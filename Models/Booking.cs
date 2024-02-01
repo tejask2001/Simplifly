@@ -11,8 +11,8 @@ namespace Simplifly.Models
         public string SeatNumber { get; set; }
         [ForeignKey("SeatNumber")]
         public SeatDetail SeatDetail { get; set; }
-        public int CustomerId { get; set; }
-        [ForeignKey("CustomerId")]
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
         public DateTime BookingTime { get; set; }
 
         public Booking()
@@ -27,7 +27,7 @@ namespace Simplifly.Models
             Flight = flight;
             SeatNumber = seatNumber;
             SeatDetail = seatDetail;
-            CustomerId = customerId;
+            UserId = customerId;
             BookingTime = bookingTime;
         }
 
