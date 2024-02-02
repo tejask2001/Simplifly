@@ -1,0 +1,45 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Simplifly.Models
+{
+    public class Admin :IEquatable<Admin>
+    {
+        [Key]
+        public int AdminId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+
+        // Additional Fields for Administrator
+        public string Position { get; set; } = string.Empty;
+        public string? ContactNumber { get; set; }
+        public string? Address { get; set; }
+
+        public Admin()
+        {
+        }
+
+        public Admin(int adminId, string name, string email, string position, string? contactNumber, string? address)
+        {
+            AdminId = adminId;
+            Name = name;
+            Email = email;
+            Position = position;
+            ContactNumber = contactNumber;
+            Address = address;
+        }
+        public Admin( string name, string email, string position, string? contactNumber, string? address)
+        {
+            Name = name;
+            Email = email;
+            Position = position;
+            ContactNumber = contactNumber;
+            Address = address;
+        }
+
+        public bool Equals(Admin? other)
+        {
+            var Admin = other ?? new Admin();
+            return this.AdminId.Equals(Admin.AdminId) && this.Email.Equals(Admin.Email);
+        }
+    }
+}
