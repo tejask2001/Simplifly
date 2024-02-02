@@ -5,9 +5,9 @@ namespace Simplifly.Models
     public class Booking:IEquatable<Booking>
     {
         public int Id { get; set; }
-        public string FlightNumber { get; set; }
-        [ForeignKey("FlightNumber")]
-        public Flight Flight { get; set; }
+        public int ScheduleId { get; set; }
+        [ForeignKey("ScheduleId")]
+        public Schedule Schedule { get; set; }
         public string SeatNumber { get; set; }
         [ForeignKey("SeatNumber")]
         public SeatDetail SeatDetail { get; set; }
@@ -20,11 +20,11 @@ namespace Simplifly.Models
             
         }
 
-        public Booking(int id, string flightNumber, Flight flight, string seatNumber, SeatDetail seatDetail, int customerId, DateTime bookingTime)
+        public Booking(int id, int scheduleId, Schedule schedule, string seatNumber, SeatDetail seatDetail, int customerId, DateTime bookingTime)
         {
             Id = id;
-            FlightNumber = flightNumber;
-            Flight = flight;
+            ScheduleId = scheduleId;
+            Schedule = schedule;
             SeatNumber = seatNumber;
             SeatDetail = seatDetail;
             UserId = customerId;
