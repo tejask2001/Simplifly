@@ -8,6 +8,7 @@ namespace Simplifly.Models
         public int AdminId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string Password {  get; set; } = string.Empty;
 
         // Additional Fields for Administrator
         public string Position { get; set; } = string.Empty;
@@ -16,9 +17,10 @@ namespace Simplifly.Models
 
         public Admin()
         {
+            AdminId = 0;
         }
 
-        public Admin(int adminId, string name, string email, string position, string? contactNumber, string? address)
+        public Admin(int adminId, string name, string email, string position, string? contactNumber, string? address,string password)
         {
             AdminId = adminId;
             Name = name;
@@ -26,14 +28,16 @@ namespace Simplifly.Models
             Position = position;
             ContactNumber = contactNumber;
             Address = address;
+            Password = password;
         }
-        public Admin( string name, string email, string position, string? contactNumber, string? address)
+        public Admin( string name, string email, string position, string? contactNumber, string? address, string password)
         {
             Name = name;
             Email = email;
             Position = position;
             ContactNumber = contactNumber;
             Address = address;
+            Password = password;
         }
 
         public bool Equals(Admin? other)
