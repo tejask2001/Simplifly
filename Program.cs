@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Simplifly.Context;
+using System.Drawing;
+using System.Reflection.Emit;
+
 namespace Simplifly
 {
     public class Program
@@ -12,7 +17,13 @@ namespace Simplifly
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<RequestTrackerContext>(opts =>
+            {
+                opts.UseSqlServer(builder.Configuration.GetConnectionString("requestTrackerConnection"));
+            });
 
+
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
