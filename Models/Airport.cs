@@ -10,7 +10,7 @@
 
         public Airport()
         {
-            
+            Id = 0;
         }
 
         public Airport(int id, string name, string city, string state, string country)
