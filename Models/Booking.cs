@@ -6,9 +6,11 @@ namespace Simplifly.Models
     {
         public int Id { get; set; }
         public int ScheduleId { get; set; }
+        //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("ScheduleId")]
         public Schedule? Schedule { get; set; }
         public string SeatNumber { get; set; }
+        //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("SeatNumber")]
         public SeatDetail? SeatDetail { get; set; }
         public int UserId { get; set; }

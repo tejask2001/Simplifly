@@ -6,15 +6,16 @@ namespace Simplifly.Models
     public class Schedule:IEquatable<Schedule>
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; set; }      
+        public string FlightNumber { get; set; }
 
-      
-        public string FlightNumber { get; set; } 
+        //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("FlightNumber")]
         public Flight? Flight { get; set; }
         public int RouteId { get; set; }
-        [ForeignKey("RouteId")]
-   
+        //This one is just for navigation and will not be created as an attribute in table
+
+        [ForeignKey("RouteId")]   
         public Route? Route { get; set; }
 
         public DateTime Departure { get; set; }
