@@ -9,10 +9,21 @@ namespace Simplifly.Repositories
     public class FlightRepository : IRepository<string, Flight>
     {
         RequestTrackerContext _context;
+
+        /// <summary>
+        /// Default constructor with RequestTrackerContext
+        /// </summary>
+        /// <param name="context">Database context</param>
         public FlightRepository(RequestTrackerContext context)
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Method to add Flight to the database
+        /// </summary>
+        /// <param name="items">Object of Flight</param>
+        /// <returns>Flight object</returns>
         public async Task<Flight> Add(Flight items)
         {
             _context.Add(items);
@@ -20,6 +31,12 @@ namespace Simplifly.Repositories
             return items;
         }
 
+        /// <summary>
+        /// Method to delete Flight from database
+        /// </summary>
+        /// <param name="items">Object of Flight</param>
+        /// <returns>Flight object</returns>
+        /// <exception cref="NoSuchFlightException">throws exception if no booking found</exception>
         public async Task<Flight> Delete(Flight items)
         {
             var flight = await GetAsync(items.FlightNumber);
@@ -32,6 +49,12 @@ namespace Simplifly.Repositories
             throw new NoSuchFlightException();
         }
 
+        /// <summary>
+        /// Method to get Flight data of specific Id
+        /// </summary>
+        /// <param name="key">key in int</param>
+        /// <returns>Flight Object</returns>
+        /// <exception cref="NoSuchFlightException">throws exception if no Flight found.</exception>
         public async Task<Flight> GetAsync(string key)
         {
             var flights= await GetAsync();
@@ -43,12 +66,22 @@ namespace Simplifly.Repositories
             throw new NoSuchFlightException();
         }
 
+        /// <summary>
+        /// Method to get list of Flight
+        /// </summary>
+        /// <returns>Flight objects</returns>
         public async Task<List<Flight>> GetAsync()
         {
             var flights = _context.Flights.ToList();
             return flights;
         }
 
+        /// <summary>
+        /// Method to update Flight.
+        /// </summary>
+        /// <param name="items">Object of Flight</param>
+        /// <returns>Flight Object</returns>
+        /// <exception cref="NoSuchFlightException">throws exception if no Flight found</exception</exception>
         public async Task<Flight> Update(Flight items)
         {
             var flight = await GetAsync(items.FlightNumber);
