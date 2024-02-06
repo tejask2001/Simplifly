@@ -8,6 +8,6 @@ namespace Simplifly.Interfaces
         public Task<Route> AddRoute(Route route);
         public Task<Route> RemoveRoute(Route route);
         public Task<List<Route>> GetAllRoutes();
-        public Task<List<Route>> UpdateFlight(Route route);
+        public Task<List<Route>> UpdateRoute(Route route);
     }
 }
