@@ -37,9 +37,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Booking</param>
         /// <returns>Booking object</returns>
         /// <exception cref="NoSuchBookingsException">throws exception if no booking found</exception>
-        public async Task<Booking> Delete(Booking items)
+        public async Task<Booking> Delete(int bookingId)
         {
-            var booking = await GetAsync(items.Id);
+            var booking = await GetAsync(bookingId);
             if (booking != null)
             {
                 _context.Remove(booking);

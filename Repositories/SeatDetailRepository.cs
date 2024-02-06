@@ -37,9 +37,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of SeatDetail</param>
         /// <returns>SeatDetail object</returns>
         /// <exception cref="NoSuchSeatException">throws exception if no SeatDetail found</exception>
-        public async Task<SeatDetail> Delete(SeatDetail items)
+        public async Task<SeatDetail> Delete(string seatNumber)
         {
-            var seatDetail = await GetAsync(items.SeatNumber);
+            var seatDetail = await GetAsync(seatNumber);
             if (seatDetail != null)
             {
                 _context.Remove(seatDetail);

@@ -37,9 +37,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Airport</param>
         /// <returns>Airport object</returns>
         /// <exception cref="NoSuchAirportException">throws exception if no airport found</exception>
-        public Task<Airport> Delete(Airport items)
+        public Task<Airport> Delete(int airportId)
         {
-            var airport = GetAsync(items.Id);
+            var airport = GetAsync(airportId);
             if (airport != null)
             {
                 _context.Remove(airport);
@@ -70,7 +70,7 @@ namespace Simplifly.Repositories
         /// Method to get list of Airports
         /// </summary>
         /// <returns></returns>
-        public async Task<List<Airport>>? GetAsync()
+        public async Task<List<Airport>> GetAsync()
         {
             var airports = _context.Airports.ToList();
             return airports;

@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Simplifly.Context;
+using Simplifly.Interfaces;
+using Simplifly.Models;
+using Simplifly.Repositories;
 using System.Drawing;
 using System.Reflection.Emit;
+using Route = Simplifly.Models.Route;
 
 namespace Simplifly
 {
@@ -22,8 +26,16 @@ namespace Simplifly
                 opts.UseSqlServer(builder.Configuration.GetConnectionString("requestTrackerConnection"));
             });
 
+            builder.Services.AddScoped<IRepository<int,Airport>,AirportRepository>();
+            builder.Services.AddScoped<IRepository<int,Booking>,BookingsRepository>();
+            builder.Services.AddScoped<IRepository<string,Flight>,FlightRepository>();
+            builder.Services.AddScoped<IRepository<int,FlightOwner>,FlightOwnerRepositor>();
+            builder.Services.AddScoped<IRepository<int,Route>,RouteRepository>();
+            builder.Services.AddScoped<IRepository<int, Schedule>, ScheduleRepository>();
+            builder.Services.AddScoped<IRepository<string, SeatDetail>, SeatDetailRepository>();
 
-            
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

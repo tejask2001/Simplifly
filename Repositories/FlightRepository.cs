@@ -37,9 +37,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Flight</param>
         /// <returns>Flight object</returns>
         /// <exception cref="NoSuchFlightException">throws exception if no booking found</exception>
-        public async Task<Flight> Delete(Flight items)
+        public async Task<Flight> Delete(string flightNumber)
         {
-            var flight = await GetAsync(items.FlightNumber);
+            var flight = await GetAsync(flightNumber);
             if (flight != null)
             {
                 _context.Remove(flight);

@@ -37,14 +37,14 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Schedule</param>
         /// <returns>Schedule object</returns>
         /// <exception cref="NoSuchScheduleException">throws exception if no Schedule found</exception>
-        public async Task<Schedule> Delete(Schedule items)
+        public async Task<Schedule> Delete(int scheduleId)
         {
-            var schedule = await GetAsync(items.Id);
+            var schedule = await GetAsync(scheduleId);
             if (schedule != null)
             {
                 _context.Remove(schedule);
                 _context.SaveChanges();
-                return items;
+                return schedule;
             }
             throw new NoSuchScheduleException();
         }
