@@ -8,10 +8,21 @@ namespace Simplifly.Repositories
     public class RouteRepository : IRepository<int, Models.Route>
     {
         RequestTrackerContext _context;
+
+        /// <summary>
+        /// Default constructor with RequestTrackerContext
+        /// </summary>
+        /// <param name="context">Database context</param>
         public RouteRepository(RequestTrackerContext context)
         {
             _context = context;
         }
+
+        /// <summary>
+        /// Method to add Route to the database
+        /// </summary>
+        /// <param name="items">Object of Route</param>
+        /// <returns>Route object</returns>
         public async Task<Models.Route> Add(Models.Route items)
         {
             _context.Add(items);
@@ -19,9 +30,15 @@ namespace Simplifly.Repositories
             return items;
         }
 
-        public Task<Models.Route> Delete(Models.Route items)
+        /// <summary>
+        /// Method to delete Route from database
+        /// </summary>
+        /// <param name="items">Object of Route</param>
+        /// <returns>Route object</returns>
+        /// <exception cref="NoSuchRouteException">throws exception if no Route found</exception>
+        public Task<Models.Route> Delete(int routeId)
         {
-            var route = GetAsync(items.Id);
+            var route = GetAsync(routeId);
             if (route != null)
             {
                 _context.Remove(route);
@@ -31,6 +48,12 @@ namespace Simplifly.Repositories
             throw new NoSuchRouteException();
         }
 
+        /// <summary>
+        /// Method to get Route data of specific Id
+        /// </summary>
+        /// <param name="key">key in int</param>
+        /// <returns>Route Object</returns>
+        /// <exception cref="NoSuchRouteException">throws exception if no Route found.</exception>
         public async Task<Models.Route> GetAsync(int key)
         {
             var routes= await GetAsync();
@@ -42,18 +65,29 @@ namespace Simplifly.Repositories
             throw new NoSuchRouteException();
         }
 
+        /// <summary>
+        /// Method to get list of Route
+        /// </summary>
+        /// <returns>Route object</returns>
         public async Task<List<Models.Route>> GetAsync()
         {
             var routes = _context.Routes.ToList();
             return routes;
         }
 
+        /// <summary>
+        /// Method to update Route.
+        /// </summary>
+        /// <param name="items">Object of Route</param>
+        /// <returns>Airport Object</returns>
+        /// <exception cref="NoSuchRouteException">throws exception if no Route found</exception</exception>
         public async Task<Models.Route> Update(Models.Route items)
         {
             var route= await GetAsync(items.Id);
             if (route != null)
             {
                 _context.Entry<Models.Route>(route).State=EntityState.Modified;
+                _context.SaveChanges();
                 return route;
             }
             throw new NoSuchRouteException();
