@@ -5,7 +5,7 @@ namespace Simplifly.Models
     public class SeatDetail:IEquatable<SeatDetail>
     {
         [Key]
-        public string SeatNumber { get; set; }
+        public string SeatNumber { get; set; }  = string.Empty;
         public string SeatClass { get; set;} = string.Empty;
         public string status { get; set; } = string.Empty;
 

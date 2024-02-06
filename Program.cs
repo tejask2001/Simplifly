@@ -1,3 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+using Simplifly.Context;
+using Simplifly.Interfaces;
+using Simplifly.Models;
+using Simplifly.Repositories;
+using System.Drawing;
+using System.Reflection.Emit;
+using Route = Simplifly.Models.Route;
+
 namespace Simplifly
 {
     public class Program
@@ -12,6 +21,20 @@ namespace Simplifly
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddDbContext<RequestTrackerContext>(opts =>
+            {
+                opts.UseSqlServer(builder.Configuration.GetConnectionString("requestTrackerConnection"));
+            });
+
+            builder.Services.AddScoped<IRepository<int,Airport>,AirportRepository>();
+            builder.Services.AddScoped<IRepository<int,Booking>,BookingsRepository>();
+            builder.Services.AddScoped<IRepository<string,Flight>,FlightRepository>();
+            builder.Services.AddScoped<IRepository<int,FlightOwner>,FlightOwnerRepositor>();
+            builder.Services.AddScoped<IRepository<int,Route>,RouteRepository>();
+            builder.Services.AddScoped<IRepository<int, Schedule>, ScheduleRepository>();
+            builder.Services.AddScoped<IRepository<string, SeatDetail>, SeatDetailRepository>();
+
+
 
             var app = builder.Build();
 

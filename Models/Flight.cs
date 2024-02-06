@@ -5,12 +5,13 @@ namespace Simplifly.Models
     public class Flight:IEquatable<Flight>
     {
         [Key]
-        public string FlightNumber { get; set; }
-        public string Airline { get; set; }
+        public string FlightNumber { get; set; } 
+        public string Airline { get; set; }= string.Empty;
         public int TotalSeats { get; set; }
 
         public Flight()
         {
+           FlightNumber = string.Empty;
             
         }
 

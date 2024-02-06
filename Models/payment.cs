@@ -20,7 +20,7 @@ namespace Simplifly.Models
 
         public Payment()
         {
-
+            PaymentId = 0;
         }
 
         public Payment(int paymentId, decimal amount, DateTime paymentDate, PaymentStatus status, PaymentDetails paymentDetails, Booking booking)

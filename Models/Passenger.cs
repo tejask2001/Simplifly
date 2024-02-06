@@ -15,6 +15,7 @@ namespace Simplifly.Models
 
         public Passenger()
         {
+            PassengerId = 0;
         }
 
         public Passenger(string name,int age, string passportNo)

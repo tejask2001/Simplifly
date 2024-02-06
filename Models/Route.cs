@@ -4,17 +4,22 @@ namespace Simplifly.Models
 {
     public class Route:IEquatable<Route>
     {
-        public int Id { get; set; }
+        public int Id { get; set; }        
         public int SourceAirportId { get; set; }
+
+        //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("SourceAirportId")]
-        public Airport? SourceAirport { get; set; }
+        public Airport? SourceAirport { get; set; }        
         public int DestinationAirportId { get; set;}
+
+        //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("DestinationAirportId")]
         public Airport? DestinationAirport { get; set; }
+              
 
         public Route()
         {
-            
+            Id = 0;
         }
 
         public Route(int id, int sourceAirportId, Airport? sourceAirport, int destinationAirportId, Airport? destinationAirport)
