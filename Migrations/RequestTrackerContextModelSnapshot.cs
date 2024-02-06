@@ -44,15 +44,18 @@ namespace Simplifly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("AdminId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Admins");
                 });
@@ -97,6 +100,9 @@ namespace Simplifly.Migrations
                     b.Property<DateTime>("BookingTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("CustomerUserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ScheduleId")
                         .HasColumnType("int");
 
@@ -109,13 +115,47 @@ namespace Simplifly.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CustomerUserId");
+
                     b.HasIndex("ScheduleId");
 
                     b.HasIndex("SeatNumber");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Bookings");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.Customer", b =>
+                {
+                    b.Property<int>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Flight", b =>
@@ -172,11 +212,14 @@ namespace Simplifly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OwnerId");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("FlightsOwner");
                 });
@@ -361,37 +404,43 @@ namespace Simplifly.Migrations
 
             modelBuilder.Entity("Simplifly.Models.User", b =>
                 {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"), 1L, 1);
+                    b.Property<byte[]>("Key")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
-                    b.Property<string>("Email")
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
+                    b.HasKey("Username");
 
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Simplifly.Models.Admin", b =>
+                {
+                    b.HasOne("Simplifly.Models.User", "User")
+                        .WithOne("admin")
+                        .HasForeignKey("Simplifly.Models.Admin", "Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Simplifly.Models.Booking", b =>
                 {
+                    b.HasOne("Simplifly.Models.Customer", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("CustomerUserId");
+
                     b.HasOne("Simplifly.Models.Schedule", "Schedule")
                         .WithMany()
                         .HasForeignKey("ScheduleId")
@@ -404,15 +453,20 @@ namespace Simplifly.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Simplifly.Models.User", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Schedule");
 
                     b.Navigation("SeatDetail");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.Customer", b =>
+                {
+                    b.HasOne("Simplifly.Models.User", "User")
+                        .WithOne("customer")
+                        .HasForeignKey("Simplifly.Models.Customer", "Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Flight", b =>
@@ -420,6 +474,17 @@ namespace Simplifly.Migrations
                     b.HasOne("Simplifly.Models.FlightOwner", null)
                         .WithMany("OwnedFlights")
                         .HasForeignKey("FlightOwnerOwnerId");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
+                {
+                    b.HasOne("Simplifly.Models.User", "User")
+                        .WithOne("flightOwner")
+                        .HasForeignKey("Simplifly.Models.FlightOwner", "Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Simplifly.Models.PassengerBooking", b =>
@@ -494,6 +559,11 @@ namespace Simplifly.Migrations
                     b.Navigation("Route");
                 });
 
+            modelBuilder.Entity("Simplifly.Models.Customer", b =>
+                {
+                    b.Navigation("Bookings");
+                });
+
             modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
                 {
                     b.Navigation("OwnedFlights");
@@ -501,7 +571,14 @@ namespace Simplifly.Migrations
 
             modelBuilder.Entity("Simplifly.Models.User", b =>
                 {
-                    b.Navigation("Bookings");
+                    b.Navigation("admin")
+                        .IsRequired();
+
+                    b.Navigation("customer")
+                        .IsRequired();
+
+                    b.Navigation("flightOwner")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

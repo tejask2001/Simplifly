@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Simplifly.Models
 {
@@ -8,12 +9,13 @@ namespace Simplifly.Models
         public int AdminId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
-        public string Password {  get; set; } = string.Empty;
-
-        // Additional Fields for Administrator
+        
         public string Position { get; set; } = string.Empty;
         public string? ContactNumber { get; set; }
         public string? Address { get; set; }
+        public string Username { get; set; }
+        [ForeignKey("Username")]
+        public User User { get; set; }
 
         public Admin()
         {
@@ -28,7 +30,7 @@ namespace Simplifly.Models
             Position = position;
             ContactNumber = contactNumber;
             Address = address;
-            Password = password;
+           
         }
         public Admin( string name, string email, string position, string? contactNumber, string? address, string password)
         {
@@ -37,7 +39,7 @@ namespace Simplifly.Models
             Position = position;
             ContactNumber = contactNumber;
             Address = address;
-            Password = password;
+           
         }
 
         public bool Equals(Admin? other)

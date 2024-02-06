@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Simplifly.Models
 {
@@ -12,11 +13,13 @@ namespace Simplifly.Models
         // Additional Fields for Flight Owner
         public string CompanyName { get; set; } = string.Empty;
         public string ContactNumber { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+       
         public string Address { get; set; } = string.Empty;
         public string BusinessRegistrationNumber { get; set; } = string.Empty;
 
-
+        public string Username { get; set; }
+        [ForeignKey("Username")]
+        public User User { get; set; }
         // Navigation Properties
         public List<Flight>? OwnedFlights { get; set; }
 
@@ -34,7 +37,7 @@ namespace Simplifly.Models
             Address = address;
             BusinessRegistrationNumber = businessRegistrationNumber;
             OwnedFlights = ownedFlights;
-            Password = password;
+           
         }
         public FlightOwner( string name, string email, string companyName, string contactNumber, string address, string businessRegistrationNumber, List<Flight> ownedFlights,string password)
         {
@@ -45,7 +48,7 @@ namespace Simplifly.Models
             Address = address;
             BusinessRegistrationNumber = businessRegistrationNumber;
             OwnedFlights = ownedFlights;
-            Password = password;
+            
         }
        
 
