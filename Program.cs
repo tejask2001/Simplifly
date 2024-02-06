@@ -3,6 +3,7 @@ using Simplifly.Context;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Repositories;
+using Simplifly.Services;
 using System.Drawing;
 using System.Reflection.Emit;
 using Route = Simplifly.Models.Route;
@@ -26,15 +27,18 @@ namespace Simplifly
                 opts.UseSqlServer(builder.Configuration.GetConnectionString("requestTrackerConnection"));
             });
 
-            builder.Services.AddScoped<IRepository<int,Airport>,AirportRepository>();
+                                    builder.Services.AddScoped<IRepository<int,Airport>,AirportRepository>();
             builder.Services.AddScoped<IRepository<int,Booking>,BookingsRepository>();
             builder.Services.AddScoped<IRepository<string,Flight>,FlightRepository>();
-            builder.Services.AddScoped<IRepository<int,FlightOwner>,FlightOwnerRepositor>();
+            builder.Services.AddScoped<IRepository<int,FlightOwner>,FlightOwnerRepository>();
+            builder.Services.AddScoped<IRepository<int, Admin>, AdminRepository>();
+            builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
+            builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
             builder.Services.AddScoped<IRepository<int,Route>,RouteRepository>();
             builder.Services.AddScoped<IRepository<int, Schedule>, ScheduleRepository>();
             builder.Services.AddScoped<IRepository<string, SeatDetail>, SeatDetailRepository>();
 
-
+            builder.Services.AddScoped<IUserService, USerService>();
 
             var app = builder.Build();
 

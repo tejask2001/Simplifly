@@ -6,6 +6,21 @@ namespace Simplifly.Context
 {
     public class RequestTrackerContext:DbContext
     {
+
+        public DbSet<Admin> Admins { get; set; }
+        public DbSet<Airport> Airports { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Flight> Flights { get; set; }
+        public DbSet<FlightOwner> FlightsOwner { get; set; }
+        public DbSet<Passenger> Passengers { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Models.Route> Routes { get; set; }
+        public DbSet<PassengerBooking> PassengerBookings { get; set; }
+        public DbSet<Schedule> Schedules { get; set; }
+        public DbSet<SeatDetail> Seats { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<User> Users { get; set; }
+
         public RequestTrackerContext(DbContextOptions options):base(options)
         {
             
@@ -33,19 +48,7 @@ namespace Simplifly.Context
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Admin> Admins { get; set; }
-        public DbSet<Airport> Airports { get; set; }        
-        public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Flight> Flights { get; set; }
-        public DbSet<FlightOwner> FlightsOwner { get; set; }
-        public DbSet<Passenger> Passengers { get; set; }
-        public DbSet<Payment> Payments { get; set; }
-        public DbSet<Models.Route> Routes { get; set; }
-        public DbSet<PassengerBooking> PassengerBookings { get; set; }
-        public DbSet<Schedule> Schedules { get; set; }
-        public DbSet <SeatDetail> Seats { get; set; }
-        public DbSet<User> Users { get; set; }
-
+      
 
     }
 }

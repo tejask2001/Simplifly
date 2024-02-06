@@ -6,7 +6,7 @@ using Simplifly.Models;
 
 namespace Simplifly.Repositories
 {
-    public class FlightOwnerRepositor : IRepository<int, FlightOwner>
+    public class FlightOwnerRepository: IRepository<int, FlightOwner>
     {
         readonly RequestTrackerContext _context;
 
@@ -14,7 +14,7 @@ namespace Simplifly.Repositories
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public FlightOwnerRepositor(RequestTrackerContext context)
+        public FlightOwnerRepository(RequestTrackerContext context)
         {
             _context = context;
         }
