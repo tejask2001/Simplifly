@@ -29,19 +29,19 @@ namespace Simplifly.Context
         {
             modelBuilder.Entity<Payment>()
                 .Property(p => p.Amount)
-                .HasColumnType("decimal(18, 2)"); // Adjust precision and scale as needed
-                                                  // Configure the Route entity relationships
+                .HasColumnType("decimal(18, 2)");
+                                                  
             modelBuilder.Entity<Models.Route>()
                 .HasOne(r => r.SourceAirport)
                 .WithMany()
                 .HasForeignKey(r => r.SourceAirportId)
-                .OnDelete(DeleteBehavior.Restrict); // Remove ON DELETE CASCADE
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<Models.Route>()
                 .HasOne(r => r.DestinationAirport)
                 .WithMany()
                 .HasForeignKey(r => r.DestinationAirportId)
-                .OnDelete(DeleteBehavior.Restrict); // Remove ON DELETE CASCADE
+                .OnDelete(DeleteBehavior.Restrict); 
 
 
 

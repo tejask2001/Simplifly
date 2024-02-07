@@ -12,8 +12,8 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    [Migration("20240206133422_User")]
-    partial class User
+    [Migration("20240206152624_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

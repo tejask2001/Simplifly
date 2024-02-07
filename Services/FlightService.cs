@@ -7,14 +7,25 @@ namespace Simplifly.Services
     public class FlightService : IFlightFlightOwnerService
     {
         private readonly IRepository<string, Flight> _flightRepository;
-        public FlightService(IRepository<string, Flight> flightRepository)
+        private readonly ILogger<FlightService> _logger;
+        public FlightService(IRepository<string, Flight> flightRepository, ILogger<FlightService> logger)
         {
             _flightRepository = flightRepository;
+            _logger = logger;
         }
         public async Task<Flight> AddFlight(Flight flight)
         {
-            flight=await _flightRepository.Add(flight);
-            return flight;
+            try
+            {
+                var flights = await _flightRepository.GetAsync(flight.FlightNumber);
+                throw new FlightAlreadyPresentException();
+            }
+            catch(NoSuchFlightException)
+            {
+                flight = await _flightRepository.Add(flight);
+                return flight;
+            }
+            
         }
 
         public async Task<List<Flight>> GetAllFlights()
@@ -34,9 +45,28 @@ namespace Simplifly.Services
             throw new NoSuchFlightException();
         }
 
-        public Task<List<Flight>> UpdateFlight(Flight flight)
+        public async Task<Flight> UpdateAirline(string flightNumber, string airline)
         {
-            throw new NotImplementedException();
+            var flight= await _flightRepository.GetAsync(flightNumber);
+            if(flight != null)
+            {
+                flight.Airline = airline;
+                flight=await _flightRepository.Update(flight);
+                return flight;
+            }
+            throw new NoSuchFlightException();
+        }
+
+        public async Task<Flight> UpdateTotalSeats(string flightNumber, int totalSeats)
+        {
+            var flight = await _flightRepository.GetAsync(flightNumber);
+            if(flight!=null)
+            {
+                flight.TotalSeats = totalSeats;
+                flight = await _flightRepository.Update(flight);
+                return flight;
+            }
+            return null;
         }
     }
 }
