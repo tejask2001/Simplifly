@@ -9,6 +9,9 @@ namespace Simplifly.Models
         public string FlightNumber { get; set; } 
         public string Airline { get; set; }= string.Empty;
         public int TotalSeats { get; set; }
+        public int FlightOwnerOwnerId { get; set; }
+        [ForeignKey("FlightOwnerOwnerId")]
+        public FlightOwner? FlightOwner { get; set; }
 
         [ForeignKey("FlightOwnerId")]
         public int FlightOwner {  get; set; }
