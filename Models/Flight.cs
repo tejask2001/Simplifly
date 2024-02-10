@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Simplifly.Models
 {
@@ -8,6 +9,10 @@ namespace Simplifly.Models
         public string FlightNumber { get; set; } 
         public string Airline { get; set; }= string.Empty;
         public int TotalSeats { get; set; }
+
+        [ForeignKey("FlightOwnerId")]
+        public int FlightOwner {  get; set; }
+
 
         public Flight()
         {
