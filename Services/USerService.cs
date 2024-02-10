@@ -16,16 +16,18 @@ namespace Simplifly.Services
         private readonly ILogger<USerService> _logger;
         private readonly IRepository<int, Admin> _adminRepository;
         private readonly IRepository<int, FlightOwner> _flightownerRepository;
+        private readonly ITokenService _tokenService;
         private readonly IRepository<int, Customer> _customerRepository;
 
         public USerService(IRepository<string, User> userRepository, IRepository<int, Admin> adminRepository,
                            IRepository<int, FlightOwner> flightownerRepository, IRepository<int, Customer> customerRepository,
-                            ILogger<USerService> logger)
+                            ITokenService tokenService,ILogger<USerService> logger)
         {
             _adminRepository = adminRepository;
             _flightownerRepository = flightownerRepository;
             _userRepository = userRepository;
             _customerRepository = customerRepository;
+            _tokenService = tokenService;
             _logger = logger;
 
         }
@@ -43,6 +45,7 @@ namespace Simplifly.Services
             {
                 user.Password = "";
                 user.Role = myUSer.Role;
+                user.Token = await _tokenService.GenerateToken(user);
                 return user;
             }
             throw new InvlidUuserException();

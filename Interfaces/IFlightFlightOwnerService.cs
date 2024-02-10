@@ -8,7 +8,8 @@ namespace Simplifly.Interfaces
         public Task<Flight> AddFlight(Flight flight);
         public Task<Flight> RemoveFlight(string flightNumber);
         public Task<List<Flight>> GetAllFlights();
-        public Task<List<Flight>> UpdateFlight(Flight flight);
+        public Task<Flight> UpdateAirline(string flightNumber,string airline);
+        public Task<Flight> UpdateTotalSeats(string flightNumber,int totalSeats);
         
     }
 }

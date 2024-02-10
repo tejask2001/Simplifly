@@ -71,7 +71,7 @@ namespace Simplifly.Repositories
         /// <returns>Route object</returns>
         public async Task<List<Models.Route>> GetAsync()
         {
-            var routes = _context.Routes.ToList();
+            var routes = _context.Routes.Include(e=>e.SourceAirport).Include(d=>d.DestinationAirport).ToList();
             return routes;
         }
 

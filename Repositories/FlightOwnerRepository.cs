@@ -9,19 +9,22 @@ namespace Simplifly.Repositories
     public class FlightOwnerRepository: IRepository<int, FlightOwner>
     {
         readonly RequestTrackerContext _context;
+        ILogger<FlightOwnerRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public FlightOwnerRepository(RequestTrackerContext context)
+        public FlightOwnerRepository(RequestTrackerContext context, ILogger<FlightOwnerRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<FlightOwner> Add(FlightOwner items)
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation("Doctor added " + items.OwnerId);
             return items;
         }
 

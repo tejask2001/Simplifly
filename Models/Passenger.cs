@@ -12,7 +12,6 @@ namespace Simplifly.Models
         public string PassportNo { get; set; } = string.Empty;
 
 
-
         public Passenger()
         {
             PassengerId = 0;
@@ -25,8 +24,6 @@ namespace Simplifly.Models
             Age = age;
             PassportNo = passportNo;
         }
-
-        
 
         public Passenger(string name,int passengerId, int age, string passportNo)
         {

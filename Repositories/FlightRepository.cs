@@ -9,14 +9,16 @@ namespace Simplifly.Repositories
     public class FlightRepository : IRepository<string, Flight>
     {
         RequestTrackerContext _context;
+        ILogger<FlightRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public FlightRepository(RequestTrackerContext context)
+        public FlightRepository(RequestTrackerContext context, ILogger<FlightRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -25,9 +27,10 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Flight</param>
         /// <returns>Flight object</returns>
         public async Task<Flight> Add(Flight items)
-        {
+        {            
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation("Flight added "+ items.FlightNumber);
             return items;
         }
 
