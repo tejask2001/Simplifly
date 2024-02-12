@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Numerics;
 
 namespace Simplifly.Models
 {
     public class PassengerBooking : IEquatable<PassengerBooking>
     {
+        [Key]
         public int Id { get; set; }
-
-        public DateTime Date { get; set; }
         public int? BookingId { get; set; }
         //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("BookingId")]
@@ -18,26 +18,27 @@ namespace Simplifly.Models
         [ForeignKey("PassengerId")]
         public Passenger? Passenger { get; set; }
 
+        public int? SeatId { get; set; }
+        //This one is just for navigation and will not be created as an attribute in table
+        [ForeignKey("SeatId")]
+        public SeatDetail? SeatDetail { get; set; }
+
 
         public PassengerBooking()
         {
             Id = 0;
         }
-        public PassengerBooking(int id, DateTime dateOfApp)
+        public PassengerBooking(int id)
         {
             Id = id;
-            Date = dateOfApp;
+           
         }
 
-        public PassengerBooking(DateTime dateOfApp)
+        public PassengerBooking(int id, int? bookingId, int? passengerId, int? seatId) : this(id)
         {
-            Date = dateOfApp;
-        }
-
-        public PassengerBooking(int id, DateTime date, int? doctorId, int? patientId) : this(id, date)
-        {
-            BookingId = doctorId;
-            PassengerId = patientId;
+            BookingId = bookingId;
+            PassengerId = passengerId;
+            SeatId = seatId;
         }
 
         public bool Equals(PassengerBooking? other)

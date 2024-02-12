@@ -24,18 +24,18 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
-            _logger.LogInformation("Doctor added " + items.OwnerId);
+            _logger.LogInformation("FlightOwner added " + items.OwnerId);
             return items;
         }
 
-        public Task<FlightOwner> Delete(int ownerId)
+        public async Task<FlightOwner> Delete(int Id)
         {
-            var flightOwner = GetAsync(ownerId);
-            if (flightOwner != null)
+            var owner = await GetAsync( Id);
+            if (owner != null)
             {
-                _context.Remove(flightOwner);
+                _context?.Remove(owner);
                 _context.SaveChanges();
-                return flightOwner;
+                return owner;
             }
             throw new NoSuchFlightOwnerException();
         }
@@ -53,20 +53,18 @@ namespace Simplifly.Repositories
 
         public async Task<List<FlightOwner>> GetAsync()
         {
-            var flightOwners = _context.FlightsOwner.ToList();
+            var flightOwners = _context.FlightsOwners.ToList();
             return flightOwners;
         }
 
         public async Task<FlightOwner> Update(FlightOwner items)
         {
             var flightOwner = await GetAsync(items.OwnerId);
-            if (flightOwner != null)
-            {
+            
                 _context.Entry<FlightOwner>(items).State = EntityState.Modified;
                 _context.SaveChanges();
                 return flightOwner;
-            }
-            throw new NoSuchFlightOwnerException();
+
         }
     }
 }

@@ -103,12 +103,12 @@ namespace Simplifly.Migrations
                     b.Property<int?>("CustomerUserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ScheduleId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SeatNumber")
+                    b.Property<string>("FlightId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -117,9 +117,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("CustomerUserId");
 
-                    b.HasIndex("ScheduleId");
-
-                    b.HasIndex("SeatNumber");
+                    b.HasIndex("FlightId");
 
                     b.ToTable("Bookings");
                 });
@@ -167,7 +165,10 @@ namespace Simplifly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FlightOwnerOwnerId")
+                    b.Property<double>("BasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("FlightOwnerOwnerId")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalSeats")
@@ -221,7 +222,7 @@ namespace Simplifly.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("FlightsOwner");
+                    b.ToTable("FlightsOwners");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Passenger", b =>
@@ -259,10 +260,10 @@ namespace Simplifly.Migrations
                     b.Property<int?>("BookingId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("PassengerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SeatId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -270,6 +271,8 @@ namespace Simplifly.Migrations
                     b.HasIndex("BookingId");
 
                     b.HasIndex("PassengerId");
+
+                    b.HasIndex("SeatId");
 
                     b.ToTable("PassengerBookings");
                 });
@@ -342,6 +345,9 @@ namespace Simplifly.Migrations
                     b.Property<int>("DestinationAirportId")
                         .HasColumnType("int");
 
+                    b.Property<double>("Distance")
+                        .HasColumnType("float");
+
                     b.Property<int>("SourceAirportId")
                         .HasColumnType("int");
 
@@ -368,7 +374,7 @@ namespace Simplifly.Migrations
                     b.Property<DateTime>("Departure")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("FlightNumber")
+                    b.Property<string>("FlightId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -386,18 +392,31 @@ namespace Simplifly.Migrations
 
             modelBuilder.Entity("Simplifly.Models.SeatDetail", b =>
                 {
-                    b.Property<string>("SeatNumber")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FlightId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SeatClass")
+                    b.Property<bool>("IsBooked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SeatNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("Id");
 
-                    b.HasKey("SeatNumber");
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("FlightId");
 
                     b.ToTable("Seats");
                 });
@@ -441,21 +460,13 @@ namespace Simplifly.Migrations
                         .WithMany("Bookings")
                         .HasForeignKey("CustomerUserId");
 
-                    b.HasOne("Simplifly.Models.Schedule", "Schedule")
+                    b.HasOne("Simplifly.Models.Flight", "Flight")
                         .WithMany()
-                        .HasForeignKey("ScheduleId")
+                        .HasForeignKey("FlightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Simplifly.Models.SeatDetail", "SeatDetail")
-                        .WithMany()
-                        .HasForeignKey("SeatNumber")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Schedule");
-
-                    b.Navigation("SeatDetail");
+                    b.Navigation("Flight");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Customer", b =>
@@ -471,9 +482,13 @@ namespace Simplifly.Migrations
 
             modelBuilder.Entity("Simplifly.Models.Flight", b =>
                 {
-                    b.HasOne("Simplifly.Models.FlightOwner", null)
+                    b.HasOne("Simplifly.Models.FlightOwner", "FlightOwner")
                         .WithMany("OwnedFlights")
-                        .HasForeignKey("FlightOwnerOwnerId");
+                        .HasForeignKey("FlightOwnerOwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FlightOwner");
                 });
 
             modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
@@ -497,15 +512,21 @@ namespace Simplifly.Migrations
                         .WithMany()
                         .HasForeignKey("PassengerId");
 
+                    b.HasOne("Simplifly.Models.SeatDetail", "SeatDetail")
+                        .WithMany()
+                        .HasForeignKey("SeatId");
+
                     b.Navigation("Booking");
 
                     b.Navigation("Passenger");
+
+                    b.Navigation("SeatDetail");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Payment", b =>
                 {
                     b.HasOne("Simplifly.Models.Booking", "Booking")
-                        .WithMany()
+                        .WithMany("Payments")
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -544,12 +565,12 @@ namespace Simplifly.Migrations
                 {
                     b.HasOne("Simplifly.Models.Flight", "Flight")
                         .WithMany()
-                        .HasForeignKey("FlightNumber")
+                        .HasForeignKey("FlightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Simplifly.Models.Route", "Route")
-                        .WithMany()
+                        .WithMany("Schedules")
                         .HasForeignKey("RouteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -557,6 +578,28 @@ namespace Simplifly.Migrations
                     b.Navigation("Flight");
 
                     b.Navigation("Route");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.SeatDetail", b =>
+                {
+                    b.HasOne("Simplifly.Models.Booking", null)
+                        .WithMany("Seats")
+                        .HasForeignKey("BookingId");
+
+                    b.HasOne("Simplifly.Models.Flight", "Flight")
+                        .WithMany()
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Flight");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.Booking", b =>
+                {
+                    b.Navigation("Payments");
+
+                    b.Navigation("Seats");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Customer", b =>
@@ -567,6 +610,11 @@ namespace Simplifly.Migrations
             modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
                 {
                     b.Navigation("OwnedFlights");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.Route", b =>
+                {
+                    b.Navigation("Schedules");
                 });
 
             modelBuilder.Entity("Simplifly.Models.User", b =>
