@@ -7,7 +7,7 @@ namespace Simplifly.Exceptions
         private readonly string message;
         public NoSuchBookingsException()
         {
-            message = "No flight found with given details";
+            message = "No Booking found with given details";
         }
         public override string Message => message;
     }

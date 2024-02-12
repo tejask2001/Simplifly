@@ -11,7 +11,7 @@ namespace Simplifly.Context
         public DbSet<Airport> Airports { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Flight> Flights { get; set; }
-        public DbSet<FlightOwner> FlightsOwner { get; set; }
+        public DbSet<FlightOwner> FlightsOwners { get; set; }
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Models.Route> Routes { get; set; }
@@ -35,14 +35,15 @@ namespace Simplifly.Context
                 .HasOne(r => r.SourceAirport)
                 .WithMany()
                 .HasForeignKey(r => r.SourceAirportId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Restrict);
+            
+               
 
             modelBuilder.Entity<Models.Route>()
                 .HasOne(r => r.DestinationAirport)
                 .WithMany()
                 .HasForeignKey(r => r.DestinationAirportId)
-                .OnDelete(DeleteBehavior.Restrict); 
-
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             base.OnModelCreating(modelBuilder);

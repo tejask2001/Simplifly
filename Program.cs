@@ -78,16 +78,29 @@ namespace Simplifly
             builder.Services.AddScoped<IRepository<int,FlightOwner>,FlightOwnerRepository>();
             builder.Services.AddScoped<IRepository<int, Admin>, AdminRepository>();
             builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
+            builder.Services.AddScoped<IRepository<int, PassengerBooking>, PassengerBookingRepository>();
+            builder.Services.AddScoped<IRepository<int, Payment>,PaymentRepository>();
             builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
             builder.Services.AddScoped<IRepository<int,Route>,RouteRepository>();
             builder.Services.AddScoped<IRepository<int, Schedule>, ScheduleRepository>();
             builder.Services.AddScoped<IRepository<string, SeatDetail>, SeatDetailRepository>();
+            builder.Services.AddScoped<IPassengerBookingRepository,PassengerBookingRepository>();
+            builder.Services.AddScoped<IBookingRepository ,BookingsRepository>();
+            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+            builder.Services.AddScoped<ISeatDeatilRepository, SeatDetailRepository>();
+
+
 
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IFlightFlightOwnerService,FlightService>();
             builder.Services.AddScoped<IRouteFlightOwnerService, RouteService>();
             builder.Services.AddScoped<IScheduleFlightOwnerService,ScheduleServices>();
             builder.Services.AddScoped<IUserService, USerService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IFlightOwnerService, FlightOwnerService>();
+            builder.Services.AddScoped<IBookingService, BookingService>();
+
+
 
             var app = builder.Build();
 
