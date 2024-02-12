@@ -1,7 +1,10 @@
-﻿namespace Simplifly.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Simplifly.Models
 {
     public class Airport:IEquatable<Airport>
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string City { get; set; }

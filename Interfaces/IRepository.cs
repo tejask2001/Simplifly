@@ -7,6 +7,5 @@
         public Task<T> Add(T items);
         public Task<T> Update(T items);
         public Task<T> Delete(K key);
-
     }
 }
