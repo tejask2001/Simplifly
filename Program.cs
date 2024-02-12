@@ -95,10 +95,12 @@ namespace Simplifly
             builder.Services.AddScoped<IFlightFlightOwnerService,FlightService>();
             builder.Services.AddScoped<IRouteFlightOwnerService, RouteService>();
             builder.Services.AddScoped<IScheduleFlightOwnerService,ScheduleServices>();
+            builder.Services.AddScoped<IFlightCustomerService ,ScheduleServices>();
             builder.Services.AddScoped<IUserService, USerService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IFlightOwnerService, FlightOwnerService>();
             builder.Services.AddScoped<IBookingService, BookingService>();
+            
 
 
 

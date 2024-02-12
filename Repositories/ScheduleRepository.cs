@@ -73,7 +73,12 @@ namespace Simplifly.Repositories
         /// <returns>Schedule object</returns>
         public async Task<List<Schedule>> GetAsync()
         {
-            var schedules = _context.Schedules.ToList();
+            var schedules = await _context.Schedules.AsNoTracking()
+                        .Include(e => e.Route)
+                        .Include(e => e.Flight)
+                        .Include(e => e.Route.SourceAirport)
+                        .Include(e => e.Route.DestinationAirport)
+                        .ToListAsync();
             return schedules;
         }
 

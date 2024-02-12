@@ -30,7 +30,7 @@ namespace Simplifly.Services
             var owner =  await _flightownerRepository.GetAsync(id);
             if(owner != null)
             {
-                await _flightownerRepository.Delete(id);
+               await _flightownerRepository.Delete(id);
                await _userRepository.Delete(owner.Username);
                 return true;
             }

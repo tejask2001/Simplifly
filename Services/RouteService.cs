@@ -8,12 +8,25 @@ namespace Simplifly.Services
     {
         private readonly IRepository<int, Route> _routeRepository;
         private readonly ILogger<RouteService> _logger;
+
+        /// <summary>
+        /// Constructor to initialize the objects
+        /// </summary>
+        /// <param name="routeRepository"></param>
+        /// <param name="logger"></param>
         public RouteService(IRepository<int, Route> routeRepository, ILogger<RouteService> logger)
         {
             _routeRepository = routeRepository;
             _logger = logger;
 
         }
+
+        /// <summary>
+        ///Service class method to add route 
+        /// </summary>
+        /// <param name="route">Object of route</param>
+        /// <returns>route object</returns>
+        /// <exception cref="RouteAlreadyPresentException">Throw when route is already present</exception>
         public async Task<Route> AddRoute(Route route)
         {
             var existingRoutes = await GetAllRoutes();
@@ -28,12 +41,34 @@ namespace Simplifly.Services
             throw new RouteAlreadyPresentException();
         }
 
+
+        /// <summary>
+        /// Service class method to get all Routes
+        /// </summary>
+        /// <returns>List of route</returns>
         public async Task<List<Route>> GetAllRoutes()
         {
             var routes = await _routeRepository.GetAsync();
             return routes;
         }
 
+        public async Task<Route> GetRouteById(int id)
+        {
+            var route=await _routeRepository.GetAsync(id);
+            if (route != null)
+            {
+                return route;
+            }
+            throw new NoSuchRouteException();
+        }
+
+        /// <summary>
+        /// Service class method to remove route
+        /// </summary>
+        /// <param name="sourceAirportId">Source airport id in int</param>
+        /// <param name="destinationAirportId">Destination airport id in int</param>
+        /// <returns>Object of route</returns>
+        /// <exception cref="NoSuchRouteException">throw when route is not present</exception>
         public async Task<Route> RemoveRoute(int sourceAirportId, int destinationAirportId)
         {
             var routes = await _routeRepository.GetAsync();

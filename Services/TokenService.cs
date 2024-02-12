@@ -11,11 +11,18 @@ namespace Simplifly.Services
     {
         private readonly string _keyString;
         private readonly SymmetricSecurityKey _symmetricSecurityKey;
+
         public TokenService(IConfiguration configuration)
         {
             _keyString = configuration["SecretKey"].ToString();
             _symmetricSecurityKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_keyString));
         }
+
+        /// <summary>
+        /// Method to generate token
+        /// </summary>
+        /// <param name="user">Object of LoginUserDTO</param>
+        /// <returns>Generated token in string</returns>
         public async Task<string> GenerateToken(LoginUserDTO user)
         {
             string token = string.Empty;
