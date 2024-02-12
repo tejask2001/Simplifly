@@ -25,12 +25,12 @@ namespace Simplifly.Repositories
             return items;
         }
 
-        public async Task<Customer> Delete(int ownerId)
+        public Task<Customer> Delete(int ownerId)
         {
-            var customer = await GetAsync(ownerId);
+            var customer = GetAsync(ownerId);
             if (customer != null)
             {
-                _context?.Remove(customer);
+                _context.Remove(customer);
                 _context.SaveChanges();
                 return customer;
             }

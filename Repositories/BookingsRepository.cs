@@ -6,7 +6,7 @@ using Simplifly.Models;
 
 namespace Simplifly.Repositories
 {
-    public class BookingsRepository : IRepository<int, Booking>, IBookingRepository
+    public class BookingsRepository : IRepository<int, Booking>
     {
         RequestTrackerContext _context;
 
@@ -92,34 +92,6 @@ namespace Simplifly.Repositories
                 return bookings;
             }
             throw new NoSuchBookingsException();
-        }
-
-        public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(int userId)
-        {
-            return await _context.Bookings
-                .Where(b => b.UserId == userId)
-                .ToListAsync();
-        }
-        public async Task<bool> CheckSeatsAvailabilityAsync(string flightId, List<int> seatIds)
-        {
-            // Get all booked seats for the given flight
-            var bookedSeats = await _context.PassengerBookings
-                .Where(pb => pb.Booking.FlightId == flightId && seatIds.Contains(pb.SeatId ?? -1))
-                .Select(pb => pb.SeatId)
-                .ToListAsync();
-
-            // Check if any of the requested seats are already booked
-            foreach (var seatId in seatIds)
-            {
-                if (bookedSeats.Contains(seatId))
-                {
-                    // Seat is already booked, return false
-                    return false;
-                }
-            }
-
-            // All seats are available
-            return true;
         }
     }
 }

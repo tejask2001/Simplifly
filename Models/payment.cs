@@ -7,7 +7,7 @@ namespace Simplifly.Models
     {
         [Key]
         public int PaymentId { get; set; }
-        public double Amount { get; set; }
+        public decimal Amount { get; set; }
         public DateTime PaymentDate { get; set; }
         public PaymentStatus Status { get; set; }
 
@@ -16,16 +16,14 @@ namespace Simplifly.Models
         [ForeignKey("BookingId")]
         public int BookingId { get; set; }
         // Navigation Properties
-        public Booking Booking { get; set; }
-
-
+        public Booking? Booking { get; set; }
 
         public Payment()
         {
             PaymentId = 0;
         }
 
-        public Payment(int paymentId, double amount, DateTime paymentDate, PaymentStatus status, PaymentDetails paymentDetails, Booking booking)
+        public Payment(int paymentId, decimal amount, DateTime paymentDate, PaymentStatus status, PaymentDetails paymentDetails, Booking booking)
         {
             PaymentId = paymentId;
             Amount = amount;
@@ -34,7 +32,7 @@ namespace Simplifly.Models
             PaymentDetails = paymentDetails;
             Booking = booking;
         }
-        public Payment( double amount, DateTime paymentDate, PaymentStatus status, PaymentDetails paymentDetails, Booking booking)
+        public Payment( decimal amount, DateTime paymentDate, PaymentStatus status, PaymentDetails paymentDetails, Booking booking)
         {
             Amount = amount;
             PaymentDate = paymentDate;

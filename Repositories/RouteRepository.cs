@@ -36,9 +36,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Route</param>
         /// <returns>Route object</returns>
         /// <exception cref="NoSuchRouteException">throws exception if no Route found</exception>
-        public async  Task<Models.Route> Delete(int routeId)
+        public Task<Models.Route> Delete(int routeId)
         {
-            var route = await GetAsync(routeId);
+            var route = GetAsync(routeId);
             if (route != null)
             {
                 _context.Remove(route);
