@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Simplifly.Migrations
 {
-    public partial class test : Migration
+    public partial class final : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -224,8 +224,7 @@ namespace Simplifly.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RouteId = table.Column<int>(type: "int", nullable: false),
-                    FlightId = table.Column<int>(type: "int", nullable: false),
-                    FlightNumber = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    FlightId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Departure = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Arrival = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -233,10 +232,11 @@ namespace Simplifly.Migrations
                 {
                     table.PrimaryKey("PK_Schedules", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Schedules_Flights_FlightNumber",
-                        column: x => x.FlightNumber,
+                        name: "FK_Schedules_Flights_FlightId",
+                        column: x => x.FlightId,
                         principalTable: "Flights",
-                        principalColumn: "FlightNumber");
+                        principalColumn: "FlightNumber",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Schedules_Routes_RouteId",
                         column: x => x.RouteId,
@@ -400,9 +400,9 @@ namespace Simplifly.Migrations
                 column: "SourceAirportId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Schedules_FlightNumber",
+                name: "IX_Schedules_FlightId",
                 table: "Schedules",
-                column: "FlightNumber");
+                column: "FlightId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Schedules_RouteId",

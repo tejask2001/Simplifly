@@ -12,8 +12,8 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    [Migration("20240212062256_test")]
-    partial class test
+    [Migration("20240212081127_final")]
+    partial class final
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -376,10 +376,8 @@ namespace Simplifly.Migrations
                     b.Property<DateTime>("Departure")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FlightId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FlightNumber")
+                    b.Property<string>("FlightId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("RouteId")
@@ -387,7 +385,7 @@ namespace Simplifly.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FlightNumber");
+                    b.HasIndex("FlightId");
 
                     b.HasIndex("RouteId");
 
@@ -569,7 +567,9 @@ namespace Simplifly.Migrations
                 {
                     b.HasOne("Simplifly.Models.Flight", "Flight")
                         .WithMany()
-                        .HasForeignKey("FlightNumber");
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Simplifly.Models.Route", "Route")
                         .WithMany("Schedules")

@@ -14,8 +14,8 @@ namespace Simplifly.Models
         [ForeignKey("RouteId")]   
         public Route? Route { get; set; }
 
-        [ForeignKey("FlightId")]
-        public int FlightId { get; set; }
+        [ForeignKey("FlightNumber")]
+        public String FlightId { get; set; }
         public Flight? Flight { get; set; }
 
         public DateTime Departure { get; set; }
@@ -27,7 +27,7 @@ namespace Simplifly.Models
             Id = 0;
         }
 
-        public Schedule(int id, int routeId, Route? route, int flightId, DateTime departure, DateTime arrival)
+        public Schedule(int id, int routeId, Route? route, string flightId, DateTime departure, DateTime arrival)
         {
             Id = id;
             RouteId = routeId;
@@ -36,7 +36,7 @@ namespace Simplifly.Models
             Arrival = arrival;
             FlightId = flightId;
         }
-        public Schedule(  int routeId, Route? route, int flightId, DateTime departure, DateTime arrival)
+        public Schedule(  int routeId, Route? route, string flightId, DateTime departure, DateTime arrival)
         {
 
             RouteId = routeId;
