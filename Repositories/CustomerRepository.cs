@@ -8,15 +8,16 @@ namespace Simplifly.Repositories
 {
     public class CustomerRepository : IRepository<int, Customer>
     {
-        readonly RequestTrackerContext _context;
-
+        private readonly RequestTrackerContext _context;
+        private readonly ILogger<CustomerRepository> _logger;
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public CustomerRepository(RequestTrackerContext context)
+        public CustomerRepository(RequestTrackerContext context,ILogger<CustomerRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<Customer> Add(Customer items)
         {
