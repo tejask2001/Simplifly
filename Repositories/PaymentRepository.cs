@@ -2,10 +2,11 @@
 using Simplifly.Context;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
+using Simplifly.Models;
 
 namespace Simplifly.Repositories
 {
-    public class PaymentRepository : IRepository<int, Models.Payment>
+    public class PaymentRepository : IRepository<int, Models.Payment>, IPaymentRepository
     {
         RequestTrackerContext _context;
 
@@ -92,5 +93,10 @@ namespace Simplifly.Repositories
             }
             throw new NoSuchPaymentException();
         }
+        public async Task<Payment> GetPaymentByBookingIdAsync(int bookingId)
+        {
+            return await _context.Payments.FirstOrDefaultAsync(p => p.BookingId == bookingId);
+        }
+
     }
 }

@@ -1,24 +1,39 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Simplifly.Models
 {
     public class SeatDetail:IEquatable<SeatDetail>
     {
         [Key]
-        public string SeatNumber { get; set; }  = string.Empty;
-        public string SeatClass { get; set;} = string.Empty;
-        public string status { get; set; } = string.Empty;
+        public int Id { get; set; }
+
+        public String FlightId { get; set; }
+
+        [ForeignKey("FlightId")]
+        public Flight Flight { get; set; }
+
+        public string SeatNumber { get; set; }
+
+        public bool IsBooked { get; set; }
 
         public SeatDetail()
         {
             
         }
-
-        public SeatDetail(string seatNumber, string seatClass, string status)
+        public SeatDetail( string flightId, string seatNumber, bool isBooked)
         {
+            FlightId = flightId;
             SeatNumber = seatNumber;
-            SeatClass = seatClass;
-            this.status = status;
+            IsBooked = isBooked;
+        }
+
+        public SeatDetail(int id, string flightId, string seatNumber, bool isBooked)
+        {
+            Id = id;
+            FlightId = flightId;
+            SeatNumber = seatNumber;
+            IsBooked = isBooked;
         }
 
         public bool Equals(SeatDetail? other)

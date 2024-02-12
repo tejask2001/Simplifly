@@ -2,10 +2,11 @@
 using Simplifly.Context;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
+using Simplifly.Models;
 
 namespace Simplifly.Repositories
 {
-    public class PassengerRepository : IRepository<int, Models.Passenger>
+    public class PassengerRepository : IRepository<int, Models.Passenger> 
     {
         RequestTrackerContext _context;
 
@@ -36,9 +37,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Passenger</param>
         /// <returns>Passenger object</returns>
         /// <exception cref="NoSuchPassengerException">throws exception if no Passenger found</exception>
-        public Task<Models.Passenger> Delete(int passengerId)
+        public  async Task<Models.Passenger> Delete(int passengerId)
         {
-            var passenger = GetAsync(passengerId);
+            var passenger = await GetAsync(passengerId);
             if (passenger != null)
             {
                 _context.Remove(passenger);
@@ -74,6 +75,7 @@ namespace Simplifly.Repositories
             var passengers = _context.Passengers.ToList();
             return passengers;
         }
+
 
         /// <summary>
         /// Method to update Passenger.

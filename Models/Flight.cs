@@ -9,12 +9,13 @@ namespace Simplifly.Models
         public string FlightNumber { get; set; } 
         public string Airline { get; set; }= string.Empty;
         public int TotalSeats { get; set; }
-        public int FlightOwnerOwnerId { get; set; }
+
         [ForeignKey("FlightOwnerOwnerId")]
+        public int FlightOwnerOwnerId { get; set; }
+       
         public FlightOwner? FlightOwner { get; set; }
 
-        [ForeignKey("FlightOwnerId")]
-        public int FlightOwner {  get; set; }
+        public double BasePrice { get; set; }
 
 
         public Flight()
@@ -23,11 +24,13 @@ namespace Simplifly.Models
             
         }
 
-        public Flight(string flightNumber, string airline, int totalSeats)
+        public Flight(string flightNumber, string airline, int totalSeats, int flightOwnerOwnerId, double basePrice)
         {
             FlightNumber = flightNumber;
             Airline = airline;
             TotalSeats = totalSeats;
+            FlightOwnerOwnerId = flightOwnerOwnerId;
+            BasePrice = basePrice;
         }
 
         public bool Equals(Flight? other)
