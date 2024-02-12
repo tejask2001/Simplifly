@@ -35,7 +35,9 @@ namespace Simplifly.Models
             Departure = departure;
             Arrival = arrival;
         }
+        
         public Schedule( string flightNumber, int routeId, Route? route, DateTime departure, DateTime arrival)
+
         {
             
             FlightNumber = flightNumber;
