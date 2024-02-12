@@ -6,7 +6,7 @@ using Simplifly.Models;
 
 namespace Simplifly.Repositories
 {
-    public class SeatDetailRepository : IRepository<string, SeatDetail>,ISeatDeatilRepository
+    public class SeatDetailRepository : IRepository<string, SeatDetail>
     {
         RequestTrackerContext _context;
 
@@ -64,17 +64,6 @@ namespace Simplifly.Repositories
                 return seatDetail;
             }
             throw new NoSuchSeatException();
-        }
-
-        public async Task<IEnumerable<SeatDetail>> GetSeatDetailsAsync(List<int> seatIds)
-        {
-            return await Task.FromResult(_context.Seats.Where(s => seatIds.Contains(s.Id)).ToList());
-        }
-
-        public async Task UpdateSeatDetailsAsync(IEnumerable<SeatDetail> seatDetails)
-        {
-            _context.Seats.UpdateRange(seatDetails);
-            await _context.SaveChangesAsync();
         }
 
         /// <summary>

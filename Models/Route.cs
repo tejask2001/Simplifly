@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Simplifly.Models
 {
     public class Route:IEquatable<Route>
     {
-        [Key]
         public int Id { get; set; }        
         public int SourceAirportId { get; set; }
 
@@ -17,9 +15,7 @@ namespace Simplifly.Models
         //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("DestinationAirportId")]
         public Airport? DestinationAirport { get; set; }
-        public double Distance { get; set; }
-        public ICollection<Schedule> Schedules { get; set; }
-
+              
 
         public Route()
         {

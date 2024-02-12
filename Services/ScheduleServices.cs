@@ -18,8 +18,9 @@ namespace Simplifly.Services
         public async Task<Schedule> AddSchedule(Schedule schedule)
         {
             var existingSchedules = await GetAllSchedules();
-            
-            if (existingSchedules == null)
+            var existingSchedule= existingSchedules.FirstOrDefault(e=>e.FlightNumber == 
+            schedule.FlightNumber && (schedule.Departure>=e.Departure && schedule.Arrival<=e.Arrival));
+            if (existingSchedule==null)
             {
                 schedule= await _scheduleRepository.Add(schedule);
                 return schedule;
@@ -43,6 +44,7 @@ namespace Simplifly.Services
             var schedule = await _scheduleRepository.GetAsync(scheduleId);
             if (schedule != null)
             {
+                schedule.FlightNumber = flightNumber;
                 schedule = await _scheduleRepository.Update(schedule);
                 return schedule;
             }
