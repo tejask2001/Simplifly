@@ -49,14 +49,6 @@ namespace Simplifly.Services
             throw new NoSuchRouteException();
 
         }
-        public async Task<bool> RemoveRouteById(int routeId)
-        {
-            if( await _routeRepository.Delete(routeId) != null)
-            {
-                return true;
-            };
-            return false;
-        }
 
         public Task<List<Route>> UpdateRoute(Route route)
         {
