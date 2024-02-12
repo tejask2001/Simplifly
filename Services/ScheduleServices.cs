@@ -1,6 +1,7 @@
 ﻿using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using Simplifly.Repositories;
 
 namespace Simplifly.Services
 {
@@ -17,14 +18,17 @@ namespace Simplifly.Services
         }
         public async Task<Schedule> AddSchedule(Schedule schedule)
         {
-            var existingSchedules = await GetAllSchedules();
             
-            if (existingSchedules == null)
+            try
             {
-                schedule= await _scheduleRepository.Add(schedule);
+                var existingSchedules = await _scheduleRepository.GetAsync(schedule.Id);
+                throw new FlightScheduleBusyException();
+            }
+            catch (NoSuchScheduleException)
+            {
+                schedule = await _scheduleRepository.Add(schedule);
                 return schedule;
             }
-            throw new FlightScheduleBusyException();
         }
 
         public async Task<List<Schedule>> GetAllSchedules()

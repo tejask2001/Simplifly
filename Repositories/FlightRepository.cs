@@ -8,8 +8,8 @@ namespace Simplifly.Repositories
 {
     public class FlightRepository : IRepository<string, Flight>
     {
-        RequestTrackerContext _context;
-        ILogger<FlightRepository> _logger;
+        private readonly RequestTrackerContext _context;
+        private readonly ILogger<FlightRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext

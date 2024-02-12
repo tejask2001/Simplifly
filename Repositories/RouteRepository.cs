@@ -8,14 +8,16 @@ namespace Simplifly.Repositories
     public class RouteRepository : IRepository<int, Models.Route>
     {
         RequestTrackerContext _context;
+        ILogger<RouteRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public RouteRepository(RequestTrackerContext context)
+        public RouteRepository(RequestTrackerContext context, ILogger<RouteRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
