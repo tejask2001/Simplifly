@@ -32,6 +32,7 @@ namespace Simplifly.Services
             {
                 await _flightownerRepository.Delete(id);
                 await _userRepository.Delete(owner.Username);
+
                 return true;
             }
             return false;

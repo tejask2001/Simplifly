@@ -9,6 +9,7 @@ namespace Simplifly.Services
     public class ScheduleServices : IScheduleFlightOwnerService, IFlightCustomerService
     {
         IRepository<int, Schedule> _scheduleRepository;
+
         ILogger<ScheduleServices> _logger;
 
 
@@ -32,6 +33,7 @@ namespace Simplifly.Services
         /// <exception cref="FlightScheduleBusyException">Throw when schedule is already present</exception>
         public async Task<Schedule> AddSchedule(Schedule schedule)
         {
+
             try
             {
                 var existingSchedules = await _scheduleRepository.GetAsync(schedule.Id);
@@ -85,6 +87,7 @@ namespace Simplifly.Services
             if (schedule != null)
             {
                 schedule.FlightId = flightNumber;
+
                 schedule = await _scheduleRepository.Update(schedule);
                 return schedule;
             }
@@ -171,6 +174,7 @@ namespace Simplifly.Services
             flightSchedule = schedules.Select(e => new FlightScheduleDTO
             {
                 FlightNumber = e.FlightId,
+
                 SourceAirport = e.Route?.SourceAirport?.Name + " ," + e.Route?.SourceAirport?.City,
                 DestinationAirport = e.Route?.DestinationAirport?.Name + " ," + e.Route?.DestinationAirport?.City,
                 Departure = e.Departure,

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
+
 namespace Simplifly.Models
 {
     public class Schedule:IEquatable<Schedule>
@@ -53,5 +54,6 @@ namespace Simplifly.Models
             var schedule= other ?? new Schedule();
             return this.Id.Equals(schedule.Id);
         }
+
     }
 }

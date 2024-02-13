@@ -24,6 +24,7 @@ namespace Simplifly.Controllers
 
         [HttpGet]
         [Authorize(Roles = "flightOwner")]
+
         public async Task<ActionResult<List<Route>>> GetAllRoute()
         {
             try
@@ -41,14 +42,15 @@ namespace Simplifly.Controllers
 
         [Route("AddAirport")]
         [HttpPost]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Airport>> AddAirport(Airport airport)
         {
             try
             {
-                airport = await _routeFlightOwnerService.AddAirport(airport);
+                airport=await _routeFlightOwnerService.AddAirport(airport);
                 return airport;
             }
-            catch (AirportAlreadyPresentException aape)
+            catch(AirportAlreadyPresentException aape)
             {
                 _logger.LogInformation(aape.Message);
                 return NotFound(aape.Message);
@@ -66,11 +68,12 @@ namespace Simplifly.Controllers
                 route = await _routeFlightOwnerService.AddRoute(route);
                 return route;
             }
-            catch (RouteAlreadyPresentException nape)
+            catch(RouteAlreadyPresentException nape)
             {
                 _logger.LogInformation(nape.Message);
                 return NotFound(nape.Message);
             }
+
 
         }
 
@@ -88,6 +91,7 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsre.Message);
                 return NotFound(nsre.Message);
             }
+
 
         }
     }
