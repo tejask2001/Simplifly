@@ -91,8 +91,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsre.Message);
                 return NotFound(nsre.Message);
             }
-
-
         }
     }
 }

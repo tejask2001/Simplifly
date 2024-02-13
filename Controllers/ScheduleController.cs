@@ -127,5 +127,22 @@ namespace Simplifly.Controllers
                 return NotFound(nsse.Message);
             }
         }
+
+        [Route("DeleteSchedule")]
+        [HttpDelete]
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<Schedule>> DeleteSchedule(int scheduleID)
+        {
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.RemoveSchedule(scheduleID);
+                return schedule;
+            }
+            catch(NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
+        }
     }
 }

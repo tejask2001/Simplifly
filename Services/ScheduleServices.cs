@@ -33,17 +33,21 @@ namespace Simplifly.Services
         /// <exception cref="FlightScheduleBusyException">Throw when schedule is already present</exception>
         public async Task<Schedule> AddSchedule(Schedule schedule)
         {
+            var existingSchedules = await _scheduleRepository.GetAsync();
+            bool isOverlap = existingSchedules.Any(e =>
+    e.FlightId == schedule.FlightId &&
+    ((schedule.Departure >= e.Departure && schedule.Departure <= e.Arrival) ||
+    (schedule.Arrival >= e.Departure && schedule.Arrival <= e.Arrival) ||
+    (e.Departure >= schedule.Departure && e.Arrival <= schedule.Arrival)));
 
-            try
+            if (!isOverlap)
             {
-                var existingSchedules = await _scheduleRepository.GetAsync(schedule.Id);
-                throw new FlightScheduleBusyException();
-            }
-            catch (NoSuchScheduleException)
-            {
+                // If no overlap, add the new schedule
                 schedule = await _scheduleRepository.Add(schedule);
                 return schedule;
             }
+            throw new FlightScheduleBusyException();
+
         }
 
         /// <summary>
@@ -62,9 +66,9 @@ namespace Simplifly.Services
         /// <param name="flightNumber">Schedule number in string</param>
         /// <returns>Object of schedule</returns>
         /// <exception cref="NoSuchScheduleException">throw when schedule is not present</exception>
-        public async Task<Schedule> RemoveSchedule(Schedule schedule)
+        public async Task<Schedule> RemoveSchedule(int scheduleId)
         {
-            var schedules = await _scheduleRepository.GetAsync(schedule.Id);
+            var schedules = await _scheduleRepository.GetAsync(scheduleId);
             if (schedules != null)
             {
                 schedules = await _scheduleRepository.Delete(schedules.Id);

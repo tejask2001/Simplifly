@@ -6,7 +6,7 @@ namespace Simplifly.Interfaces
     public interface IScheduleFlightOwnerService
     {
         public Task<Schedule> AddSchedule(Schedule schedule);
-        public Task<Schedule> RemoveSchedule(Schedule schedule);
+        public Task<Schedule> RemoveSchedule(int scheduleId);
         public Task<List<Schedule>> GetAllSchedules();
         public Task<List<FlightScheduleDTO>> GetFlightSchedules(string flightNumber);
         public Task<Schedule> UpdateScheduledFlight(int scheduleId, string flightNumber);
