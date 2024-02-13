@@ -23,7 +23,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="flight owner")]
+        [Authorize(Roles ="f    ")]
         public async Task<ActionResult<List<Route>>> GetAllRoute()
         {
             try
@@ -58,7 +58,7 @@ namespace Simplifly.Controllers
 
         [Route("AddRoute")]
         [HttpPost]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Route>> AddRoute(Route route)
         {
             try
@@ -75,7 +75,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Route>> RemoveRoute(RemoveRouteDTO routeDTO)
         {
             try

@@ -24,7 +24,7 @@ namespace Simplifly.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles ="flight owner")]
+        [Authorize(Roles ="flightOwner")]
         public async Task<ActionResult<List<Flight>>> GetAllFlight()
         {            
             try
@@ -41,7 +41,7 @@ namespace Simplifly.Controllers
 
         [Route("SearchFlight")]
         [HttpGet]
-        [Authorize(Roles ="customer")]
+        [Authorize(Roles ="Customer")]
         public async Task<ActionResult<List<SearchedFlightResultDTO>>> GetAllFlights([FromQuery] SearchFlightDTO searchFlightDTO)
         {
             try
@@ -58,7 +58,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles ="flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> AddFlight(Flight flight)
         {
             try
@@ -76,7 +76,7 @@ namespace Simplifly.Controllers
                 
 
         [HttpPut]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles =  ")]
         public async Task<ActionResult<Flight>> UpdateFlightAirline(FlightAirlineDTO flightDTO)
         {           
 
@@ -95,7 +95,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateTotalSeats")]
         [HttpPut]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateTotalSeats(FlightSeatsDTO flightDTO)
         {
             try
@@ -112,7 +112,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> RemoveFlight(string flightNumber)
         {
             try

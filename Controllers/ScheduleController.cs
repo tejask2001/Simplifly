@@ -21,7 +21,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="flight owner,admin")]
+        [Authorize(Roles ="flightOwner,admin")]
         public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
             try
@@ -39,7 +39,7 @@ namespace Simplifly.Controllers
 
         [Route("FlightSchedule")]
         [HttpGet]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<List<FlightScheduleDTO>>> GetFlightSchedule([FromQuery] string flightNumber)
         {
             try
@@ -55,7 +55,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> AddSchedule(Schedule schedule)
         {
             try
@@ -73,7 +73,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledFlight")]
         [HttpPut]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledFlight(ScheduleFlightDTO scheduleFlightDTO)
         {
             try
@@ -92,7 +92,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledRoute")]
         [HttpPut]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledRoute(ScheduleRouteDTO scheduleRouteDTO)
         {
             try
@@ -111,7 +111,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledTime")]
         [HttpPut]
-        [Authorize(Roles = "flight owner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledTime(ScheduleTimeDTO scheduleTimeDTO)
         {
             try
