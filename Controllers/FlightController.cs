@@ -76,7 +76,7 @@ namespace Simplifly.Controllers
                 
 
         [HttpPut]
-        [Authorize(Roles =  ")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateFlightAirline(FlightAirlineDTO flightDTO)
         {           
 

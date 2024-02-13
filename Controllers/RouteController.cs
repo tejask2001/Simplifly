@@ -23,7 +23,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="f    ")]
+        [Authorize(Roles ="flightOwner")]
         public async Task<ActionResult<List<Route>>> GetAllRoute()
         {
             try
@@ -41,6 +41,7 @@ namespace Simplifly.Controllers
 
         [Route("AddAirport")]
         [HttpPost]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Airport>> AddAirport(Airport airport)
         {
             try
