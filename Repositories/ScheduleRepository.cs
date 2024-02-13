@@ -59,7 +59,7 @@ namespace Simplifly.Repositories
         public async Task<Schedule> GetAsync(int key)
         {
             var schedules = await GetAsync();
-            var schedule= schedules.FirstOrDefault(e=>e.Id==key);
+            var schedule = schedules.FirstOrDefault(e => e.Id == key);
             if (schedule != null)
             {
                 return schedule;
@@ -73,7 +73,12 @@ namespace Simplifly.Repositories
         /// <returns>Schedule object</returns>
         public async Task<List<Schedule>> GetAsync()
         {
-            var schedules = _context.Schedules.ToList();
+            var schedules = await _context.Schedules.AsNoTracking()
+                        .Include(e => e.Route)
+                        .Include(e => e.Flight)
+                        .Include(e => e.Route.SourceAirport)
+                        .Include(e => e.Route.DestinationAirport)
+                        .ToListAsync();
             return schedules;
         }
 
@@ -87,9 +92,9 @@ namespace Simplifly.Repositories
         public async Task<Schedule> Update(Schedule items)
         {
             var schedule = await GetAsync(items.Id);
-            if(schedule != null)
+            if (schedule != null)
             {
-                _context.Entry<Schedule>(items).State=EntityState.Modified;
+                _context.Entry<Schedule>(items).State = EntityState.Modified;
                 _context.SaveChanges();
                 return schedule;
             }

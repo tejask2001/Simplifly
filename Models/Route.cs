@@ -18,7 +18,7 @@ namespace Simplifly.Models
         [ForeignKey("DestinationAirportId")]
         public Airport? DestinationAirport { get; set; }
         public double Distance { get; set; }
-        public ICollection<Schedule> Schedules { get; set; }
+        public ICollection<Schedule>? Schedules { get; set; }
 
 
         public Route()

@@ -10,7 +10,6 @@ namespace Simplifly.Repositories
     {
         private readonly RequestTrackerContext _context;
         private readonly ILogger<UserRepository> _logger;
-
         public UserRepository(RequestTrackerContext context, ILogger<UserRepository> logger)
         {
             _context = context;

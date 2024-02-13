@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Models.DTO_s;
@@ -12,52 +13,119 @@ namespace Simplifly.Controllers
     public class FlightController : ControllerBase
     {
         private readonly IFlightFlightOwnerService _flightOwnerService;
-        public FlightController(IFlightFlightOwnerService flightOwnerService)
+        private readonly IFlightCustomerService _flightCustomerService;
+        private readonly ILogger<FlightController> _logger;
+        public FlightController(IFlightFlightOwnerService flightOwnerService, IFlightCustomerService flightCustomerService, ILogger<FlightController> logger)
         {
             _flightOwnerService = flightOwnerService;
+            _flightCustomerService = flightCustomerService;
+            _logger = logger;
         }
 
 
         [HttpGet]
-        [Authorize(Roles ="Admin")]
-        public Task<List<Flight>> GetAllFlight()
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<List<Flight>>> GetAllFlight()
         {
-            var flights=_flightOwnerService.GetAllFlights();
-            return flights;
+            try
+            {
+                var flights = await _flightOwnerService.GetAllFlights();
+                return flights;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+        }
+
+        [Route("SearchFlight")]
+        [HttpGet]
+        [Authorize(Roles = "Customer")]
+        public async Task<ActionResult<List<SearchedFlightResultDTO>>> GetAllFlights([FromQuery] SearchFlightDTO searchFlightDTO)
+        {
+            try
+            {
+                var flights = await _flightCustomerService.SearchFlights(searchFlightDTO);
+                return flights;
+            }
+            catch (NoFlightAvailableException nfae)
+            {
+                _logger.LogInformation(nfae.Message);
+                return NotFound(nfae.Message);
+            }
+
         }
 
         [HttpPost]
         [Authorize(Roles = "flightOwner")]
-        public async Task<Flight> AddFlight(Flight flight)
+        public async Task<ActionResult<Flight>> AddFlight(Flight flight)
         {
-            flight= await _flightOwnerService.AddFlight(flight);
-            return flight;
+            try
+            {
+                flight = await _flightOwnerService.AddFlight(flight);
+                return flight;
+            }
+            catch (FlightAlreadyPresentException fape)
+            {
+                _logger.LogInformation(fape.Message);
+                return NotFound(fape.Message);
+            }
+
         }
-                
+
 
         [HttpPut]
         [Authorize(Roles = "flightOwner")]
-        public async Task<Flight> UpdateFlightAirline(FlightAirlineDTO flightDTO)
+        public async Task<ActionResult<Flight>> UpdateFlightAirline(FlightAirlineDTO flightDTO)
         {
-            var flight= await _flightOwnerService.UpdateAirline(flightDTO.FlightNumber, flightDTO.Airline);
-            return flight;
+
+            try
+            {
+                var flight = await _flightOwnerService.UpdateAirline(flightDTO.FlightNumber, flightDTO.Airline);
+                return flight;
+            }
+            catch (NoSuchFlightException nsfe)
+            {
+                _logger.LogInformation(nsfe.Message);
+                return NotFound(nsfe.Message);
+            }
+
         }
 
         [Route("UpdateTotalSeats")]
         [HttpPut]
         [Authorize(Roles = "flightOwner")]
-        public async Task<Flight> UpdateTotalSeats(FlightSeatsDTO flightDTO)
+        public async Task<ActionResult<Flight>> UpdateTotalSeats(FlightSeatsDTO flightDTO)
         {
-            var flight = await _flightOwnerService.UpdateTotalSeats(flightDTO.FlightNumber, flightDTO.TotalSeats);
-            return flight;
+            try
+            {
+                var flight = await _flightOwnerService.UpdateTotalSeats(flightDTO.FlightNumber, flightDTO.TotalSeats);
+                return flight;
+            }
+            catch (NoSuchFlightException nsfe)
+            {
+                _logger.LogInformation(nsfe.Message);
+                return NotFound(nsfe.Message);
+            }
+
         }
 
         [HttpDelete]
         [Authorize(Roles = "flightOwner")]
-        public async Task<Flight> RemoveFlight(string flightNumber)
+        public async Task<ActionResult<Flight>> RemoveFlight(string flightNumber)
         {
-            var flight = await _flightOwnerService.RemoveFlight(flightNumber);
-            return flight;
+            try
+            {
+                var flight = await _flightOwnerService.RemoveFlight(flightNumber);
+                return flight;
+            }
+            catch (NoSuchFlightException nsfe)
+            {
+                _logger.LogInformation(nsfe.Message);
+                return NotFound(nsfe.Message);
+            }
+
         }
 
     }
