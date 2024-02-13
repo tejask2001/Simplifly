@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Simplifly.Models;
 using Simplifly.Services;
 using Simplifly.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Simplifly.Controllers
 {
@@ -27,6 +28,8 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/users/{userId}
         [HttpDelete("customers/{userId}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> DeleteCustomer(int userId)
         {
             var result = await _custService.RemoveCustomer(userId);
@@ -39,6 +42,8 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/flightowners/{flightOwnerId}
         [HttpDelete("flightowners/{flightOwnerId}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> DeleteFlightOwner(int flightOwnerId)
         {
             var result = await _flightOwnerService.RemoveFlightOwner(flightOwnerId);
@@ -53,6 +58,8 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/bookings/{bookingId}
         [HttpDelete("bookings/{bookingId}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> CancelBooking( int bookingId)
         {
             var success = await _bookingService.CancelBookingAsync(bookingId);
@@ -65,6 +72,8 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/flightroutes/{flightRouteId}
         [HttpDelete("flightroutes/{flightRouteId}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> DeleteFlightRoute(int flightRouteId)
         {
             var result = await _routeService.RemoveRouteById(flightRouteId);

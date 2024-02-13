@@ -9,14 +9,15 @@ namespace Simplifly.Repositories
     public class ScheduleRepository : IRepository<int, Schedule>
     {
         RequestTrackerContext _context;
-
+        private readonly ILogger<ScheduleRepository> _logger;
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public ScheduleRepository(RequestTrackerContext context)
+        public ScheduleRepository(RequestTrackerContext context, ILogger<ScheduleRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>

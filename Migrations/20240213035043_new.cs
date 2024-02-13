@@ -4,7 +4,7 @@
 
 namespace Simplifly.Migrations
 {
-    public partial class token : Migration
+    public partial class @new : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

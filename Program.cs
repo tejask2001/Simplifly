@@ -79,6 +79,8 @@ namespace Simplifly
             builder.Services.AddScoped<IRepository<int, Admin>, AdminRepository>();
             builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
             builder.Services.AddScoped<IRepository<int, PassengerBooking>, PassengerBookingRepository>();
+            builder.Services.AddScoped<IRepository<int, Passenger>, PassengerRepository>();
+
             builder.Services.AddScoped<IRepository<int, Payment>,PaymentRepository>();
             builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
             builder.Services.AddScoped<IRepository<int,Route>,RouteRepository>();
@@ -99,6 +101,9 @@ namespace Simplifly
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IFlightOwnerService, FlightOwnerService>();
             builder.Services.AddScoped<IBookingService, BookingService>();
+            builder.Services.AddScoped<IPassengerService, PassengerService>();
+            builder.Services.AddScoped<ISeatDetailService, SeatDetailService>();
+
 
 
 

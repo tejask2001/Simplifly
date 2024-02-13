@@ -8,15 +8,17 @@ namespace Simplifly.Repositories
 {
     public class AirportRepository : IRepository<int, Airport>
     {
-        readonly RequestTrackerContext _context;
+        private readonly RequestTrackerContext _context;
+        private readonly ILogger<AirportRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public AirportRepository(RequestTrackerContext context)
+        public AirportRepository(RequestTrackerContext context, ILogger<AirportRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>

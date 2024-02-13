@@ -37,9 +37,9 @@ namespace Simplifly.Repositories
         /// <param name="items">Object of Payment</param>
         /// <returns>Payment object</returns>
         /// <exception cref="NoSuchPaymentException">throws exception if no Payment found</exception>
-        public Task<Models.Payment> Delete(int paymentId)
+        public async Task<Models.Payment> Delete(int paymentId)
         {
-            var payment = GetAsync(paymentId);
+            var payment =  await GetAsync(paymentId);
             if (payment != null)
             {
                 _context.Remove(payment);

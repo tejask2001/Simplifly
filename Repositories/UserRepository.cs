@@ -9,10 +9,12 @@ namespace Simplifly.Repositories
     public class UserRepository : IRepository<string, User>
     {
         private readonly RequestTrackerContext _context;
+        private readonly ILogger<UserRepository> _logger;
 
-        public UserRepository(RequestTrackerContext context)
+        public UserRepository(RequestTrackerContext context, ILogger<UserRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<User> Add(User item)
         {
