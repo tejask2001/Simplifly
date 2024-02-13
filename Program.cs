@@ -67,10 +67,16 @@ namespace Simplifly
                       };
                   });
 
+            #region context
+
             builder.Services.AddDbContext<RequestTrackerContext>(opts =>
             {
                 opts.UseSqlServer(builder.Configuration.GetConnectionString("requestTrackerConnection"));
             });
+
+            #endregion
+
+            #region RepositoryInjection 
 
             builder.Services.AddScoped<IRepository<int,Airport>,AirportRepository>();
             builder.Services.AddScoped<IRepository<int,Booking>,BookingsRepository>();
@@ -89,7 +95,9 @@ namespace Simplifly
             builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<ISeatDeatilRepository, SeatDetailRepository>();
 
+            #endregion
 
+            #region Service Injection
 
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IFlightFlightOwnerService,FlightService>();
@@ -100,8 +108,8 @@ namespace Simplifly
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IFlightOwnerService, FlightOwnerService>();
             builder.Services.AddScoped<IBookingService, BookingService>();
-            
 
+            #endregion
 
 
             var app = builder.Build();

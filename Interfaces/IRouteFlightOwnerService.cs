@@ -5,6 +5,7 @@ namespace Simplifly.Interfaces
 {
     public interface IRouteFlightOwnerService
     {
+        public Task<Airport> AddAirport(Airport airport);
         public Task<Route> AddRoute(Route route);
         public Task<Route> RemoveRoute(int sourceAirportId,int destinationAirportId);
         public Task<List<Route>> GetAllRoutes();

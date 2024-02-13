@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
+using Simplifly.Models;
 using Simplifly.Models.DTO_s;
 using Route = Simplifly.Models.Route;
 
@@ -38,6 +39,24 @@ namespace Simplifly.Controllers
             
         }
 
+        [Route("AddAirport")]
+        [HttpPost]
+        public async Task<ActionResult<Airport>> AddAirport(Airport airport)
+        {
+            try
+            {
+                airport=await _routeFlightOwnerService.AddAirport(airport);
+                return airport;
+            }
+            catch(AirportAlreadyPresentException aape)
+            {
+                _logger.LogInformation(aape.Message);
+                return NotFound(aape.Message);
+            }
+        }
+
+
+        [Route("AddRoute")]
         [HttpPost]
         [Authorize(Roles = "flight owner")]
         public async Task<ActionResult<Route>> AddRoute(Route route)

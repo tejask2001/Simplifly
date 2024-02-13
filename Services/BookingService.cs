@@ -194,5 +194,16 @@ namespace Simplifly.Services
             return true;
         }
 
+        public async Task<List<Booking>> GetBookingByFlight(string flightNumber)
+        {
+            var bookings = await _bookingRepository.GetAsync();
+            bookings=bookings.Where(e=>e.FlightId==flightNumber).ToList();
+
+            if (bookings != null)
+            {
+                return bookings;
+            }
+            throw new NoSuchBookingsException();
+        }
     }
 }

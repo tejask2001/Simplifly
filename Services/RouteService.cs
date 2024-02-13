@@ -1,5 +1,6 @@
 ﻿using Simplifly.Exceptions;
 using Simplifly.Interfaces;
+using Simplifly.Models;
 using Route = Simplifly.Models.Route;
 
 namespace Simplifly.Services
@@ -8,7 +9,7 @@ namespace Simplifly.Services
     {
         private readonly IRepository<int, Route> _routeRepository;
         private readonly ILogger<RouteService> _logger;
-
+        private readonly IRepository<int, Airport> _airportRepository;
         /// <summary>
         /// Constructor to initialize the objects
         /// </summary>
@@ -19,6 +20,25 @@ namespace Simplifly.Services
             _routeRepository = routeRepository;
             _logger = logger;
 
+        }
+        public RouteService(IRepository<int, Route> routeRepository, ILogger<RouteService> logger, IRepository<int, Airport> airportRepository)
+        {
+            _airportRepository = airportRepository;
+            _routeRepository = routeRepository;
+            _logger = logger;
+
+        }
+
+        public async Task<Airport> AddAirport(Models.Airport airport)
+        {
+            var airports= await _airportRepository.GetAsync();
+            var existingAirport=airports.FirstOrDefault(e=>e.Name==airport.Name && e.City==airport.City);
+            if(existingAirport==null)
+            {
+                airport = await _airportRepository.Add(airport);
+                return airport;
+            }
+            throw new AirportAlreadyPresentException();
         }
 
         /// <summary>
