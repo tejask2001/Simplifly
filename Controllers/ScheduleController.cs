@@ -35,8 +35,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(ex.Message);
                 return NotFound(ex.Message);
             }
-
-
         }
 
         [Route("FlightSchedule")]
@@ -71,9 +69,7 @@ namespace Simplifly.Controllers
             {
                 _logger.LogInformation(fsbe.Message);
                 return NotFound(fsbe.Message);
-            
-
-
+            }
         }
 
         [Route("UpdateScheduledFlight")]
@@ -93,8 +89,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-
-
         }
 
         [Route("UpdateScheduledRoute")]
@@ -113,8 +107,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-
-
         }
 
         [Route("UpdateScheduledTime")]
@@ -134,8 +126,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-
-
         }
     }
 }
