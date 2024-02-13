@@ -21,7 +21,8 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="flightOwner,admin")]
+        [Authorize(Roles = "flightOwner,Admin")]
+
         public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
             try
@@ -34,7 +35,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(ex.Message);
                 return NotFound(ex.Message);
             }
-            
+
+
         }
 
         [Route("FlightSchedule")]
@@ -44,10 +46,11 @@ namespace Simplifly.Controllers
         {
             try
             {
-                var flightSchedule=await _scheduleFlightOwnerService.GetFlightSchedules(flightNumber);
+                var flightSchedule = await _scheduleFlightOwnerService.GetFlightSchedules(flightNumber);
                 return flightSchedule;
             }
-            catch(NoSuchScheduleException nsse)
+            catch (NoSuchScheduleException nsse)
+
             {
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
@@ -63,12 +66,14 @@ namespace Simplifly.Controllers
                 schedule = await _scheduleFlightOwnerService.AddSchedule(schedule);
                 return schedule;
             }
-            catch(FlightScheduleBusyException fsbe)
+            catch (FlightScheduleBusyException fsbe)
+
             {
                 _logger.LogInformation(fsbe.Message);
                 return NotFound(fsbe.Message);
-            }
             
+
+
         }
 
         [Route("UpdateScheduledFlight")]
@@ -82,12 +87,14 @@ namespace Simplifly.Controllers
                                 UpdateScheduledFlight(scheduleFlightDTO.ScheduleId, scheduleFlightDTO.FlightNumber);
                 return schedule;
             }
-            catch(NoSuchScheduleException nsse)
+            catch (NoSuchScheduleException nsse)
+
             {
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-            
+
+
         }
 
         [Route("UpdateScheduledRoute")]
@@ -106,7 +113,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-            
+
+
         }
 
         [Route("UpdateScheduledTime")]
@@ -126,7 +134,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-            
+
+
         }
     }
 }

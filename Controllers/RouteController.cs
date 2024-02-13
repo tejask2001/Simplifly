@@ -23,7 +23,8 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles ="flightOwner")]
+        [Authorize(Roles = "flightOwner")]
+
         public async Task<ActionResult<List<Route>>> GetAllRoute()
         {
             try
@@ -36,7 +37,7 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(ex.Message);
                 return NotFound(ex.Message);
             }
-            
+
         }
 
         [Route("AddAirport")]
@@ -72,7 +73,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nape.Message);
                 return NotFound(nape.Message);
             }
-            
+
+
         }
 
         [HttpDelete]
@@ -89,7 +91,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsre.Message);
                 return NotFound(nsre.Message);
             }
-            
+
+
         }
     }
 }

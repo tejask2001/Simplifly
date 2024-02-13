@@ -15,7 +15,7 @@ namespace Simplifly.Services
         public TokenService(IConfiguration configuration)
         {
             _keyString = configuration["SecretKey"].ToString();
-            _symmetricSecurityKey= new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_keyString));
+            _symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_keyString));
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Simplifly.Services
                 new Claim(JwtRegisteredClaimNames.NameId,user.Username),
                 new Claim(ClaimTypes.Role,user.Role)
             };
-            var cred=new SigningCredentials(_symmetricSecurityKey,SecurityAlgorithms.HmacSha256);
+            var cred = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
             var tokenDescription = new SecurityTokenDescriptor
             {
@@ -42,7 +42,7 @@ namespace Simplifly.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var myToken = tokenHandler.CreateToken(tokenDescription);
-            token=tokenHandler.WriteToken(myToken);
+            token = tokenHandler.WriteToken(myToken);
             return token;
         }
     }

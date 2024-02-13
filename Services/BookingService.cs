@@ -11,7 +11,7 @@ namespace Simplifly.Services
         private readonly IRepository<int, Booking> _bookingRepository;
         private readonly IRepository<string, Flight> _flightRepository;
         private readonly IRepository<int, PassengerBooking> _passengerBookingRepository;
-        private readonly  ISeatDeatilRepository _seatDetailRepository;
+        private readonly ISeatDeatilRepository _seatDetailRepository;
         private readonly IPassengerBookingRepository _passengerBookingsRepository;
         private readonly IBookingRepository _bookingsRepository;
 
@@ -38,17 +38,17 @@ namespace Simplifly.Services
             {
                 throw new ArgumentNullException(nameof(bookingRequest));
             }
-            var isSeatsAvailable = await _bookingsRepository.CheckSeatsAvailabilityAsync(bookingRequest.FlightId,bookingRequest.SelectedSeats);
+            var isSeatsAvailable = await _bookingsRepository.CheckSeatsAvailabilityAsync(bookingRequest.FlightId, bookingRequest.SelectedSeats);
 
             if (!isSeatsAvailable)
             {
                 // Handle case where selected seats are not available
-                return false; 
+                return false;
             }
-            
+
 
             // Calculate total price based on the number of selected seats
-            var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(bookingRequest.FlightId) );
+            var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(bookingRequest.FlightId));
             // Create Booking object
             var booking = new Booking
             {
@@ -62,7 +62,7 @@ namespace Simplifly.Services
             // Fetch seat details for selected seats
             var seatDetails = await _seatDetailRepository.GetSeatDetailsAsync(bookingRequest.SelectedSeats);
 
-            if (seatDetails == null || seatDetails.Count()!= bookingRequest.SelectedSeats.Count())
+            if (seatDetails == null || seatDetails.Count() != bookingRequest.SelectedSeats.Count())
             {
                 throw new Exception("Invalid seat selection.");
             }
@@ -154,12 +154,12 @@ namespace Simplifly.Services
         {
             return await _bookingsRepository.GetBookingsByUserIdAsync(userId);
         }
-        private double CalculateTotalPrice(int numberOfSeats,Flight flight)
+        public double CalculateTotalPrice(int numberOfSeats, Flight flight)
         {
             // Calculate total price based on the number of selected seats and any applicable pricing logic
             // For example:
-             return numberOfSeats * flight.BasePrice ;
-            
+            return numberOfSeats * flight.BasePrice;
+
         }
 
         public async Task<bool> RequestRefundAsync(int bookingId)
@@ -197,7 +197,8 @@ namespace Simplifly.Services
         public async Task<List<Booking>> GetBookingByFlight(string flightNumber)
         {
             var bookings = await _bookingRepository.GetAsync();
-            bookings=bookings.Where(e=>e.FlightId==flightNumber).ToList();
+            bookings = bookings.Where(e => e.FlightId == flightNumber).ToList();
+
 
             if (bookings != null)
             {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.Text.Json;
+
 
 namespace Simplifly.Models
 {
@@ -16,7 +16,7 @@ namespace Simplifly.Models
         [ForeignKey("RouteId")]
         [JsonIgnore]
         public Route? Route { get; set; }
-
+        
         [ForeignKey("FlightNumber")]
         public String FlightId { get; set; }
         public Flight? Flight { get; set; }

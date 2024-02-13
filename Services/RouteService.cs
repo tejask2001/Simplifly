@@ -31,9 +31,10 @@ namespace Simplifly.Services
 
         public async Task<Airport> AddAirport(Models.Airport airport)
         {
-            var airports= await _airportRepository.GetAsync();
-            var existingAirport=airports.FirstOrDefault(e=>e.Name==airport.Name && e.City==airport.City);
-            if(existingAirport==null)
+            var airports = await _airportRepository.GetAsync();
+            var existingAirport = airports.FirstOrDefault(e => e.Name == airport.Name && e.City == airport.City);
+            if (existingAirport == null)
+
             {
                 airport = await _airportRepository.Add(airport);
                 return airport;
@@ -50,10 +51,10 @@ namespace Simplifly.Services
         public async Task<Route> AddRoute(Route route)
         {
             var existingRoutes = await GetAllRoutes();
-            var existingRoute=existingRoutes.FirstOrDefault(s=>s.SourceAirportId==route.SourceAirportId
-             && s.DestinationAirportId==route.DestinationAirportId);
+            var existingRoute = existingRoutes.FirstOrDefault(s => s.SourceAirportId == route.SourceAirportId
+             && s.DestinationAirportId == route.DestinationAirportId);
 
-            if (existingRoute==null)
+            if (existingRoute == null)
             {
                 route = await _routeRepository.Add(route);
                 return route;
@@ -74,7 +75,8 @@ namespace Simplifly.Services
 
         public async Task<Route> GetRouteById(int id)
         {
-            var route=await _routeRepository.GetAsync(id);
+            var route = await _routeRepository.GetAsync(id);
+
             if (route != null)
             {
                 return route;
@@ -106,7 +108,7 @@ namespace Simplifly.Services
         }
         public async Task<bool> RemoveRouteById(int routeId)
         {
-            if( await _routeRepository.Delete(routeId) != null)
+            if (await _routeRepository.Delete(routeId) != null)
             {
                 return true;
             };

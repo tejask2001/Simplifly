@@ -35,12 +35,12 @@ namespace Simplifly.Services
                 var flights = await _flightRepository.GetAsync(flight.FlightNumber);
                 throw new FlightAlreadyPresentException();
             }
-            catch(NoSuchFlightException)
+            catch (NoSuchFlightException)
             {
                 flight = await _flightRepository.Add(flight);
                 return flight;
             }
-            
+
         }
 
         /// <summary>
@@ -56,7 +56,8 @@ namespace Simplifly.Services
         public async Task<Flight> GetFlightById(string id)
         {
             var flights = await _flightRepository.GetAsync(id);
-            if(flights!=null)
+            if (flights != null)
+
             {
                 return flights;
             }
@@ -71,8 +72,8 @@ namespace Simplifly.Services
         /// <exception cref="NoSuchFlightException">throw when flight is not present</exception>
         public async Task<Flight> RemoveFlight(string flightNumber)
         {
-            var flight=await _flightRepository.GetAsync(flightNumber);
-            if(flight != null)
+            var flight = await _flightRepository.GetAsync(flightNumber);
+            if (flight != null)
             {
                 flight = await _flightRepository.Delete(flightNumber);
                 return flight;
@@ -90,11 +91,11 @@ namespace Simplifly.Services
         /// <exception cref="NoSuchFlightException">throw when flight is not present</exception>
         public async Task<Flight> UpdateAirline(string flightNumber, string airline)
         {
-            var flight= await _flightRepository.GetAsync(flightNumber);
-            if(flight != null)
+            var flight = await _flightRepository.GetAsync(flightNumber);
+            if (flight != null)
             {
                 flight.Airline = airline;
-                flight=await _flightRepository.Update(flight);
+                flight = await _flightRepository.Update(flight);
                 return flight;
             }
             throw new NoSuchFlightException();
@@ -110,7 +111,7 @@ namespace Simplifly.Services
         public async Task<Flight> UpdateTotalSeats(string flightNumber, int totalSeats)
         {
             var flight = await _flightRepository.GetAsync(flightNumber);
-            if(flight!=null)
+            if (flight != null)
             {
                 flight.TotalSeats = totalSeats;
                 flight = await _flightRepository.Update(flight);

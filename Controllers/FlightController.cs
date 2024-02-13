@@ -18,15 +18,15 @@ namespace Simplifly.Controllers
         public FlightController(IFlightFlightOwnerService flightOwnerService, IFlightCustomerService flightCustomerService, ILogger<FlightController> logger)
         {
             _flightOwnerService = flightOwnerService;
-            _flightCustomerService=flightCustomerService;
+            _flightCustomerService = flightCustomerService;
             _logger = logger;
         }
 
 
         [HttpGet]
-        [Authorize(Roles ="flightOwner")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<List<Flight>>> GetAllFlight()
-        {            
+        {
             try
             {
                 var flights = await _flightOwnerService.GetAllFlights();
@@ -41,7 +41,7 @@ namespace Simplifly.Controllers
 
         [Route("SearchFlight")]
         [HttpGet]
-        [Authorize(Roles ="Customer")]
+        [Authorize(Roles = "Customer")]
         public async Task<ActionResult<List<SearchedFlightResultDTO>>> GetAllFlights([FromQuery] SearchFlightDTO searchFlightDTO)
         {
             try
@@ -66,26 +66,27 @@ namespace Simplifly.Controllers
                 flight = await _flightOwnerService.AddFlight(flight);
                 return flight;
             }
-            catch(FlightAlreadyPresentException fape)
+            catch (FlightAlreadyPresentException fape)
             {
                 _logger.LogInformation(fape.Message);
                 return NotFound(fape.Message);
             }
-            
+
         }
-                
+
 
         [HttpPut]
         [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateFlightAirline(FlightAirlineDTO flightDTO)
-        {           
+        {
 
             try
             {
                 var flight = await _flightOwnerService.UpdateAirline(flightDTO.FlightNumber, flightDTO.Airline);
                 return flight;
             }
-            catch(NoSuchFlightException nsfe)
+            catch (NoSuchFlightException nsfe)
+
             {
                 _logger.LogInformation(nsfe.Message);
                 return NotFound(nsfe.Message);
@@ -108,7 +109,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsfe.Message);
                 return NotFound(nsfe.Message);
             }
-            
+
+
         }
 
         [HttpDelete]
@@ -125,7 +127,8 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsfe.Message);
                 return NotFound(nsfe.Message);
             }
-            
+
+
         }
 
     }

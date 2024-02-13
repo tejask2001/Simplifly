@@ -6,9 +6,10 @@ using Simplifly.Repositories;
 
 namespace Simplifly.Services
 {
-    public class ScheduleServices : IScheduleFlightOwnerService,IFlightCustomerService
+    public class ScheduleServices : IScheduleFlightOwnerService, IFlightCustomerService
     {
-        IRepository<int,Schedule> _scheduleRepository;
+        IRepository<int, Schedule> _scheduleRepository;
+
         ILogger<ScheduleServices> _logger;
 
 
@@ -31,7 +32,8 @@ namespace Simplifly.Services
         /// <returns>Schedule object</returns>
         /// <exception cref="FlightScheduleBusyException">Throw when schedule is already present</exception>
         public async Task<Schedule> AddSchedule(Schedule schedule)
-        {            
+        {
+
             try
             {
                 var existingSchedules = await _scheduleRepository.GetAsync(schedule.Id);
@@ -84,7 +86,8 @@ namespace Simplifly.Services
             var schedule = await _scheduleRepository.GetAsync(scheduleId);
             if (schedule != null)
             {
-                schedule.FlightId=flightNumber;
+                schedule.FlightId = flightNumber;
+
                 schedule = await _scheduleRepository.Update(schedule);
                 return schedule;
             }
@@ -104,7 +107,7 @@ namespace Simplifly.Services
             if (schedule != null)
             {
                 schedule.RouteId = routeId;
-                schedule=await _scheduleRepository.Update(schedule);
+                schedule = await _scheduleRepository.Update(schedule);
                 return schedule;
             }
             throw new NoSuchScheduleException();
@@ -123,8 +126,8 @@ namespace Simplifly.Services
             var schedule = await _scheduleRepository.GetAsync(scheduleId);
             if (schedule != null)
             {
-                schedule.Departure= departure;
-                schedule.Arrival= arrival;
+                schedule.Departure = departure;
+                schedule.Arrival = arrival;
                 schedule = await _scheduleRepository.Update(schedule);
                 return schedule;
             }
@@ -165,12 +168,13 @@ namespace Simplifly.Services
         {
             List<FlightScheduleDTO> flightSchedule = new List<FlightScheduleDTO>();
 
-            var schedules=await _scheduleRepository.GetAsync();
-            schedules=schedules.Where(e=>e.FlightId == flightNumber).ToList();
+            var schedules = await _scheduleRepository.GetAsync();
+            schedules = schedules.Where(e => e.FlightId == flightNumber).ToList();
 
-            flightSchedule=schedules.Select(e=> new FlightScheduleDTO
+            flightSchedule = schedules.Select(e => new FlightScheduleDTO
             {
-                FlightNumber=e.FlightId,
+                FlightNumber = e.FlightId,
+
                 SourceAirport = e.Route?.SourceAirport?.Name + " ," + e.Route?.SourceAirport?.City,
                 DestinationAirport = e.Route?.DestinationAirport?.Name + " ," + e.Route?.DestinationAirport?.City,
                 Departure = e.Departure,
