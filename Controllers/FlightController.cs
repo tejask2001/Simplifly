@@ -19,7 +19,7 @@ namespace Simplifly.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles ="Admin")]
         public Task<List<Flight>> GetAllFlight()
         {
             var flights=_flightOwnerService.GetAllFlights();
@@ -27,6 +27,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "flightOwner")]
         public async Task<Flight> AddFlight(Flight flight)
         {
             flight= await _flightOwnerService.AddFlight(flight);
@@ -35,6 +36,7 @@ namespace Simplifly.Controllers
                 
 
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<Flight> UpdateFlightAirline(FlightAirlineDTO flightDTO)
         {
             var flight= await _flightOwnerService.UpdateAirline(flightDTO.FlightNumber, flightDTO.Airline);
@@ -43,6 +45,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateTotalSeats")]
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<Flight> UpdateTotalSeats(FlightSeatsDTO flightDTO)
         {
             var flight = await _flightOwnerService.UpdateTotalSeats(flightDTO.FlightNumber, flightDTO.TotalSeats);
@@ -50,6 +53,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "flightOwner")]
         public async Task<Flight> RemoveFlight(string flightNumber)
         {
             var flight = await _flightOwnerService.RemoveFlight(flightNumber);

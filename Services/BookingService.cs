@@ -154,7 +154,7 @@ namespace Simplifly.Services
         {
             return await _bookingsRepository.GetBookingsByUserIdAsync(userId);
         }
-        private double CalculateTotalPrice(int numberOfSeats,Flight flight)
+        public double CalculateTotalPrice(int numberOfSeats,Flight flight)
         {
             // Calculate total price based on the number of selected seats and any applicable pricing logic
             // For example:

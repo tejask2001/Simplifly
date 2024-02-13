@@ -34,6 +34,16 @@ namespace Simplifly.Services
             return flights;
         }
 
+        public async Task<Flight> GetFlightById(string flightNumber)
+        {
+            var flight = await _flightRepository.GetAsync(flightNumber);
+            if (flight != null)
+            {
+                return flight;
+            }
+            throw new NoSuchFlightException();
+        }
+
         public async Task<Flight> RemoveFlight(string flightNumber)
         {
             var flight=await _flightRepository.GetAsync(flightNumber);

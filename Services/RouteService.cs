@@ -34,6 +34,16 @@ namespace Simplifly.Services
             return routes;
         }
 
+        public async Task<Route> GetRouteById(int id)
+        {
+            var route = await _routeRepository.GetAsync(id);
+            if (route != null)
+            {
+                return route;
+            };
+            throw new NoSuchRouteException();
+        }
+
         public async Task<Route> RemoveRoute(int sourceAirportId, int destinationAirportId)
         {
             var routes = await _routeRepository.GetAsync();

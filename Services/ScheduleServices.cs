@@ -47,6 +47,7 @@ namespace Simplifly.Services
             var schedule = await _scheduleRepository.GetAsync(scheduleId);
             if (schedule != null)
             {
+                schedule.FlightId = flightNumber;
                 schedule = await _scheduleRepository.Update(schedule);
                 return schedule;
             }
