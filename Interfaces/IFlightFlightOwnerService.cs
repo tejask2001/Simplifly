@@ -12,5 +12,6 @@ namespace Simplifly.Interfaces
         public Task<Flight> UpdateAirline(string flightNumber, string airline);
         public Task<Flight> UpdateTotalSeats(string flightNumber, int totalSeats);
 
+
     }
 }

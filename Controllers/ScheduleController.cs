@@ -22,6 +22,7 @@ namespace Simplifly.Controllers
 
         [HttpGet]
         [Authorize(Roles = "flightOwner,Admin")]
+
         public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
             try
@@ -34,6 +35,7 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(ex.Message);
                 return NotFound(ex.Message);
             }
+
 
         }
 
@@ -48,6 +50,7 @@ namespace Simplifly.Controllers
                 return flightSchedule;
             }
             catch (NoSuchScheduleException nsse)
+
             {
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
@@ -64,10 +67,12 @@ namespace Simplifly.Controllers
                 return schedule;
             }
             catch (FlightScheduleBusyException fsbe)
+
             {
                 _logger.LogInformation(fsbe.Message);
                 return NotFound(fsbe.Message);
-            }
+            
+
 
         }
 
@@ -83,10 +88,12 @@ namespace Simplifly.Controllers
                 return schedule;
             }
             catch (NoSuchScheduleException nsse)
+
             {
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
+
 
         }
 
@@ -107,6 +114,7 @@ namespace Simplifly.Controllers
                 return NotFound(nsse.Message);
             }
 
+
         }
 
         [Route("UpdateScheduledTime")]
@@ -126,6 +134,7 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
+
 
         }
     }

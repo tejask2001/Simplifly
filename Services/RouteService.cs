@@ -34,6 +34,7 @@ namespace Simplifly.Services
             var airports = await _airportRepository.GetAsync();
             var existingAirport = airports.FirstOrDefault(e => e.Name == airport.Name && e.City == airport.City);
             if (existingAirport == null)
+
             {
                 airport = await _airportRepository.Add(airport);
                 return airport;
@@ -75,6 +76,7 @@ namespace Simplifly.Services
         public async Task<Route> GetRouteById(int id)
         {
             var route = await _routeRepository.GetAsync(id);
+
             if (route != null)
             {
                 return route;

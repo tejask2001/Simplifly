@@ -86,6 +86,7 @@ namespace Simplifly.Controllers
                 return flight;
             }
             catch (NoSuchFlightException nsfe)
+
             {
                 _logger.LogInformation(nsfe.Message);
                 return NotFound(nsfe.Message);
@@ -109,6 +110,7 @@ namespace Simplifly.Controllers
                 return NotFound(nsfe.Message);
             }
 
+
         }
 
         [HttpDelete]
@@ -125,6 +127,7 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsfe.Message);
                 return NotFound(nsfe.Message);
             }
+
 
         }
 

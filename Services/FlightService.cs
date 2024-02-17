@@ -57,6 +57,7 @@ namespace Simplifly.Services
         {
             var flights = await _flightRepository.GetAsync(id);
             if (flights != null)
+
             {
                 return flights;
             }

@@ -196,6 +196,7 @@ namespace Simplifly.Services
             var bookings = await _bookingRepository.GetAsync();
             bookings = bookings.Where(e => e.ScheduleId == scheduleId).ToList();
 
+
             if (bookings != null)
             {
                 return bookings;

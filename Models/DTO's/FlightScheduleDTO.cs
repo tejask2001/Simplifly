@@ -9,3 +9,4 @@
         public DateTime Arrival { get; set; }
     }
 }
+

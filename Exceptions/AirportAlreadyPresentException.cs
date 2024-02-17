@@ -1,6 +1,7 @@
 ﻿namespace Simplifly.Exceptions
 {
     public class AirportAlreadyPresentException : Exception
+
     {
         private string _message;
         public AirportAlreadyPresentException()
@@ -11,3 +12,4 @@
         public override string Message => _message;
     }
 }
+
