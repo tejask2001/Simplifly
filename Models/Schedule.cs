@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
 
 namespace Simplifly.Models
 {
@@ -11,9 +13,10 @@ namespace Simplifly.Models
         public int RouteId { get; set; }
         //This one is just for navigation and will not be created as an attribute in table
 
-        [ForeignKey("RouteId")]   
+        [ForeignKey("RouteId")]
+        [JsonIgnore]
         public Route? Route { get; set; }
-
+        
         [ForeignKey("FlightNumber")]
         public String FlightId { get; set; }
         public Flight? Flight { get; set; }
@@ -51,5 +54,6 @@ namespace Simplifly.Models
             var schedule= other ?? new Schedule();
             return this.Id.Equals(schedule.Id);
         }
+
     }
 }

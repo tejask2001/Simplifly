@@ -66,9 +66,9 @@ namespace Simplifly.Repositories
             throw new NoSuchSeatException();
         }
 
-        public async Task<IEnumerable<SeatDetail>> GetSeatDetailsAsync(List<int> seatIds)
+        public async Task<IEnumerable<SeatDetail>> GetSeatDetailsAsync(List<string> SeatNos)
         {
-            return await Task.FromResult(_context.Seats.Where(s => seatIds.Contains(s.Id)).ToList());
+            return await Task.FromResult(_context.Seats.Where(s => SeatNos.Contains(s.SeatNumber)).ToList());
         }
 
         public async Task UpdateSeatDetailsAsync(IEnumerable<SeatDetail> seatDetails)

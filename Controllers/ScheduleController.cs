@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Models.DTO_s;
@@ -11,51 +13,129 @@ namespace Simplifly.Controllers
     public class ScheduleController : ControllerBase
     {
         private readonly IScheduleFlightOwnerService _scheduleFlightOwnerService;
-        public ScheduleController(IScheduleFlightOwnerService scheduleFlightOwnerService)
+        private readonly ILogger<ScheduleController> _logger;
+        public ScheduleController(IScheduleFlightOwnerService scheduleFlightOwnerService, ILogger<ScheduleController> logger)
         {
             _scheduleFlightOwnerService = scheduleFlightOwnerService;
+            _logger = logger;
         }
 
         [HttpGet]
-        public async Task<List<Schedule>> GetAllSchedule()
+        [Authorize(Roles = "flightOwner,Admin")]
+
+        public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
-            var schedules = await _scheduleFlightOwnerService.GetAllSchedules();
-            return schedules;
+            try
+            {
+                var schedules = await _scheduleFlightOwnerService.GetAllSchedules();
+                return schedules;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+
+
+        }
+
+        [Route("FlightSchedule")]
+        [HttpGet]
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<List<FlightScheduleDTO>>> GetFlightSchedule([FromQuery] string flightNumber)
+        {
+            try
+            {
+                var flightSchedule = await _scheduleFlightOwnerService.GetFlightSchedules(flightNumber);
+                return flightSchedule;
+            }
+            catch (NoSuchScheduleException nsse)
+
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<Schedule> AddSchedule(Schedule schedule)
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<Schedule>> AddSchedule(Schedule schedule)
         {
-            schedule = await _scheduleFlightOwnerService.AddSchedule(schedule);
-            return schedule;
+            try
+            {
+                schedule = await _scheduleFlightOwnerService.AddSchedule(schedule);
+                return schedule;
+            }
+            catch (FlightScheduleBusyException fsbe)
+
+            {
+                _logger.LogInformation(fsbe.Message);
+                return NotFound(fsbe.Message);
+            
+
+
         }
 
         [Route("UpdateScheduledFlight")]
         [HttpPut]
-        public async Task<Schedule> UpdateScheduledFlight(ScheduleFlightDTO scheduleFlightDTO)
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<Schedule>> UpdateScheduledFlight(ScheduleFlightDTO scheduleFlightDTO)
         {
-            var schedule = await _scheduleFlightOwnerService.
-                UpdateScheduledFlight(scheduleFlightDTO.ScheduleId, scheduleFlightDTO.FlightNumber);
-            return schedule;
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.
+                                UpdateScheduledFlight(scheduleFlightDTO.ScheduleId, scheduleFlightDTO.FlightNumber);
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
+
+
         }
 
         [Route("UpdateScheduledRoute")]
         [HttpPut]
-        public async Task<Schedule> UpdateScheduledRoute(ScheduleRouteDTO scheduleRouteDTO)
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<Schedule>> UpdateScheduledRoute(ScheduleRouteDTO scheduleRouteDTO)
         {
-            var schedule = await _scheduleFlightOwnerService.
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.
                 UpdateScheduledRoute(scheduleRouteDTO.ScheduleId, scheduleRouteDTO.RouteId);
-            return schedule;
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
+
+
         }
 
         [Route("UpdateScheduledTime")]
         [HttpPut]
-        public async Task<Schedule> UpdateScheduledTime(ScheduleTimeDTO scheduleTimeDTO)
+        [Authorize(Roles = "flightOwner")]
+        public async Task<ActionResult<Schedule>> UpdateScheduledTime(ScheduleTimeDTO scheduleTimeDTO)
         {
-            var schedule = await _scheduleFlightOwnerService.
-                UpdateScheduledTime(scheduleTimeDTO.ScheduleId, scheduleTimeDTO.DepartureTime, 
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.
+                UpdateScheduledTime(scheduleTimeDTO.ScheduleId, scheduleTimeDTO.DepartureTime,
                 scheduleTimeDTO.ArrivalTime);
-            return schedule;
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
+
+
         }
     }
 }

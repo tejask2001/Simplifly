@@ -5,12 +5,12 @@ using System.Numerics;
 
 namespace Simplifly.Services
 {
-    public class FlightOwnerService: IFlightOwnerService
+    public class FlightOwnerService : IFlightOwnerService
     {
         private readonly IRepository<string, User> _userRepository;
         private readonly IRepository<int, FlightOwner> _flightownerRepository;
         private readonly ILogger<FlightOwnerService> _logger;
-        public FlightOwnerService(IRepository<int, FlightOwner> flightownerRepository,  IRepository<string, User> userRepository, ILogger<FlightOwnerService> logger)
+        public FlightOwnerService(IRepository<int, FlightOwner> flightownerRepository, IRepository<string, User> userRepository, ILogger<FlightOwnerService> logger)
         {
             _userRepository = userRepository;
             _flightownerRepository = flightownerRepository;
@@ -26,12 +26,13 @@ namespace Simplifly.Services
         public async Task<bool> RemoveFlightOwner(int id)
 
         {
-            
-            var owner =  await _flightownerRepository.GetAsync(id);
-            if(owner != null)
+
+            var owner = await _flightownerRepository.GetAsync(id);
+            if (owner != null)
             {
                 await _flightownerRepository.Delete(id);
-               await _userRepository.Delete(owner.Username);
+                await _userRepository.Delete(owner.Username);
+
                 return true;
             }
             return false;
@@ -42,7 +43,7 @@ namespace Simplifly.Services
             return await _flightownerRepository.GetAsync();
         }
 
-        public async Task<FlightOwner> UpdateFlightOwnerAddress(int id,string address)
+        public async Task<FlightOwner> UpdateFlightOwnerAddress(int id, string address)
         {
             var owner = await _flightownerRepository.GetAsync(id);
             if (owner != null)

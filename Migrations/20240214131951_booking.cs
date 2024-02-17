@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Simplifly.Migrations
 {
-    public partial class init : Migration
+    public partial class booking : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -56,6 +56,18 @@ namespace Simplifly.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Seats",
+                columns: table => new
+                {
+                    SeatNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SeatClass = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Seats", x => x.SeatNumber);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -94,6 +106,29 @@ namespace Simplifly.Migrations
                         principalTable: "Airports",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    PaymentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    PaymentDetailsId = table.Column<int>(type: "int", nullable: false),
+                    BookingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
+                    table.ForeignKey(
+                        name: "FK_Payments_PaymentDetails_PaymentDetailsId",
+                        column: x => x.PaymentDetailsId,
+                        principalTable: "PaymentDetails",
+                        principalColumn: "PaymentDetailsId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,34 +225,6 @@ namespace Simplifly.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bookings",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FlightId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    BookingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    CustomerUserId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bookings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Customers_CustomerUserId",
-                        column: x => x.CustomerUserId,
-                        principalTable: "Customers",
-                        principalColumn: "UserId");
-                    table.ForeignKey(
-                        name: "FK_Bookings_Flights_FlightId",
-                        column: x => x.FlightId,
-                        principalTable: "Flights",
-                        principalColumn: "FlightNumber",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Schedules",
                 columns: table => new
                 {
@@ -246,58 +253,37 @@ namespace Simplifly.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Payments",
-                columns: table => new
-                {
-                    PaymentId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    PaymentDetailsId = table.Column<int>(type: "int", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
-                    table.ForeignKey(
-                        name: "FK_Payments_Bookings_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Bookings",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Payments_PaymentDetails_PaymentDetailsId",
-                        column: x => x.PaymentDetailsId,
-                        principalTable: "PaymentDetails",
-                        principalColumn: "PaymentDetailsId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Seats",
+                name: "Bookings",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FlightId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    SeatNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsBooked = table.Column<bool>(type: "bit", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: true)
+                    ScheduleId = table.Column<int>(type: "int", nullable: false),
+                    PaymentId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    BookingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false),
+                    CustomerUserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Seats", x => x.Id);
+                    table.PrimaryKey("PK_Bookings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Seats_Bookings_BookingId",
-                        column: x => x.BookingId,
-                        principalTable: "Bookings",
-                        principalColumn: "Id");
+                        name: "FK_Bookings_Customers_CustomerUserId",
+                        column: x => x.CustomerUserId,
+                        principalTable: "Customers",
+                        principalColumn: "UserId");
                     table.ForeignKey(
-                        name: "FK_Seats_Flights_FlightId",
-                        column: x => x.FlightId,
-                        principalTable: "Flights",
-                        principalColumn: "FlightNumber",
+                        name: "FK_Bookings_Payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payments",
+                        principalColumn: "PaymentId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Schedules_ScheduleId",
+                        column: x => x.ScheduleId,
+                        principalTable: "Schedules",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -309,7 +295,7 @@ namespace Simplifly.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     BookingId = table.Column<int>(type: "int", nullable: true),
                     PassengerId = table.Column<int>(type: "int", nullable: true),
-                    SeatId = table.Column<int>(type: "int", nullable: true)
+                    SeatNumber = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -325,10 +311,11 @@ namespace Simplifly.Migrations
                         principalTable: "Passengers",
                         principalColumn: "PassengerId");
                     table.ForeignKey(
-                        name: "FK_PassengerBookings_Seats_SeatId",
-                        column: x => x.SeatId,
+                        name: "FK_PassengerBookings_Seats_SeatNumber",
+                        column: x => x.SeatNumber,
                         principalTable: "Seats",
-                        principalColumn: "Id");
+                        principalColumn: "SeatNumber",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -343,9 +330,15 @@ namespace Simplifly.Migrations
                 column: "CustomerUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_FlightId",
+                name: "IX_Bookings_PaymentId",
                 table: "Bookings",
-                column: "FlightId");
+                column: "PaymentId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bookings_ScheduleId",
+                table: "Bookings",
+                column: "ScheduleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customers_Username",
@@ -375,14 +368,9 @@ namespace Simplifly.Migrations
                 column: "PassengerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PassengerBookings_SeatId",
+                name: "IX_PassengerBookings_SeatNumber",
                 table: "PassengerBookings",
-                column: "SeatId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Payments_BookingId",
-                table: "Payments",
-                column: "BookingId");
+                column: "SeatNumber");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_PaymentDetailsId",
@@ -408,16 +396,6 @@ namespace Simplifly.Migrations
                 name: "IX_Schedules_RouteId",
                 table: "Schedules",
                 column: "RouteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Seats_BookingId",
-                table: "Seats",
-                column: "BookingId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Seats_FlightId",
-                table: "Seats",
-                column: "FlightId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -429,10 +407,7 @@ namespace Simplifly.Migrations
                 name: "PassengerBookings");
 
             migrationBuilder.DropTable(
-                name: "Payments");
-
-            migrationBuilder.DropTable(
-                name: "Schedules");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
                 name: "Passengers");
@@ -441,25 +416,28 @@ namespace Simplifly.Migrations
                 name: "Seats");
 
             migrationBuilder.DropTable(
-                name: "PaymentDetails");
-
-            migrationBuilder.DropTable(
-                name: "Routes");
-
-            migrationBuilder.DropTable(
-                name: "Bookings");
-
-            migrationBuilder.DropTable(
-                name: "Airports");
-
-            migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
+                name: "Schedules");
+
+            migrationBuilder.DropTable(
+                name: "PaymentDetails");
 
             migrationBuilder.DropTable(
                 name: "Flights");
 
             migrationBuilder.DropTable(
+                name: "Routes");
+
+            migrationBuilder.DropTable(
                 name: "FlightsOwners");
+
+            migrationBuilder.DropTable(
+                name: "Airports");
 
             migrationBuilder.DropTable(
                 name: "Users");

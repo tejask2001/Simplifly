@@ -1,6 +1,8 @@
 ﻿using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using Simplifly.Models.DTO_s;
+using Simplifly.Repositories;
 
 namespace Simplifly.Services
 {
@@ -8,11 +10,24 @@ namespace Simplifly.Services
     {
         private readonly IRepository<string, Flight> _flightRepository;
         private readonly ILogger<FlightService> _logger;
+
+        /// <summary>
+        /// Constructor to initialize the objects
+        /// </summary>
+        /// <param name="flightRepository"></param>
+        /// <param name="logger"></param>
         public FlightService(IRepository<string, Flight> flightRepository, ILogger<FlightService> logger)
         {
             _flightRepository = flightRepository;
             _logger = logger;
         }
+
+        /// <summary>
+        ///Service class method to add flight 
+        /// </summary>
+        /// <param name="flight">Object of flight</param>
+        /// <returns>Flight object</returns>
+        /// <exception cref="FlightAlreadyPresentException">Throw when flight is already present</exception>
         public async Task<Flight> AddFlight(Flight flight)
         {
             try
@@ -20,34 +35,45 @@ namespace Simplifly.Services
                 var flights = await _flightRepository.GetAsync(flight.FlightNumber);
                 throw new FlightAlreadyPresentException();
             }
-            catch(NoSuchFlightException)
+            catch (NoSuchFlightException)
             {
                 flight = await _flightRepository.Add(flight);
                 return flight;
             }
-            
+
         }
 
+        /// <summary>
+        /// Service class method to get all flight
+        /// </summary>
+        /// <returns>List of flight</returns>
         public async Task<List<Flight>> GetAllFlights()
         {
             var flights = await _flightRepository.GetAsync();
             return flights;
         }
 
-        public async Task<Flight> GetFlightById(string flightNumber)
+        public async Task<Flight> GetFlightById(string id)
         {
-            var flight = await _flightRepository.GetAsync(flightNumber);
-            if (flight != null)
+            var flights = await _flightRepository.GetAsync(id);
+            if (flights != null)
+
             {
-                return flight;
+                return flights;
             }
             throw new NoSuchFlightException();
         }
 
+        /// <summary>
+        /// Service class method to remove flight
+        /// </summary>
+        /// <param name="flightNumber">Flight number in string</param>
+        /// <returns>Object of flight</returns>
+        /// <exception cref="NoSuchFlightException">throw when flight is not present</exception>
         public async Task<Flight> RemoveFlight(string flightNumber)
         {
-            var flight=await _flightRepository.GetAsync(flightNumber);
-            if(flight != null)
+            var flight = await _flightRepository.GetAsync(flightNumber);
+            if (flight != null)
             {
                 flight = await _flightRepository.Delete(flightNumber);
                 return flight;
@@ -55,22 +81,37 @@ namespace Simplifly.Services
             throw new NoSuchFlightException();
         }
 
+
+        /// <summary>
+        /// Service class method to update airline of flight
+        /// </summary>
+        /// <param name="flightNumber">Flight Number in string</param>
+        /// <param name="airline">airline name in string</param>
+        /// <returns>Object of flight</returns>
+        /// <exception cref="NoSuchFlightException">throw when flight is not present</exception>
         public async Task<Flight> UpdateAirline(string flightNumber, string airline)
         {
-            var flight= await _flightRepository.GetAsync(flightNumber);
-            if(flight != null)
+            var flight = await _flightRepository.GetAsync(flightNumber);
+            if (flight != null)
             {
                 flight.Airline = airline;
-                flight=await _flightRepository.Update(flight);
+                flight = await _flightRepository.Update(flight);
                 return flight;
             }
             throw new NoSuchFlightException();
         }
 
+        /// <summary>
+        /// Service class method to update total seats of flight
+        /// </summary>
+        /// <param name="flightNumber">Flight Number in string</param>
+        /// <param name="totalSeats">total seats in int</param>
+        /// <returns>Object of flight</returns>
+        /// <exception cref="NoSuchFlightException">throw when flight is not present</exception>
         public async Task<Flight> UpdateTotalSeats(string flightNumber, int totalSeats)
         {
             var flight = await _flightRepository.GetAsync(flightNumber);
-            if(flight!=null)
+            if (flight != null)
             {
                 flight.TotalSeats = totalSeats;
                 flight = await _flightRepository.Update(flight);

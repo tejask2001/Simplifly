@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Simplifly.Context;
 
@@ -11,9 +12,10 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    partial class RequestTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20240214144136_rebp")]
+    partial class rebp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,6 +102,9 @@ namespace Simplifly.Migrations
                     b.Property<DateTime>("BookingTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("CustomerUserId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PaymentId")
                         .HasColumnType("int");
 
@@ -113,6 +118,8 @@ namespace Simplifly.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerUserId");
 
                     b.HasIndex("PaymentId");
 
@@ -434,6 +441,10 @@ namespace Simplifly.Migrations
 
             modelBuilder.Entity("Simplifly.Models.Booking", b =>
                 {
+                    b.HasOne("Simplifly.Models.Customer", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("CustomerUserId");
+
                     b.HasOne("Simplifly.Models.Payment", "Payment")
                         .WithMany()
                         .HasForeignKey("PaymentId")
@@ -554,6 +565,11 @@ namespace Simplifly.Migrations
                     b.Navigation("Flight");
 
                     b.Navigation("Route");
+                });
+
+            modelBuilder.Entity("Simplifly.Models.Customer", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
