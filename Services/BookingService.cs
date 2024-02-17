@@ -12,22 +12,23 @@ namespace Simplifly.Services
         private readonly IRepository<string, Flight> _flightRepository;
         private readonly IRepository<int, PassengerBooking> _passengerBookingRepository;
         private readonly ISeatDeatilRepository _seatDetailRepository;
+        private readonly IRepository<int, Schedule> _scheduleRepository;
         private readonly IPassengerBookingRepository _passengerBookingsRepository;
         private readonly IBookingRepository _bookingsRepository;
 
         private readonly IRepository<int, Payment> _paymentRepository;
-        private readonly IPaymentRepository _paymentsRepository;
+      //  private readonly IPaymentRepository _paymentsRepository;
 
         private readonly ILogger<BookingService> _logger;
-        public BookingService(IRepository<int, Booking> bookingRepository, IRepository<int, PassengerBooking> passengerBookingRepository, IPaymentRepository paymentsRepository, IRepository<string, Flight> flightRepository, IBookingRepository bookingsRepository, ISeatDeatilRepository seatDetailRepository, IPassengerBookingRepository passengerBookingRepository1, IRepository<int, Payment> paymentRepository, ILogger<BookingService> logger)
+        public BookingService(IRepository<int, Booking> bookingRepository, IRepository<int, Schedule> scheduleRepository, IRepository<int, PassengerBooking> passengerBookingRepository, IRepository<string, Flight> flightRepository, IBookingRepository bookingsRepository, ISeatDeatilRepository seatDetailRepository, IPassengerBookingRepository passengerBookingRepository1, IRepository<int, Payment> paymentRepository, ILogger<BookingService> logger)
         {
-            _paymentsRepository = paymentsRepository;
             _flightRepository = flightRepository;
             _bookingsRepository = bookingsRepository;
             _passengerBookingsRepository = passengerBookingRepository1;
             _bookingRepository = bookingRepository;
             _passengerBookingRepository = passengerBookingRepository;
             _seatDetailRepository = seatDetailRepository;
+            _scheduleRepository = scheduleRepository;
             _paymentRepository = paymentRepository;
             _logger = logger;
         }
@@ -38,27 +39,46 @@ namespace Simplifly.Services
             {
                 throw new ArgumentNullException(nameof(bookingRequest));
             }
-            var isSeatsAvailable = await _bookingsRepository.CheckSeatsAvailabilityAsync(bookingRequest.FlightId, bookingRequest.SelectedSeats);
 
+            var isSeatsAvailable = await _passengerBookingsRepository.CheckSeatsAvailabilityAsync(bookingRequest.ScheduleId, bookingRequest.SelectedSeats);
             if (!isSeatsAvailable)
             {
                 // Handle case where selected seats are not available
                 return false;
             }
 
+            var schedule = await _scheduleRepository.GetAsync(bookingRequest.ScheduleId);
+            if (schedule == null)
+            {
+                throw new Exception("Schedule not found.");
+            }
 
             // Calculate total price based on the number of selected seats
-            var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(bookingRequest.FlightId));
+            var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(schedule.FlightId));
+
+            // Create Payment entry
+            var payment = new Payment
+            {
+                Amount = totalPrice,
+                PaymentDate = DateTime.Now,
+                Status = PaymentStatus.Successful,
+                PaymentDetails = bookingRequest.PaymentDetails,
+            };
+            var addedPayment = await _paymentRepository.Add(payment);
+
             // Create Booking object
             var booking = new Booking
             {
-                FlightId = bookingRequest.FlightId,
+                ScheduleId = bookingRequest.ScheduleId,
                 UserId = bookingRequest.UserId,
                 BookingTime = DateTime.Now, // Set current booking time
                 TotalPrice = totalPrice,
-                Seats = new List<SeatDetail>()
+                PaymentId = addedPayment.PaymentId // Assign the PaymentId of the created payment
             };
+             
 
+            // Save booking
+            var addedBooking = await _bookingRepository.Add(booking);
             // Fetch seat details for selected seats
             var seatDetails = await _seatDetailRepository.GetSeatDetailsAsync(bookingRequest.SelectedSeats);
 
@@ -67,51 +87,33 @@ namespace Simplifly.Services
                 throw new Exception("Invalid seat selection.");
             }
 
-            // Check if selected seats are available
-            foreach (var seat in seatDetails)
+
+            // Create PassengerBooking entries,SeatNumbers
+            int index = 0;
+            foreach (var passengerId in bookingRequest.PassengerIds)
             {
-                if (seat.IsBooked)
+                var seatDetail = seatDetails.ElementAtOrDefault(index); // Get the seat detail at the current index
+                if (seatDetail != null)
                 {
-                    throw new Exception($"Seat {seat.SeatNumber} is already booked.");
+                    var passengerBooking = new PassengerBooking
+                    {
+                        BookingId = addedBooking.Id,
+                        PassengerId = passengerId,
+                        SeatNumber = seatDetail.SeatNumber // Assign a unique seat to each passenger
+                    };
+                    await _passengerBookingRepository.Add(passengerBooking);
+                    index++; // Move to the next seat for the next passenger
+                }
+                else
+                {
+                    // Handle case where there are not enough seats for all passengers
+                    throw new Exception("Not enough seats available for all passengers.");
                 }
             }
 
-            // Update seat availability and add to booking
-            foreach (var seat in seatDetails)
-            {
-                seat.IsBooked = true;
-                booking.Seats.Add(seat);
-            }
-
-            // Save booking and seat details
-            booking = await _bookingRepository.Add(booking);
-            await _seatDetailRepository.UpdateSeatDetailsAsync(seatDetails);
-
-            // Create PassengerBooking entries
-            foreach (var passengerId in bookingRequest.PassengerIds)
-            {
-                var passengerBooking = new PassengerBooking
-                {
-                    BookingId = booking.Id,
-                    PassengerId = passengerId,
-                    SeatId = seatDetails.First().Id // Assign the same seat to all passengers for simplicity
-                };
-                await _passengerBookingRepository.Add(passengerBooking);
-            }
-
-            // Create Payment entry
-            var payment = new Payment
-            {
-                Amount = booking.TotalPrice,
-                PaymentDate = DateTime.Now,
-                Status = PaymentStatus.Pending,
-                PaymentDetails = bookingRequest.PaymentDetails,
-                BookingId = booking.Id
-            };
-            await _paymentRepository.Add(payment);
-
-            return booking != null;
+            return addedBooking != null && addedPayment != null;
         }
+
         public async Task<IEnumerable<Booking>> GetAllBookingsAsync()
         {
             return await _bookingRepository.GetAsync();
@@ -125,17 +127,12 @@ namespace Simplifly.Services
         public async Task<Booking> CancelBookingAsync(int bookingId)
         {
             var booking = await _bookingRepository.GetAsync(bookingId);
-
+            
             if (booking == null)
             {
                 throw new Exception("Booking not found.");
             }
-
-            // Update seat availability
-            foreach (var seat in booking.Seats)
-            {
-                seat.IsBooked = false;
-            }
+           
 
             // Remove passenger bookings
             var passengerBookings = await _passengerBookingsRepository.GetPassengerBookingsAsync(bookingId);
@@ -145,7 +142,7 @@ namespace Simplifly.Services
             }
 
             // Delete payment
-            await _paymentRepository.Delete(bookingId);
+            await _paymentRepository.Delete(booking.PaymentId);
 
             // Delete booking
             return await _bookingRepository.Delete(booking.Id);
@@ -172,7 +169,7 @@ namespace Simplifly.Services
             }
 
             // Check if payment exists
-            var payment = await _paymentsRepository.GetPaymentByBookingIdAsync(bookingId);
+            var payment = await _paymentRepository.GetAsync(booking.PaymentId);
 
             if (payment == null)
             {
@@ -186,7 +183,7 @@ namespace Simplifly.Services
             }
 
             // Update payment status to "Pending" for refund request
-            payment.Status = PaymentStatus.Pending;
+            payment.Status = PaymentStatus.RefundRequested;
             await _paymentRepository.Update(payment);
 
             // Perform refund process here (e.g., communicate with payment gateway)
@@ -194,10 +191,10 @@ namespace Simplifly.Services
             return true;
         }
 
-        public async Task<List<Booking>> GetBookingByFlight(string flightNumber)
+        public async Task<List<Booking>> GetBookingBySchedule(int scheduleId)
         {
             var bookings = await _bookingRepository.GetAsync();
-            bookings = bookings.Where(e => e.FlightId == flightNumber).ToList();
+            bookings = bookings.Where(e => e.ScheduleId == scheduleId).ToList();
 
             if (bookings != null)
             {

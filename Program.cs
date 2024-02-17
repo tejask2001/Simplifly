@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Simplifly.Context;
+using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Repositories;
@@ -88,13 +89,14 @@ namespace Simplifly
             builder.Services.AddScoped<IRepository<string, SeatDetail>, SeatDetailRepository>();
             builder.Services.AddScoped<IPassengerBookingRepository,PassengerBookingRepository>();
             builder.Services.AddScoped<IBookingRepository ,BookingsRepository>();
-            builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+           // builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<ISeatDeatilRepository, SeatDetailRepository>();
 
 
 
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IFlightFlightOwnerService,FlightService>();
+            builder.Services.AddScoped<IFlightCustomerService,ScheduleServices>();
             builder.Services.AddScoped<IRouteFlightOwnerService, RouteService>();
             builder.Services.AddScoped<IScheduleFlightOwnerService,ScheduleServices>();
             builder.Services.AddScoped<IUserService, USerService>();

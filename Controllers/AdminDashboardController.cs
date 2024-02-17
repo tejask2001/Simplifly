@@ -26,6 +26,27 @@ namespace Simplifly.Controllers
             _routeService =routeService;
         }
 
+        [HttpGet("Bookings/Allbookings")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllBookings()
+        {
+            var bookings = await _bookingService.GetAllBookingsAsync();
+            return Ok(bookings);
+        }
+        [HttpGet("Users/AllCustomers")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAsync()
+        {
+            var users = await _custService.GetAllCustomers();
+            return Ok(users);
+        }
+        [HttpGet("Users/AllFlightOwners")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetFlightOwnersAsync()
+        {
+            var users = await _flightOwnerService.GetAllFlightOwners();
+            return Ok(users);
+        }
         // DELETE: api/admin/dashboard/users/{userId}
         [HttpDelete("customers/{userId}")]
         [Authorize(Roles = "Admin")]

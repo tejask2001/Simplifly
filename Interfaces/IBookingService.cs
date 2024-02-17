@@ -6,7 +6,7 @@ namespace Simplifly.Interfaces
     public interface IBookingService
     {
         Task<IEnumerable<Booking>> GetAllBookingsAsync();
-        Task<List<Booking>> GetBookingByFlight(string flightNumber);
+        Task<List<Booking>> GetBookingBySchedule(int scheduleId);
         Task<bool> CreateBookingAsync(BookingRequestDto bookingRequest);
         Task<Booking> CancelBookingAsync(int bookingId);
         Task<IEnumerable<Booking>> GetUserBookingsAsync(int userId);

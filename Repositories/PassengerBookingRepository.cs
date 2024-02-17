@@ -118,5 +118,28 @@ namespace Simplifly.Repositories
             }
             throw new NoSuchPassengerBookingException();
         }
+
+        public async Task<bool> CheckSeatsAvailabilityAsync(int scheduleId, List<string> seatNos)
+        {
+            // Get all booked seats for the given flight
+            var bookedSeats = await _context.PassengerBookings
+                .Where(pb => pb.Booking.ScheduleId == scheduleId && seatNos.Contains(pb.SeatNumber))
+                .Select(pb => pb.SeatNumber)
+                .ToListAsync();
+
+            // Check if any of the requested seats are already booked
+            foreach (var seatNo in seatNos)
+            {
+                if (bookedSeats.Contains(seatNo))
+                {
+                    // Seat is already booked, return false
+                    throw new Exception($"Seat {seatNo} is already booked.");
+                    
+                }
+            }
+
+            // All seats are available
+            return true;
+        }
     }
 }

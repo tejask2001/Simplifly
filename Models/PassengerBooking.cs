@@ -18,9 +18,9 @@ namespace Simplifly.Models
         [ForeignKey("PassengerId")]
         public Passenger? Passenger { get; set; }
 
-        public int? SeatId { get; set; }
+        public string SeatNumber { get; set; }
         //This one is just for navigation and will not be created as an attribute in table
-        [ForeignKey("SeatId")]
+        [ForeignKey("SeatNumber")]
         public SeatDetail? SeatDetail { get; set; }
 
 
@@ -34,11 +34,11 @@ namespace Simplifly.Models
            
         }
 
-        public PassengerBooking(int id, int? bookingId, int? passengerId, int? seatId) : this(id)
+        public PassengerBooking(int id, int? bookingId, int? passengerId, string? seatId) : this(id)
         {
             BookingId = bookingId;
             PassengerId = passengerId;
-            SeatId = seatId;
+            SeatNumber = seatId;
         }
 
         public bool Equals(PassengerBooking? other)
