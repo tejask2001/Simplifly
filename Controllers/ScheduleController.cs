@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Simplifly.Exceptions;
@@ -21,7 +22,6 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "flightOwner,Admin")]
 
         public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
@@ -41,7 +41,7 @@ namespace Simplifly.Controllers
 
         [Route("FlightSchedule")]
         [HttpGet]
-        [Authorize(Roles = "flightOwner")]
+        [EnableCors("RequestPolicy")]
         public async Task<ActionResult<List<FlightScheduleDTO>>> GetFlightSchedule([FromQuery] string flightNumber)
         {
             try
@@ -71,9 +71,7 @@ namespace Simplifly.Controllers
             {
                 _logger.LogInformation(fsbe.Message);
                 return NotFound(fsbe.Message);
-            
-
-
+            }
         }
 
         [Route("UpdateScheduledFlight")]
@@ -94,7 +92,6 @@ namespace Simplifly.Controllers
                 return NotFound(nsse.Message);
             }
 
-
         }
 
         [Route("UpdateScheduledRoute")]
@@ -113,8 +110,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-
-
         }
 
         [Route("UpdateScheduledTime")]

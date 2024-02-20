@@ -30,6 +30,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation($"Airport added with id {items.Id}");
             return items;
         }
 
@@ -46,6 +47,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(airport);
                 _context.SaveChanges();
+                _logger.LogInformation($"Airport removed with id {airportId}");
                 return airport;
             }
             throw new NoSuchAirportException();
@@ -91,6 +93,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Airport>(items).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation($"Airport updated with id {items.Id}");
                 return airport;
             }
             throw new NoSuchAirportException();

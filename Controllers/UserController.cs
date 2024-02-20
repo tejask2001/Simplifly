@@ -4,6 +4,7 @@ using Simplifly.Models.DTOs;
 using Simplifly.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace Simplifly.Controllers
@@ -28,6 +29,7 @@ namespace Simplifly.Controllers
         }
         [Route("RegisterFlightOwner")]
         [HttpPost]
+        [EnableCors("ReactPolicy")]
         public async Task<LoginUserDTO> RegisterFlightOwner(RegisterFlightOwnerUserDTO user)
         {
             var result = await _userService.RegisterFlightOwner(user);

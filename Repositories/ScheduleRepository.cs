@@ -29,6 +29,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation("Schedule added with scheduleId" + items.Id);
             return items;
         }
 
@@ -45,6 +46,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(schedule);
                 _context.SaveChanges();
+                _logger.LogInformation("Schedule deleted with scheduleId" + scheduleId);
                 return schedule;
             }
             throw new NoSuchScheduleException();
@@ -96,6 +98,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Schedule>(items).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation("Schedule updated with scheduleId" + items.Id);
                 return schedule;
             }
             throw new NoSuchScheduleException();

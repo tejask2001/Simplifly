@@ -14,7 +14,6 @@ namespace Simplifly.Models
         //This one is just for navigation and will not be created as an attribute in table
 
         [ForeignKey("RouteId")]
-        [JsonIgnore]
         public Route? Route { get; set; }
         
         [ForeignKey("FlightNumber")]

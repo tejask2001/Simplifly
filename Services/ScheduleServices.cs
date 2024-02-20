@@ -34,16 +34,20 @@ namespace Simplifly.Services
         public async Task<Schedule> AddSchedule(Schedule schedule)
         {
 
-            try
+            var existingSchedules = await _scheduleRepository.GetAsync();
+            bool isOverlap = existingSchedules.Any(e =>
+    e.FlightId == schedule.FlightId &&
+    ((schedule.Departure >= e.Departure && schedule.Departure <= e.Arrival) ||
+    (schedule.Arrival >= e.Departure && schedule.Arrival <= e.Arrival) ||
+    (e.Departure >= schedule.Departure && e.Arrival <= schedule.Arrival)));
+
+            if (!isOverlap)
             {
-                var existingSchedules = await _scheduleRepository.GetAsync(schedule.Id);
-                throw new FlightScheduleBusyException();
-            }
-            catch (NoSuchScheduleException)
-            {
+                // If no overlap then only adding add the new schedule
                 schedule = await _scheduleRepository.Add(schedule);
                 return schedule;
             }
+            throw new FlightScheduleBusyException();
         }
 
         /// <summary>
@@ -164,6 +168,12 @@ namespace Simplifly.Services
                 throw new NoFlightAvailableException();
         }
 
+        /// <summary>
+        /// Service class method to get the schedule of particular flight
+        /// </summary>
+        /// <param name="flightNumber">Flight Number in string</param>
+        /// <returns>Object of flight Schedule</returns>
+        /// <exception cref="NoSuchScheduleException">If no schedule found</exception>
         public async Task<List<FlightScheduleDTO>> GetFlightSchedules(string flightNumber)
         {
             List<FlightScheduleDTO> flightSchedule = new List<FlightScheduleDTO>();

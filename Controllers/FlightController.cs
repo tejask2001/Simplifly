@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Simplifly.Exceptions;
@@ -24,7 +25,7 @@ namespace Simplifly.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "flightOwner,Admin")]
+        [EnableCors("ReactPolicy")]
         public async Task<ActionResult<List<Flight>>> GetAllFlight()
         {
             try
@@ -41,7 +42,7 @@ namespace Simplifly.Controllers
 
         [Route("SearchFlight")]
         [HttpGet]
-        [Authorize(Roles = "Customer")]
+        [EnableCors("ReactPolicy")]
         public async Task<ActionResult<List<SearchedFlightResultDTO>>> GetAllFlights([FromQuery] SearchFlightDTO searchFlightDTO)
         {
             try
