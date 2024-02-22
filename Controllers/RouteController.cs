@@ -39,6 +39,39 @@ namespace Simplifly.Controllers
 
         }
 
+        [Route("GetRouteId")]
+        [HttpGet]
+        public async Task<ActionResult<int>> GetRouteId([FromQuery] GetRouteIdDTO getRouteIdDTO)
+        {
+            try
+            {
+                int routeId = await _routeFlightOwnerService.GetRouteIdByAirport(getRouteIdDTO.SourceAirportId, getRouteIdDTO.DestinationAirportId);
+                return routeId;
+            }
+            catch (NoSuchRouteException nsre)
+            {
+                _logger.LogInformation(nsre.Message);
+                return NotFound(nsre.Message);
+            }
+        }
+
+        [Route("GetAirports")]
+        [HttpGet]
+        public async Task<ActionResult<List<Airport>>> GetAirports()
+        {
+            try
+            {
+                var airports = await _routeFlightOwnerService.GetAllAirports();
+                return airports;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.Message);
+                return NotFound(ex.Message);
+            }
+        }
+        
+
         [Route("AddAirport")]
         [HttpPost]
         [Authorize(Roles = "flightOwner")]
@@ -59,7 +92,6 @@ namespace Simplifly.Controllers
 
         [Route("AddRoute")]
         [HttpPost]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Route>> AddRoute(Route route)
         {
             try
@@ -77,7 +109,6 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Route>> RemoveRoute(RemoveRouteDTO routeDTO)
         {
             try

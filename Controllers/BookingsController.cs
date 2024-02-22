@@ -35,5 +35,21 @@ namespace Simplifly.Controllers
                 return NotFound(nsbe.Message);
             }
         }
+
+        [Route("GetBookedSeats")]
+        [HttpGet]
+        public async Task<ActionResult<List<string>>> GetBookedSeats(int scheduleId)
+        {
+            try
+            {
+                var bookedSeats=await _bookingService.GetBookedSeatBySchedule(scheduleId);
+                return bookedSeats;
+            }
+            catch(NoSuchBookingsException nsbe)
+            {
+                _logger.LogInformation(nsbe.Message);
+                return NotFound(nsbe.Message);
+            }
+        }
     }
 }

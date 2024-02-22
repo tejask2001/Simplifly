@@ -58,7 +58,6 @@ namespace Simplifly.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> AddSchedule(Schedule schedule)
         {
             try
@@ -76,7 +75,6 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledFlight")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledFlight(ScheduleFlightDTO scheduleFlightDTO)
         {
             try
@@ -96,7 +94,6 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledRoute")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledRoute(ScheduleRouteDTO scheduleRouteDTO)
         {
             try
@@ -114,7 +111,6 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledTime")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledTime(ScheduleTimeDTO scheduleTimeDTO)
         {
             try
@@ -129,8 +125,37 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
+        }
 
-
+        [Route("DeleteScheduleByFlight")]
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteScheduleByFlight(string flightNumber)
+        {
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.RemoveSchedule(flightNumber);
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
+        }
+        [Route("DeleteScheduleByFlight")]
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteScheduleByDate(RemoveScheduleDateDTO scheduleDTO)
+        {
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.RemoveSchedule(scheduleDTO.DateOfSchedule,scheduleDTO.AirportId);
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
         }
     }
 }

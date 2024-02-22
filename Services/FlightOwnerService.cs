@@ -1,4 +1,5 @@
-﻿using Simplifly.Interfaces;
+﻿using Simplifly.Exceptions;
+using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Repositories;
 using System.Numerics;
@@ -55,9 +56,15 @@ namespace Simplifly.Services
             return null;
         }
 
-        public async Task<FlightOwner> GetByIdFlightOwners(int id)
+        public async Task<FlightOwner> GetByUsernameFlightOwners(string username)
         {
-            return await (_flightownerRepository.GetAsync(id));
+            var flightOwners = await _flightownerRepository.GetAsync();
+            var flightOwner=flightOwners.FirstOrDefault(e=>e.Username==username);
+            if(flightOwner != null)
+            {
+                return flightOwner;
+            }
+            throw new NoSuchFlightOwnerException();
         }
     }
 }

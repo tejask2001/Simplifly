@@ -9,7 +9,7 @@ namespace Simplifly.Services
     public class ScheduleServices : IScheduleFlightOwnerService, IFlightCustomerService
     {
         IRepository<int, Schedule> _scheduleRepository;
-
+        IBookingService _bookingService;
         ILogger<ScheduleServices> _logger;
 
 
@@ -21,6 +21,13 @@ namespace Simplifly.Services
         public ScheduleServices(IRepository<int, Schedule> scheduleRepository, ILogger<ScheduleServices> logger)
         {
             _scheduleRepository = scheduleRepository;
+            _logger = logger;
+
+        }
+        public ScheduleServices(IRepository<int, Schedule> scheduleRepository, IBookingService bookingService, ILogger<ScheduleServices> logger)
+        {
+            _scheduleRepository = scheduleRepository;
+            _bookingService = bookingService;
             _logger = logger;
 
         }
@@ -145,17 +152,19 @@ namespace Simplifly.Services
         /// <returns>List of flight based on user search</returns>
         /// <exception cref="NoFlightAvailableException">Throw when no flight available for particular search.</exception>
         public async Task<List<SearchedFlightResultDTO>> SearchFlights(SearchFlightDTO searchFlight)
-        {
+        {            
             List<SearchedFlightResultDTO> searchResult = new List<SearchedFlightResultDTO>();
             var schedules = await _scheduleRepository.GetAsync();
             schedules = schedules.Where(e => e.Departure.Date == searchFlight.DateOfJourney.Date
              && e.Route?.SourceAirport?.City == searchFlight.Origin
-             && e.Route.DestinationAirport?.City == searchFlight.Destination).ToList();
+             && e.Route.DestinationAirport?.City == searchFlight.Destination
+             && (AvailableSeats(e.Flight.TotalSeats,e.Id)>0)).ToList();
 
             searchResult = schedules.Select(e => new SearchedFlightResultDTO
             {
                 FlightNumber = e.FlightId,
                 Airline = e.Flight.Airline,
+                ScheduleId = e.Id,
                 SourceAirport = e.Route?.SourceAirport?.Name + " ," + e.Route?.SourceAirport?.City,
                 DestinationAirport = e.Route?.DestinationAirport?.Name + " ," + e.Route?.DestinationAirport?.City,
                 DepartureTime = e.Departure,
@@ -166,6 +175,16 @@ namespace Simplifly.Services
                 return searchResult;
             else
                 throw new NoFlightAvailableException();
+        }
+
+        public int AvailableSeats(int totalSeats, int schedule)
+        {
+            var bookedSeatsTask = _bookingService.GetBookedSeatBySchedule(schedule);
+            bookedSeatsTask.Wait(); 
+            var bookedSeats = bookedSeatsTask.Result;
+
+            int availableSeats = totalSeats - bookedSeats.Count();
+            return availableSeats;
         }
 
         /// <summary>
@@ -195,6 +214,33 @@ namespace Simplifly.Services
                 return flightSchedule;
             else
                 throw new NoSuchScheduleException();
+        }
+
+        public async Task<int> RemoveSchedule(string flightNumber)
+        {
+            int removedScheduleCount = 0;
+            var schedules=await _scheduleRepository.GetAsync();
+            schedules=schedules.Where(e=>e.FlightId==flightNumber).ToList();
+            foreach(var flight in schedules)
+            {
+                await _scheduleRepository.Delete(flight.Id);
+                removedScheduleCount++;
+            }
+            return removedScheduleCount;
+        }
+
+        public async Task<int> RemoveSchedule(DateTime departureDate, int airportId)
+        {
+            int removedScheduleCount = 0;
+            var schedules = await _scheduleRepository.GetAsync();
+            schedules = schedules.Where(e => e.Departure.Date==departureDate.Date && 
+            e.Route.SourceAirportId==airportId).ToList();
+            foreach (var flight in schedules)
+            {
+                await _scheduleRepository.Delete(flight.Id);
+                removedScheduleCount++;
+            }
+            return removedScheduleCount;
         }
     }
 }
