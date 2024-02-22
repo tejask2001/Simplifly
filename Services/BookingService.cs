@@ -1,7 +1,9 @@
-﻿using Simplifly.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Simplifly.Controllers;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using Simplifly.Models.DTO_s;
 using Simplifly.Repositories;
 
 namespace Simplifly.Services
@@ -200,6 +202,29 @@ namespace Simplifly.Services
             if (bookings != null)
             {
                 return bookings;
+            }
+            throw new NoSuchBookingsException();
+        }
+
+        public async Task<ActionResult<List<Booking>>> GetBookingByFlight(string flightNumber)
+        {
+            var bookings = await _bookingRepository.GetAsync();
+            bookings = bookings.Where(e => e.Schedule.FlightId == flightNumber).ToList();
+            if (bookings != null)
+            {
+                return bookings;
+            }
+            throw new NoSuchBookingsException();
+        }
+
+        public async Task<List<string>> GetBookedSeatBySchedule(int scheduleID)
+        {
+            var bookings=await _passengerBookingRepository.GetAsync();
+            var bookedSeats= bookings.Where(e=>e.Booking.ScheduleId==scheduleID)
+                .Select(e=>e.SeatNumber).ToList();
+            if(bookedSeats != null)
+            {
+                return bookedSeats;
             }
             throw new NoSuchBookingsException();
         }

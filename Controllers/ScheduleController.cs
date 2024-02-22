@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Simplifly.Exceptions;
@@ -21,7 +22,6 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "flightOwner,Admin")]
 
         public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
@@ -41,7 +41,7 @@ namespace Simplifly.Controllers
 
         [Route("FlightSchedule")]
         [HttpGet]
-        [Authorize(Roles = "flightOwner")]
+        [EnableCors("RequestPolicy")]
         public async Task<ActionResult<List<FlightScheduleDTO>>> GetFlightSchedule([FromQuery] string flightNumber)
         {
             try
@@ -58,7 +58,6 @@ namespace Simplifly.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> AddSchedule(Schedule schedule)
         {
             try
@@ -71,14 +70,11 @@ namespace Simplifly.Controllers
             {
                 _logger.LogInformation(fsbe.Message);
                 return NotFound(fsbe.Message);
-            
-
-
+            }
         }
 
         [Route("UpdateScheduledFlight")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledFlight(ScheduleFlightDTO scheduleFlightDTO)
         {
             try
@@ -94,12 +90,10 @@ namespace Simplifly.Controllers
                 return NotFound(nsse.Message);
             }
 
-
         }
 
         [Route("UpdateScheduledRoute")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledRoute(ScheduleRouteDTO scheduleRouteDTO)
         {
             try
@@ -113,13 +107,10 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-
-
         }
 
         [Route("UpdateScheduledTime")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledTime(ScheduleTimeDTO scheduleTimeDTO)
         {
             try
@@ -134,8 +125,37 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
+        }
 
-
+        [Route("DeleteScheduleByFlight")]
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteScheduleByFlight(string flightNumber)
+        {
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.RemoveSchedule(flightNumber);
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
+        }
+        [Route("DeleteScheduleByFlight")]
+        [HttpDelete]
+        public async Task<ActionResult<int>> DeleteScheduleByDate(RemoveScheduleDateDTO scheduleDTO)
+        {
+            try
+            {
+                var schedule = await _scheduleFlightOwnerService.RemoveSchedule(scheduleDTO.DateOfSchedule,scheduleDTO.AirportId);
+                return schedule;
+            }
+            catch (NoSuchScheduleException nsse)
+            {
+                _logger.LogInformation(nsse.Message);
+                return NotFound(nsse.Message);
+            }
         }
     }
 }

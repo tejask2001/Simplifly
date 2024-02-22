@@ -47,6 +47,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(flight);
                 _context.SaveChanges();
+                _logger.LogInformation("Flight deleted with flight number" + flightNumber);
                 return flight;
             }
             throw new NoSuchFlightException();
@@ -92,6 +93,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Flight>(items).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation("Flight updated with flight number" + items.FlightNumber);
                 return flight;
             }
             throw new NoSuchFlightException();

@@ -74,7 +74,7 @@ namespace Simplifly.Repositories
         /// <returns>PassengerBooking object</returns>
         public async Task<List<Models.PassengerBooking>> GetAsync()
         {
-            var passengerBookings = _context.PassengerBookings.ToList();
+            var passengerBookings = _context.PassengerBookings.Include(e=>e.Booking).ToList();
             return passengerBookings;
         }
 

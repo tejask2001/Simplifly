@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Simplifly.Exceptions;
@@ -24,7 +25,7 @@ namespace Simplifly.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "flightOwner,Admin")]
+        [EnableCors("ReactPolicy")]
         public async Task<ActionResult<List<Flight>>> GetAllFlight()
         {
             try
@@ -41,7 +42,7 @@ namespace Simplifly.Controllers
 
         [Route("SearchFlight")]
         [HttpGet]
-        [Authorize(Roles = "Customer")]
+        [EnableCors("ReactPolicy")]
         public async Task<ActionResult<List<SearchedFlightResultDTO>>> GetAllFlights([FromQuery] SearchFlightDTO searchFlightDTO)
         {
             try
@@ -57,8 +58,9 @@ namespace Simplifly.Controllers
 
         }
 
+        [Route("AddFlight")]
         [HttpPost]
-        [Authorize(Roles = "flightOwner")]
+        [EnableCors("ReactPolicy")]
         public async Task<ActionResult<Flight>> AddFlight(Flight flight)
         {
             try
@@ -76,7 +78,6 @@ namespace Simplifly.Controllers
 
 
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateFlightAirline(FlightAirlineDTO flightDTO)
         {
 
@@ -96,7 +97,6 @@ namespace Simplifly.Controllers
 
         [Route("UpdateTotalSeats")]
         [HttpPut]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateTotalSeats(FlightSeatsDTO flightDTO)
         {
             try
@@ -114,7 +114,6 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> RemoveFlight(string flightNumber)
         {
             try

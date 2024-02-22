@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Simplifly.Context;
@@ -11,6 +14,7 @@ using Simplifly.Services;
 using System.Drawing;
 using System.Reflection.Emit;
 using System.Text;
+using System.Text.Json.Serialization;
 using Route = Simplifly.Models.Route;
 
 namespace Simplifly
@@ -40,6 +44,8 @@ namespace Simplifly
                     Scheme = "bearer"
                 });
 
+
+
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
@@ -56,6 +62,12 @@ namespace Simplifly
                     });
             });
 
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                   .AddJwtBearer(options =>
                   {
@@ -67,6 +79,14 @@ namespace Simplifly
                           ValidateAudience = false
                       };
                   });
+
+            builder.Services.AddCors(Options =>
+            {
+                Options.AddPolicy("ReactPolicy", opts =>
+                {
+                    opts.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+                });
+            });
 
             #region context
 
@@ -128,8 +148,9 @@ namespace Simplifly
                 app.UseSwaggerUI();
             }
 
+            app.UseCors("ReactPolicy");
             app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseAuthorization();           
 
 
             app.MapControllers();

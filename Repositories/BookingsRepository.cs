@@ -73,7 +73,7 @@ namespace Simplifly.Repositories
         /// <returns>Booking objects</returns>
         public async Task<List<Booking>> GetAsync()
         {
-            var bookings = _context.Bookings.ToList();
+            var bookings = _context.Bookings.Include(e=>e.Schedule).ToList();
             return bookings;
         }
 

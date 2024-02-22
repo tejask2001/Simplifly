@@ -112,6 +112,9 @@ namespace Simplifly.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("bookingStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PaymentId");

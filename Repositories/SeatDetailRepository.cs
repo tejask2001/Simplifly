@@ -9,14 +9,16 @@ namespace Simplifly.Repositories
     public class SeatDetailRepository : IRepository<string, SeatDetail>,ISeatDeatilRepository
     {
         RequestTrackerContext _context;
+        ILogger<SeatDetailRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public SeatDetailRepository(RequestTrackerContext context)
+        public SeatDetailRepository(RequestTrackerContext context, ILogger<SeatDetailRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation("Seat detail added with seatDetailId" + items.SeatNumber);
             return items;
         }
 
@@ -44,6 +47,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(seatDetail);
                 _context.SaveChanges();
+                _logger.LogInformation("Seat detail deleted with seatDetailId" + seatNumber);
                 return seatDetail;
             }
             throw new NoSuchSeatException();
@@ -75,6 +79,7 @@ namespace Simplifly.Repositories
         {
             _context.Seats.UpdateRange(seatDetails);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Seat detail updated");
         }
 
         /// <summary>
@@ -100,6 +105,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry(seatDetail).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation("Seat detail updated");
                 return seatDetail;
             }
             throw new NoSuchSeatException();

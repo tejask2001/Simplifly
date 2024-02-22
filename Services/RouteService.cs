@@ -62,6 +62,12 @@ namespace Simplifly.Services
             throw new RouteAlreadyPresentException();
         }
 
+        public async Task<List<Airport>> GetAllAirports()
+        {
+            var airports = await _airportRepository.GetAsync();
+            return airports;
+        }
+
 
         /// <summary>
         /// Service class method to get all Routes
@@ -82,6 +88,19 @@ namespace Simplifly.Services
                 return route;
             }
             throw new NoSuchRouteException();
+        }
+
+        public async Task<int> GetRouteIdByAirport(int sourceAirportId, int destinationAirportId)
+        {
+            var routes = await _routeRepository.GetAsync();
+            var route = routes.FirstOrDefault(e => e.SourceAirportId == sourceAirportId && 
+            e.DestinationAirportId == destinationAirportId);
+            if(route != null)
+            {
+                return (int)route.Id;
+            }
+            throw new NoSuchRouteException();
+
         }
 
         /// <summary>

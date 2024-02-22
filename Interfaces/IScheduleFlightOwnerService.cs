@@ -7,6 +7,8 @@ namespace Simplifly.Interfaces
     {
         public Task<Schedule> AddSchedule(Schedule schedule);
         public Task<Schedule> RemoveSchedule(Schedule schedule);
+        public Task<int> RemoveSchedule(string flightNumber);
+        public Task<int> RemoveSchedule(DateTime departureDate,int airportId);
         public Task<List<Schedule>> GetAllSchedules();
         public Task<List<FlightScheduleDTO>> GetFlightSchedules(string flightNumber);
         public Task<Schedule> UpdateScheduledFlight(int scheduleId, string flightNumber);

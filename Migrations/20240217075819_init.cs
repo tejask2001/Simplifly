@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Simplifly.Migrations
 {
-    public partial class booking : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -117,8 +117,7 @@ namespace Simplifly.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    PaymentDetailsId = table.Column<int>(type: "int", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: false)
+                    PaymentDetailsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,17 +261,12 @@ namespace Simplifly.Migrations
                     PaymentId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     BookingTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    CustomerUserId = table.Column<int>(type: "int", nullable: true)
+                    bookingStatus = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bookings", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Bookings_Customers_CustomerUserId",
-                        column: x => x.CustomerUserId,
-                        principalTable: "Customers",
-                        principalColumn: "UserId");
                     table.ForeignKey(
                         name: "FK_Bookings_Payments_PaymentId",
                         column: x => x.PaymentId,
@@ -325,15 +319,9 @@ namespace Simplifly.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_CustomerUserId",
-                table: "Bookings",
-                column: "CustomerUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Bookings_PaymentId",
                 table: "Bookings",
-                column: "PaymentId",
-                unique: true);
+                column: "PaymentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_ScheduleId",
@@ -404,6 +392,9 @@ namespace Simplifly.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
                 name: "PassengerBookings");
 
             migrationBuilder.DropTable(
@@ -414,9 +405,6 @@ namespace Simplifly.Migrations
 
             migrationBuilder.DropTable(
                 name: "Seats");
-
-            migrationBuilder.DropTable(
-                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Payments");

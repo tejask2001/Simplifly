@@ -12,8 +12,8 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    [Migration("20240214131951_booking")]
-    partial class booking
+    [Migration("20240217075819_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -102,9 +102,6 @@ namespace Simplifly.Migrations
                     b.Property<DateTime>("BookingTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("CustomerUserId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PaymentId")
                         .HasColumnType("int");
 
@@ -117,12 +114,12 @@ namespace Simplifly.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("bookingStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerUserId");
-
-                    b.HasIndex("PaymentId")
-                        .IsUnique();
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("ScheduleId");
 
@@ -296,9 +293,6 @@ namespace Simplifly.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
@@ -445,13 +439,9 @@ namespace Simplifly.Migrations
 
             modelBuilder.Entity("Simplifly.Models.Booking", b =>
                 {
-                    b.HasOne("Simplifly.Models.Customer", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("CustomerUserId");
-
                     b.HasOne("Simplifly.Models.Payment", "Payment")
-                        .WithOne("Booking")
-                        .HasForeignKey("Simplifly.Models.Booking", "PaymentId")
+                        .WithMany()
+                        .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -571,20 +561,9 @@ namespace Simplifly.Migrations
                     b.Navigation("Route");
                 });
 
-            modelBuilder.Entity("Simplifly.Models.Customer", b =>
-                {
-                    b.Navigation("Bookings");
-                });
-
             modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
                 {
                     b.Navigation("OwnedFlights");
-                });
-
-            modelBuilder.Entity("Simplifly.Models.Payment", b =>
-                {
-                    b.Navigation("Booking")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Simplifly.Models.Route", b =>

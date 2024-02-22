@@ -1,4 +1,5 @@
-﻿using Simplifly.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Simplifly.Controllers;
 using Simplifly.Models;
 
 namespace Simplifly.Interfaces
@@ -12,5 +13,7 @@ namespace Simplifly.Interfaces
         Task<IEnumerable<Booking>> GetUserBookingsAsync(int userId);
         Task<Booking> GetBookingByIdAsync(int bookingId);
         Task<bool> RequestRefundAsync(int bookingId);
+        Task<ActionResult<List<Booking>>> GetBookingByFlight(string flightNumber);
+        Task<List<string>> GetBookedSeatBySchedule(int scheduleID);
     }
 }

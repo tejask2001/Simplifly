@@ -29,6 +29,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation("Route added with routeId" + items.Id);
             return items;
         }
 
@@ -45,6 +46,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(route);
                 _context.SaveChanges();
+                _logger.LogInformation("Route deleted with routeId" + routeId);
                 return route;
             }
             throw new NoSuchRouteException();
@@ -90,6 +92,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Models.Route>(route).State=EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation("Route updated with routeId" + items.Id);
                 return route;
             }
             throw new NoSuchRouteException();
