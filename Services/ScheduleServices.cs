@@ -165,16 +165,37 @@ namespace Simplifly.Services
                 FlightNumber = e.FlightId,
                 Airline = e.Flight.Airline,
                 ScheduleId = e.Id,
-                SourceAirport = e.Route?.SourceAirport?.Name + " ," + e.Route?.SourceAirport?.City,
-                DestinationAirport = e.Route?.DestinationAirport?.Name + " ," + e.Route?.DestinationAirport?.City,
+                SourceAirport = e.Route.SourceAirport.City,
+                DestinationAirport = e.Route.DestinationAirport.City,
                 DepartureTime = e.Departure,
-                ArrivalTime = e.Arrival
+                ArrivalTime = e.Arrival,
+                TotalPrice = CalculateTotalPrice(searchFlight, e.Flight.BasePrice)
 
             }).ToList();
             if (searchResult != null)
                 return searchResult;
             else
                 throw new NoFlightAvailableException();
+        }
+
+        public double CalculateTotalPrice(SearchFlightDTO searchFlightDto, double basePrice)
+        {
+            double totalPrice = 0;
+            double seatPrice = 0;
+            double adultSeatCost = 0;
+            double childSeatCost = 0;
+            if (searchFlightDto.SeatClass == "economy")
+                seatPrice = basePrice*0.2;
+            else if (searchFlightDto.SeatClass == "premiumEconomy")
+                seatPrice = basePrice*0.3;
+            else
+                seatPrice = basePrice * 0.4;
+
+            adultSeatCost = basePrice + seatPrice + (basePrice*0.3);
+            childSeatCost = basePrice + seatPrice + (basePrice * 0.2);
+            totalPrice=(adultSeatCost*searchFlightDto.Adult)+(childSeatCost*searchFlightDto.Child);
+
+            return totalPrice;
         }
 
         public int AvailableSeats(int totalSeats, int schedule)

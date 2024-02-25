@@ -9,14 +9,16 @@ namespace Simplifly.Repositories
     public class PaymentRepository : IRepository<int, Models.Payment>
     {
         RequestTrackerContext _context;
+        ILogger<PaymentRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public PaymentRepository(RequestTrackerContext context)
+        public PaymentRepository(RequestTrackerContext context, ILogger<PaymentRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation($"Payment added with id {items.PaymentId}");
             return items;
         }
 
@@ -44,6 +47,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(payment);
                 _context.SaveChanges();
+                _logger.LogInformation($"Payment added with id {paymentId}");
                 return payment;
             }
             throw new NoSuchPaymentException();
@@ -89,6 +93,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Models.Payment>(payment).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation($"Payment updated with id {items.PaymentId}");
                 return payment;
             }
             throw new NoSuchPaymentException();

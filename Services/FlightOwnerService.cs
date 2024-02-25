@@ -66,5 +66,16 @@ namespace Simplifly.Services
             }
             throw new NoSuchFlightOwnerException();
         }
+
+        public async Task<FlightOwner> GetFlightOwnerById(int id)
+        {
+            var flightOwners = await _flightownerRepository.GetAsync();
+            var flightOwner= flightOwners.FirstOrDefault(e=>e.OwnerId==id);
+            if (flightOwner != null)
+            {
+                return flightOwner;
+            }
+            throw new NoSuchFlightOwnerException();
+        }
     }
 }

@@ -9,14 +9,16 @@ namespace Simplifly.Repositories
     public class PassengerRepository : IRepository<int, Models.Passenger> 
     {
         RequestTrackerContext _context;
+        ILogger<PassengerRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext
         /// </summary>
         /// <param name="context">Database context</param>
-        public PassengerRepository(RequestTrackerContext context)
+        public PassengerRepository(RequestTrackerContext context, ILogger<PassengerRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -28,6 +30,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation($"Passenger added with id {items.PassengerId}");
             return items;
         }
 
@@ -44,6 +47,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(passenger);
                 _context.SaveChanges();
+                _logger.LogInformation($"Passenger deleted with id {passengerId}");
                 return passenger;
             }
             throw new NoSuchPassengerException();
@@ -90,6 +94,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Models.Passenger>(passenger).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation($"Passenger updated with id {items.PassengerId}");
                 return passenger;
             }
             throw new NoSuchPassengerException();

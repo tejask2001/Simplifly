@@ -19,25 +19,45 @@ namespace Simplifly.Repositories
             _context = context;
             _logger = logger;
         }
+
+        /// <summary>
+        /// Method to add Customer
+        /// </summary>
+        /// <param name="items">Object of Customer</param>
+        /// <returns>Customer object</returns>
         public async Task<Customer> Add(Customer items)
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation($"Customer added with id {items.UserId}");
             return items;
         }
 
+        /// <summary>
+        /// Method to delete Customer
+        /// </summary>
+        /// <param name="ownerId">OwnerId in int</param>
+        /// <returns>Object of Customer</returns>
+        /// <exception cref="NoSuchCustomerException">when customer with given id not found</exception>
         public async Task<Customer> Delete(int ownerId)
         {
             var customer = await GetAsync(ownerId);
             if (customer != null)
             {
-                _context?.Remove(customer);
+                _context.Remove(customer);
                 _context.SaveChanges();
+                _logger.LogInformation($"Customer deleted with id {ownerId}");
                 return customer;
             }
             throw new NoSuchCustomerException();
         }
 
+        /// <summary>
+        /// method to get customer by id
+        /// </summary>
+        /// <param name="key">id in int</param>
+        /// <returns>Object of customer</returns>
+        /// <exception cref="NoSuchCustomerException">when customer with given id not found</exception>
         public async Task<Customer> GetAsync(int key)
         {
             var customers = await GetAsync();
@@ -55,6 +75,13 @@ namespace Simplifly.Repositories
             return customers;
         }
 
+
+        /// <summary>
+        /// Method to update customer 
+        /// </summary>
+        /// <param name="items">Object of customer</param>
+        /// <returns>Object of customer</returns>
+        /// <exception cref="NoSuchCustomerException">if customer not found</exception>
         public async Task<Customer> Update(Customer items)
         {
             var customer = await GetAsync(items.UserId);
@@ -62,6 +89,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Customer>(items).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation($"Customer updated with id {items.UserId}");
                 return customer;
             }
             throw new NoSuchCustomerException();

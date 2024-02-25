@@ -26,6 +26,7 @@ namespace Simplifly.Controllers
 
         [HttpGet]
         [EnableCors("ReactPolicy")]
+        [Authorize(Roles ="flightOwner")]
         public async Task<ActionResult<List<Flight>>> GetAllFlight()
         {
             try
@@ -61,6 +62,7 @@ namespace Simplifly.Controllers
         [Route("AddFlight")]
         [HttpPost]
         [EnableCors("ReactPolicy")]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> AddFlight(Flight flight)
         {
             try
@@ -78,6 +80,7 @@ namespace Simplifly.Controllers
 
 
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateFlightAirline(FlightAirlineDTO flightDTO)
         {
 
@@ -97,6 +100,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateTotalSeats")]
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> UpdateTotalSeats(FlightSeatsDTO flightDTO)
         {
             try
@@ -114,6 +118,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Flight>> RemoveFlight(string flightNumber)
         {
             try

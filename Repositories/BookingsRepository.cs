@@ -29,6 +29,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation($"Booking added with id {items.Id}");
             return items;
         }
 
@@ -45,6 +46,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(booking);
                 _context.SaveChanges();
+                _logger.LogInformation($"Booking deleted with id {bookingId}");
                 return booking;
             }
             throw new NoSuchBookingsException();
@@ -73,7 +75,7 @@ namespace Simplifly.Repositories
         /// <returns>Booking objects</returns>
         public async Task<List<Booking>> GetAsync()
         {
-            var bookings = _context.Bookings.Include(e=>e.Schedule).ToList();
+            var bookings = _context.Bookings.Include(e=>e.Schedule).Include(e=>e.Payment).ToList();
             return bookings;
         }
 
@@ -90,6 +92,7 @@ namespace Simplifly.Repositories
             {
                 _context.Entry<Booking>(items).State = EntityState.Modified;
                 _context.SaveChanges();
+                _logger.LogInformation($"Booking updated with id {items.Id}");
                 return bookings;
             }
             throw new NoSuchBookingsException();

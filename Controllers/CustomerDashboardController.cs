@@ -2,6 +2,8 @@
 using Simplifly.Interfaces;
 using System.Threading.Tasks;
 using Simplifly.Services;
+using Simplifly.Models;
+using Simplifly.Exceptions;
 
 namespace Simplifly.Controllers
 {
@@ -12,12 +14,14 @@ namespace Simplifly.Controllers
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
         private readonly IBookingService _bookingService;
+        private readonly ILogger<CustomerDashboardController> _logger;
 
-        public CustomerDashboardController(IUserService userService, ICustomerService customerService, IBookingService bookingService)
+        public CustomerDashboardController(IUserService userService, ICustomerService customerService, IBookingService bookingService, ILogger<CustomerDashboardController> logger)
         {
             _userService = userService;
             _bookingService = bookingService;
             _customerService = customerService;
+            _logger = logger;
         }
 
         //[HttpGet("{userId}/bookings")]
@@ -45,6 +49,23 @@ namespace Simplifly.Controllers
             }
             return Ok(booking);
         }
+
+        [HttpGet("GetCustomerByUsername")]
+        public async Task<ActionResult<Customer>> GetCustomerByUsername(string username)
+        {
+            try
+            {
+                var customer = await _customerService.GetCustomersByUsername(username);
+                return Ok(customer);
+            }
+            catch(NoSuchCustomerException nsce)
+            {
+                _logger.LogInformation(nsce.Message);   
+                return NotFound(nsce.Message);
+            }
+            
+        }
+
 
         [HttpDelete("{userId}/bookings/{bookingId}")]
         public async Task<IActionResult> CancelBooking(int userId, int bookingId)

@@ -22,6 +22,19 @@ namespace Simplifly.Services
       //  private readonly IPaymentRepository _paymentsRepository;
 
         private readonly ILogger<BookingService> _logger;
+
+        /// <summary>
+        /// Constructor to initialize objects
+        /// </summary>
+        /// <param name="bookingRepository"></param>
+        /// <param name="scheduleRepository"></param>
+        /// <param name="passengerBookingRepository"></param>
+        /// <param name="flightRepository"></param>
+        /// <param name="bookingsRepository"></param>
+        /// <param name="seatDetailRepository"></param>
+        /// <param name="passengerBookingRepository1"></param>
+        /// <param name="paymentRepository"></param>
+        /// <param name="logger"></param>
         public BookingService(IRepository<int, Booking> bookingRepository, IRepository<int, Schedule> scheduleRepository, IRepository<int, PassengerBooking> passengerBookingRepository, IRepository<string, Flight> flightRepository, IBookingRepository bookingsRepository, ISeatDeatilRepository seatDetailRepository, IPassengerBookingRepository passengerBookingRepository1, IRepository<int, Payment> paymentRepository, ILogger<BookingService> logger)
         {
             _flightRepository = flightRepository;
@@ -34,6 +47,14 @@ namespace Simplifly.Services
             _paymentRepository = paymentRepository;
             _logger = logger;
         }
+
+        /// <summary>
+        /// Method to Create Booking
+        /// </summary>
+        /// <param name="bookingRequest">Object ob BookingRequestDTO</param>
+        /// <returns>bool based on booking status</returns>
+        /// <exception cref="ArgumentNullException">If null value encountered</exception>
+        /// <exception cref="Exception">If schedule not found or invalid seat selected</exception>
         public async Task<bool> CreateBookingAsync(BookingRequestDto bookingRequest)
         {
             // Perform validation and business logic
@@ -57,6 +78,11 @@ namespace Simplifly.Services
 
             // Calculate total price based on the number of selected seats
             var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(schedule.FlightId));
+            var seatClass = bookingRequest.SelectedSeats[0][0];
+            if (seatClass == 'E')
+            {
+                totalPrice += 800;
+            }
 
             // Create Payment entry
             var payment = new Payment
@@ -116,23 +142,38 @@ namespace Simplifly.Services
             return addedBooking != null && addedPayment != null;
         }
 
+        /// <summary>
+        /// Method to get all bookings
+        /// </summary>
+        /// <returns>Collection of Booking</returns>
         public async Task<IEnumerable<Booking>> GetAllBookingsAsync()
         {
             return await _bookingRepository.GetAsync();
         }
 
+        /// <summary>
+        /// Method to get booking by Id
+        /// </summary>
+        /// <param name="bookingId">Id in int</param>
+        /// <returns>Object of booking</returns>
         public async Task<Booking> GetBookingByIdAsync(int bookingId)
         {
             return await _bookingRepository.GetAsync(bookingId);
         }
 
+        /// <summary>
+        /// Method to get booking by Id
+        /// </summary>
+        /// <param name="bookingId">Id in in</param>
+        /// <returns>Object of booking</returns>
+        /// <exception cref="NoSuchBookingsException">throws when no booking found</exception>
         public async Task<Booking> CancelBookingAsync(int bookingId)
         {
             var booking = await _bookingRepository.GetAsync(bookingId);
             
             if (booking == null)
             {
-                throw new Exception("Booking not found.");
+                throw new NoSuchBookingsException();
             }
            
 
@@ -149,25 +190,43 @@ namespace Simplifly.Services
             // Delete booking
             return await _bookingRepository.Delete(booking.Id);
         }
+
+        /// <summary>
+        /// Method to get booking by userID
+        /// </summary>
+        /// <param name="userId">UserId in int</param>
+        /// <returns>Collection og Booking</returns>
         public async Task<IEnumerable<Booking>> GetUserBookingsAsync(int userId)
         {
             return await _bookingsRepository.GetBookingsByUserIdAsync(userId);
         }
+
+        /// <summary>
+        /// Method to calculate total price of booking
+        /// </summary>
+        /// <param name="numberOfSeats">Total seats in int</param>
+        /// <param name="flight">Object of flight</param>
+        /// <returns></returns>
         public double CalculateTotalPrice(int numberOfSeats, Flight flight)
         {
-            // Calculate total price based on the number of selected seats and any applicable pricing logic
-            // For example:
-            return numberOfSeats * flight.BasePrice;
+            double totalPrice = numberOfSeats * (flight?.BasePrice ?? 0); 
+            return totalPrice;
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bookingId"></param>
+        /// <returns></returns>
+        /// <exception cref="NoSuchBookingsException">When booking with given id not found</exception>
         public async Task<bool> RequestRefundAsync(int bookingId)
         {
             var booking = await _bookingRepository.GetAsync(bookingId);
 
             if (booking == null)
             {
-                throw new Exception("Booking not found.");
+                throw new NoSuchBookingsException();
             }
 
             // Check if payment exists
@@ -193,6 +252,12 @@ namespace Simplifly.Services
             return true;
         }
 
+        /// <summary>
+        /// Method to get booking by scheduleId
+        /// </summary>
+        /// <param name="scheduleId">ScheduleId in int</param>
+        /// <returns>List of Booking</returns>
+        /// <exception cref="NoSuchBookingsException">when booking with given scheduleId not found</exception>
         public async Task<List<Booking>> GetBookingBySchedule(int scheduleId)
         {
             var bookings = await _bookingRepository.GetAsync();
@@ -206,7 +271,13 @@ namespace Simplifly.Services
             throw new NoSuchBookingsException();
         }
 
-        public async Task<ActionResult<List<Booking>>> GetBookingByFlight(string flightNumber)
+        /// <summary>
+        /// Method to get booking by flight Number
+        /// </summary>
+        /// <param name="flightNumber">Flight number in string</param>
+        /// <returns>List of booking</returns>
+        /// <exception cref="NoSuchBookingsException">When booking with flight number not found</exception>
+        public async Task<List<Booking>> GetBookingByFlight(string flightNumber)
         {
             var bookings = await _bookingRepository.GetAsync();
             bookings = bookings.Where(e => e.Schedule.FlightId == flightNumber).ToList();
@@ -217,6 +288,12 @@ namespace Simplifly.Services
             throw new NoSuchBookingsException();
         }
 
+        /// <summary>
+        /// Method to get booked seat for particular schedule
+        /// </summary>
+        /// <param name="scheduleID">scheduleId in int</param>
+        /// <returns>List of booked seat in string</returns>
+        /// <exception cref="NoSuchBookingsException">when no seats found with given schedule</exception>
         public async Task<List<string>> GetBookedSeatBySchedule(int scheduleID)
         {
             var bookings=await _passengerBookingRepository.GetAsync();
