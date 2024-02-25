@@ -1,4 +1,5 @@
-﻿using Simplifly.Interfaces;
+﻿using Simplifly.Exceptions;
+using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Repositories;
 using System.Numerics;
@@ -55,6 +56,17 @@ namespace Simplifly.Services
         public async Task<Customer> GetByIdCustomers(int id)
         {
             return await (_customerRepository.GetAsync(id));
+        }
+
+        public async Task<Customer> GetCustomersByUsername(string username)
+        {
+            var customers = await _customerRepository.GetAsync();
+            var customer=customers.FirstOrDefault(e=>e.Username==username);
+            if(customer!= null)
+            {
+                return customer;
+            }
+            throw new NoSuchCustomerException();
         }
     }
 }

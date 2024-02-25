@@ -9,5 +9,6 @@
         public string DestinationAirport { get; set; }
         public DateTime DepartureTime { get; set; }
         public DateTime ArrivalTime { get; set; }
+        public Double TotalPrice { get; set; }
     }
 }

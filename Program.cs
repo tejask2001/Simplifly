@@ -134,6 +134,7 @@ namespace Simplifly
             builder.Services.AddScoped<IBookingService, BookingService>();
             builder.Services.AddScoped<IPassengerService, PassengerService>();
             builder.Services.AddScoped<ISeatDetailService, SeatDetailService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
 
             #endregion

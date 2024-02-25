@@ -22,7 +22,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<List<Schedule>>> GetAllSchedule()
         {
             try
@@ -58,6 +58,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> AddSchedule(Schedule schedule)
         {
             try
@@ -75,6 +76,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledFlight")]
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledFlight(ScheduleFlightDTO scheduleFlightDTO)
         {
             try
@@ -94,6 +96,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledRoute")]
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledRoute(ScheduleRouteDTO scheduleRouteDTO)
         {
             try
@@ -111,6 +114,7 @@ namespace Simplifly.Controllers
 
         [Route("UpdateScheduledTime")]
         [HttpPut]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<Schedule>> UpdateScheduledTime(ScheduleTimeDTO scheduleTimeDTO)
         {
             try
@@ -129,6 +133,7 @@ namespace Simplifly.Controllers
 
         [Route("DeleteScheduleByFlight")]
         [HttpDelete]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<int>> DeleteScheduleByFlight(string flightNumber)
         {
             try
@@ -142,8 +147,9 @@ namespace Simplifly.Controllers
                 return NotFound(nsse.Message);
             }
         }
-        [Route("DeleteScheduleByFlight")]
+        [Route("DeleteScheduleByDate")]
         [HttpDelete]
+        [Authorize(Roles = "flightOwner")]
         public async Task<ActionResult<int>> DeleteScheduleByDate(RemoveScheduleDateDTO scheduleDTO)
         {
             try

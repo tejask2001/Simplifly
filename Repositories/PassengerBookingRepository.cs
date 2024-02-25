@@ -30,6 +30,7 @@ namespace Simplifly.Repositories
         {
             _context.Add(items);
             _context.SaveChanges();
+            _logger.LogInformation($"PassengerBooking added with id {items.Id}");
             return items;
         }
 
@@ -46,6 +47,8 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(passengerBooking);
                 _context.SaveChanges();
+
+                _logger.LogInformation($"PassengerBooking delete with id {passengerBookingId}");
                 return passengerBooking;
             }
             throw new NoSuchPassengerBookingException();
@@ -74,7 +77,7 @@ namespace Simplifly.Repositories
         /// <returns>PassengerBooking object</returns>
         public async Task<List<Models.PassengerBooking>> GetAsync()
         {
-            var passengerBookings = _context.PassengerBookings.Include(e=>e.Booking).ToList();
+            var passengerBookings = _context.PassengerBookings.Include(e=>e.Booking).Include(e=>e.Passenger).Include(e=>e.SeatDetail).ToList();
             return passengerBookings;
         }
 

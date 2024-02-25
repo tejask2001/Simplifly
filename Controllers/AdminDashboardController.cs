@@ -4,6 +4,7 @@ using Simplifly.Models;
 using Simplifly.Services;
 using Simplifly.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Simplifly.Exceptions;
 
 namespace Simplifly.Controllers
 {
@@ -16,14 +17,20 @@ namespace Simplifly.Controllers
         private readonly IFlightFlightOwnerService _flightService;
         private readonly IBookingService _bookingService;
         private readonly IRouteFlightOwnerService _routeService;
+        private readonly IAdminService _adminService;
+        private readonly ILogger<AdminDashboardController> _logger;  
 
-        public AdminDashboardController(ICustomerService custService, IFlightOwnerService flightownerService, IFlightFlightOwnerService flightService, IBookingService bookingService, IRouteFlightOwnerService routeService)
+        public AdminDashboardController(ICustomerService custService, IFlightOwnerService flightownerService, 
+            IFlightFlightOwnerService flightService, IBookingService bookingService, IRouteFlightOwnerService routeService, 
+            IAdminService adminService, ILogger<AdminDashboardController> logger)
         {
             _custService = custService;
             _flightOwnerService = flightownerService;
             _flightService = flightService;
             _bookingService = bookingService;
-            _routeService =routeService;
+            _routeService = routeService;
+            _adminService = adminService;
+            _logger = logger;
         }
 
         [HttpGet("Bookings/Allbookings")]
@@ -47,6 +54,22 @@ namespace Simplifly.Controllers
             var users = await _flightOwnerService.GetAllFlightOwners();
             return Ok(users);
         }
+
+        [Route("GetAdminByUsername")]
+        [HttpGet]
+        public async Task<ActionResult<Admin>> GetAdminByUsername(string username)
+        {
+            try
+            {
+                var admin = await _adminService.GetAdminByUsername(username);
+                return Ok(admin);
+            }catch(NoSuchAdminException nsae)
+            {
+                _logger.LogInformation(nsae.Message);
+                return NotFound(nsae.Message);
+            }
+        }
+
         // DELETE: api/admin/dashboard/users/{userId}
         [HttpDelete("customers/{userId}")]
         [Authorize(Roles = "Admin")]
