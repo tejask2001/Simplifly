@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
 namespace Simplifly.Models
@@ -10,7 +11,6 @@ namespace Simplifly.Models
         public string Name { get; set; } =string.Empty;
         public int Age { get; set; } = 0;
         public string PassportNo { get; set; } = string.Empty;
-
 
         public Passenger()
         {

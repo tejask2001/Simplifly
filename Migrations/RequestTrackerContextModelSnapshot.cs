@@ -57,7 +57,7 @@ namespace Simplifly.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Airport", b =>
@@ -86,7 +86,7 @@ namespace Simplifly.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Airports");
+                    b.ToTable("Airports", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Booking", b =>
@@ -121,7 +121,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("ScheduleId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Customer", b =>
@@ -155,7 +155,7 @@ namespace Simplifly.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Flight", b =>
@@ -180,7 +180,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("FlightOwnerOwnerId");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flights", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.FlightOwner", b =>
@@ -224,7 +224,7 @@ namespace Simplifly.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("FlightsOwners");
+                    b.ToTable("FlightsOwners", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Passenger", b =>
@@ -248,7 +248,7 @@ namespace Simplifly.Migrations
 
                     b.HasKey("PassengerId");
 
-                    b.ToTable("Passengers");
+                    b.ToTable("Passengers", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.PassengerBooking", b =>
@@ -277,7 +277,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("SeatNumber");
 
-                    b.ToTable("PassengerBookings");
+                    b.ToTable("PassengerBookings", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Payment", b =>
@@ -304,7 +304,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("PaymentDetailsId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.PaymentDetails", b =>
@@ -329,7 +329,7 @@ namespace Simplifly.Migrations
 
                     b.HasKey("PaymentDetailsId");
 
-                    b.ToTable("PaymentDetails");
+                    b.ToTable("PaymentDetails", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Route", b =>
@@ -355,7 +355,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("SourceAirportId");
 
-                    b.ToTable("Routes");
+                    b.ToTable("Routes", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Schedule", b =>
@@ -385,7 +385,7 @@ namespace Simplifly.Migrations
 
                     b.HasIndex("RouteId");
 
-                    b.ToTable("Schedules");
+                    b.ToTable("Schedules", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.SeatDetail", b =>
@@ -399,7 +399,7 @@ namespace Simplifly.Migrations
 
                     b.HasKey("SeatNumber");
 
-                    b.ToTable("Seats");
+                    b.ToTable("Seats", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.User", b =>
@@ -421,7 +421,7 @@ namespace Simplifly.Migrations
 
                     b.HasKey("Username");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Simplifly.Models.Admin", b =>
