@@ -1,6 +1,7 @@
 ﻿using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using Simplifly.Models.DTO_s;
 using Simplifly.Repositories;
 using System.Numerics;
 
@@ -76,6 +77,23 @@ namespace Simplifly.Services
                 return flightOwner;
             }
             throw new NoSuchFlightOwnerException();
+        }
+
+        public async Task<FlightOwner> UpdateFlightOwner(UpdateFlightOwnerDTO flightOwner)
+        {
+            var owner = await _flightownerRepository.GetAsync(flightOwner.OwnerId);
+            if(owner != null)
+            {
+                owner.Name = flightOwner.Name;
+                owner.Email=flightOwner.Email;
+                owner.ContactNumber=flightOwner.ContactNumber;
+                owner.CompanyName=flightOwner.CompanyName;
+                owner.Address = flightOwner.Address;
+                owner = await _flightownerRepository.Update(owner);
+                return owner;
+            }
+            throw new NoSuchFlightOwnerException();
+
         }
     }
 }

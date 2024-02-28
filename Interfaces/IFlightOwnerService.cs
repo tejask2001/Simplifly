@@ -1,4 +1,5 @@
 ﻿using Simplifly.Models;
+using Simplifly.Models.DTO_s;
 
 namespace Simplifly.Interfaces
 {
@@ -10,5 +11,6 @@ namespace Simplifly.Interfaces
         public Task<List<FlightOwner>> GetAllFlightOwners();
         public Task<FlightOwner> GetByUsernameFlightOwners(string username);
         public Task<FlightOwner> UpdateFlightOwnerAddress(int id ,string address);
+        public Task<FlightOwner> UpdateFlightOwner(UpdateFlightOwnerDTO flightOwner);
     }
 }

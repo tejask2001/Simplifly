@@ -5,6 +5,7 @@ using Simplifly.Services;
 using Simplifly.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Simplifly.Exceptions;
+using Simplifly.Models.DTO_s;
 
 namespace Simplifly.Controllers
 {
@@ -126,6 +127,22 @@ namespace Simplifly.Controllers
                 return Ok("Flight route deleted successfully.");
             }
             return NotFound("Flight route not found.");
+        }
+
+        [HttpPut]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<Admin>> UpdateAdmin(UpdateAdminDTO adminDTO)
+        {
+            try
+            {
+                var admin = await _adminService.UpdateAdmin(adminDTO);
+                return admin;
+            }
+            catch (NoSuchAdminException nsae)
+            {
+                _logger.LogInformation(nsae.Message);
+                return NotFound(nsae.Message);
+            }
         }
     }
 }

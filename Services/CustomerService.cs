@@ -1,6 +1,7 @@
 ﻿using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using Simplifly.Models.DTO_s;
 using Simplifly.Repositories;
 using System.Numerics;
 
@@ -65,6 +66,20 @@ namespace Simplifly.Services
             if(customer!= null)
             {
                 return customer;
+            }
+            throw new NoSuchCustomerException();
+        }
+
+        public async Task<Customer> UpdateCustomer(UpdateCustomerDTO customer)
+        {
+            var customers = await _customerRepository.GetAsync(customer.UserId);
+            if (customer != null)
+            {
+                customers.Name=customer.Name;
+                customers.Email=customer.Email;
+                customers.Phone=customer.Phone;
+                customers = await _customerRepository.Update(customers);
+                return customers;
             }
             throw new NoSuchCustomerException();
         }
