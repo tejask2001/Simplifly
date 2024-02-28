@@ -34,21 +34,21 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet("Bookings/Allbookings")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAllBookings()
         {
             var bookings = await _bookingService.GetAllBookingsAsync();
             return Ok(bookings);
         }
         [HttpGet("Users/AllCustomers")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetAsync()
         {
             var users = await _custService.GetAllCustomers();
             return Ok(users);
         }
         [HttpGet("Users/AllFlightOwners")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> GetFlightOwnersAsync()
         {
             var users = await _flightOwnerService.GetAllFlightOwners();
@@ -72,7 +72,7 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/users/{userId}
         [HttpDelete("customers/{userId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
 
         public async Task<IActionResult> DeleteCustomer(int userId)
         {
@@ -86,7 +86,7 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/flightowners/{flightOwnerId}
         [HttpDelete("flightowners/{flightOwnerId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
 
         public async Task<IActionResult> DeleteFlightOwner(int flightOwnerId)
         {
@@ -102,7 +102,7 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/bookings/{bookingId}
         [HttpDelete("bookings/{bookingId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
 
         public async Task<IActionResult> CancelBooking( int bookingId)
         {
@@ -116,7 +116,7 @@ namespace Simplifly.Controllers
 
         // DELETE: api/admin/dashboard/flightroutes/{flightRouteId}
         [HttpDelete("flightroutes/{flightRouteId}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
 
         public async Task<IActionResult> DeleteFlightRoute(int flightRouteId)
         {
