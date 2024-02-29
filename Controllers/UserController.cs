@@ -22,10 +22,18 @@ namespace Simplifly.Controllers
             _logger = logger;
         }
         [HttpPost]
-        public async Task<LoginUserDTO> RegisterCustomer(RegisterCustomerUserDTO user)
+        public async Task<ActionResult<LoginUserDTO>> RegisterCustomer(RegisterCustomerUserDTO user)
         {
-            var result = await _userService.RegisterCustomer(user);
-            return result;
+            try
+            {
+                var result = await _userService.RegisterCustomer(user);
+                return Ok(result);
+            }catch (UserAlreadyPresentException uape)
+            {
+                _logger.LogError(uape.Message);
+                return BadRequest(uape.Message);
+            }
+            
         }
         [Route("RegisterFlightOwner")]
         [HttpPost]

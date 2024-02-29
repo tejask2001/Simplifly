@@ -53,6 +53,12 @@ namespace Simplifly.Services
             return flights;
         }
 
+        /// <summary>
+        /// Method to get flight by id
+        /// </summary>
+        /// <param name="id">flightId in string</param>
+        /// <returns>Object of flight</returns>
+        /// <exception cref="NoSuchFlightException">Throw when flight is not present</exception>
         public async Task<Flight> GetFlightById(string id)
         {
             var flights = await _flightRepository.GetAsync(id);
@@ -117,7 +123,7 @@ namespace Simplifly.Services
                 flight = await _flightRepository.Update(flight);
                 return flight;
             }
-            return null;
+            throw new NoSuchFlightException();
         }
     }
 }

@@ -311,6 +311,12 @@ namespace Simplifly.Services
             throw new NoSuchBookingsException();
         }
 
+        /// <summary>
+        /// Method to get Booking by customerId
+        /// </summary>
+        /// <param name="customerId">customerId in int</param>
+        /// <returns>List of PassengerBooking</returns>
+        /// <exception cref="NoSuchCustomerException">Throw when no booking with given customerId found</exception>
         public async Task<List<PassengerBooking>> GetBookingsByCustomerId(int customerId)
         {
             var bookings = await _passengerBookingRepository.GetAsync();

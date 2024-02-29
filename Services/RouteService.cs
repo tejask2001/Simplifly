@@ -29,6 +29,12 @@ namespace Simplifly.Services
 
         }
 
+        /// <summary>
+        /// Method to add airport
+        /// </summary>
+        /// <param name="airport">Object of airport</param>
+        /// <returns>Airport Object</returns>
+        /// <exception cref="AirportAlreadyPresentException">Throw when airport is already present</exception>
         public async Task<Airport> AddAirport(Models.Airport airport)
         {
             var airports = await _airportRepository.GetAsync();
@@ -62,6 +68,10 @@ namespace Simplifly.Services
             throw new RouteAlreadyPresentException();
         }
 
+        /// <summary>
+        /// Method to get all airports
+        /// </summary>
+        /// <returns>List of Airports</returns>
         public async Task<List<Airport>> GetAllAirports()
         {
             var airports = await _airportRepository.GetAsync();
@@ -79,6 +89,12 @@ namespace Simplifly.Services
             return routes;
         }
 
+        /// <summary>
+        /// Method to get route by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        /// <exception cref="NoSuchRouteException"></exception>
         public async Task<Route> GetRouteById(int id)
         {
             var route = await _routeRepository.GetAsync(id);
@@ -90,6 +106,13 @@ namespace Simplifly.Services
             throw new NoSuchRouteException();
         }
 
+        /// <summary>
+        /// Method to get routeId by airports
+        /// </summary>
+        /// <param name="sourceAirportId">sourceAirportId in int</param>
+        /// <param name="destinationAirportId">destinationAirportId in int</param>
+        /// <returns>RouteId in int</returns>
+        /// <exception cref="NoSuchRouteException">throw when no route found</exception>
         public async Task<int> GetRouteIdByAirport(int sourceAirportId, int destinationAirportId)
         {
             var routes = await _routeRepository.GetAsync();
@@ -125,6 +148,12 @@ namespace Simplifly.Services
             throw new NoSuchRouteException();
 
         }
+
+        /// <summary>
+        /// Method to remove route by Id
+        /// </summary>
+        /// <param name="routeId">RouteId in int</param>
+        /// <returns>true if route is removed else false</returns>
         public async Task<bool> RemoveRouteById(int routeId)
         {
             if (await _routeRepository.Delete(routeId) != null)
@@ -134,6 +163,12 @@ namespace Simplifly.Services
             return false;
         }
 
+        /// <summary>
+        /// Method to Update route
+        /// </summary>
+        /// <param name="route"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         public Task<List<Route>> UpdateRoute(Route route)
         {
             throw new NotImplementedException();

@@ -69,6 +69,10 @@ namespace Simplifly.Repositories
             throw new NoSuchCustomerException();
         }
 
+        /// <summary>
+        /// Method to get all customer
+        /// </summary>
+        /// <returns>List of customer</returns>
         public async Task<List<Customer>> GetAsync()
         {
             var customers = _context.Customers.ToList();
