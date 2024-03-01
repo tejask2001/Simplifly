@@ -178,6 +178,12 @@ namespace Simplifly.Services
                 throw new NoFlightAvailableException();
         }
 
+        /// <summary>
+        /// Method to calculate price of booking
+        /// </summary>
+        /// <param name="searchFlightDto">Object of SearchFlightDTO</param>
+        /// <param name="basePrice">basePrice in double</param>
+        /// <returns>Total price in double</returns>
         public double CalculateTotalPrice(SearchFlightDTO searchFlightDto, double basePrice)
         {
             double totalPrice = 0;
@@ -198,6 +204,12 @@ namespace Simplifly.Services
             return totalPrice;
         }
 
+        /// <summary>
+        /// Method to get available seats
+        /// </summary>
+        /// <param name="totalSeats">total seats in int</param>
+        /// <param name="schedule">schedultId in int</param>
+        /// <returns></returns>
         public int AvailableSeats(int totalSeats, int schedule)
         {
             var bookedSeatsTask = _bookingService.GetBookedSeatBySchedule(schedule);
@@ -237,6 +249,11 @@ namespace Simplifly.Services
                 throw new NoSuchScheduleException();
         }
 
+        /// <summary>
+        /// Method to remove schedule
+        /// </summary>
+        /// <param name="flightNumber">flightNumber in string</param>
+        /// <returns>number of schedule removed in int</returns>
         public async Task<int> RemoveSchedule(string flightNumber)
         {
             int removedScheduleCount = 0;
@@ -250,6 +267,12 @@ namespace Simplifly.Services
             return removedScheduleCount;
         }
 
+        /// <summary>
+        /// Method to remove schedule
+        /// </summary>
+        /// <param name="departureDate">departureDate in DateTime</param>
+        /// <param name="airportId">airportId in int</param>
+        /// <returns>number of schedule removed</returns>
         public async Task<int> RemoveSchedule(DateTime departureDate, int airportId)
         {
             int removedScheduleCount = 0;

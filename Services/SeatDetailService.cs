@@ -10,6 +10,12 @@ namespace Simplifly.Services
 
         private readonly IRepository<string, SeatDetail> _seatdetailRepository;
         private readonly ILogger<SeatDetailService> _logger;
+
+        /// <summary>
+        /// Constructor for SeatDetailService
+        /// </summary>
+        /// <param name="seatdetailRepository"></param>
+        /// <param name="logger"></param>
         public SeatDetailService(IRepository<string, SeatDetail> seatdetailRepository, ILogger<SeatDetailService> logger)
         {
             _seatdetailRepository = seatdetailRepository;

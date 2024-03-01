@@ -198,6 +198,11 @@ namespace Simplifly.Services
         /// <returns>Collection og Booking</returns>
         public async Task<IEnumerable<Booking>> GetUserBookingsAsync(int userId)
         {
+            var bookings= await _bookingsRepository.GetBookingsByUserIdAsync(userId);
+            if (bookings != null)
+            {
+                bookings.Where(e => e.Schedule.Departure > DateTime.Now);
+            }
             return await _bookingsRepository.GetBookingsByUserIdAsync(userId);
         }
 
@@ -304,6 +309,23 @@ namespace Simplifly.Services
                 return bookedSeats;
             }
             throw new NoSuchBookingsException();
+        }
+
+        /// <summary>
+        /// Method to get Booking by customerId
+        /// </summary>
+        /// <param name="customerId">customerId in int</param>
+        /// <returns>List of PassengerBooking</returns>
+        /// <exception cref="NoSuchCustomerException">Throw when no booking with given customerId found</exception>
+        public async Task<List<PassengerBooking>> GetBookingsByCustomerId(int customerId)
+        {
+            var bookings = await _passengerBookingRepository.GetAsync();
+            bookings = bookings.Where(e => e.Booking.UserId == customerId).ToList();
+            if(bookings!= null)
+            {
+                return bookings;
+            }
+            throw new NoSuchCustomerException();
         }
     }
 }

@@ -77,16 +77,30 @@ namespace Simplifly.Repositories
         /// <returns>PassengerBooking object</returns>
         public async Task<List<Models.PassengerBooking>> GetAsync()
         {
-            var passengerBookings = _context.PassengerBookings.Include(e=>e.Booking).Include(e=>e.Passenger).Include(e=>e.SeatDetail).ToList();
+            var passengerBookings = _context.PassengerBookings.Include(e=>e.Booking).Include(e=>e.Booking.Schedule)
+                .Include(e=>e.Passenger).Include(e=>e.SeatDetail).Include(e=>e.Booking.Schedule.Route)
+                .Include(e=>e.Booking.Schedule.Flight).Include(e=>e.Booking.Schedule.Route.SourceAirport)
+                .Include(e=>e.Booking.Schedule.Route.DestinationAirport)
+                .ToList();
             return passengerBookings;
         }
 
+        /// <summary>
+        /// Method to add booking for passenger
+        /// </summary>
+        /// <param name="passengerBooking">Object of PassengerBooking</param>
+        /// <returns></returns>
         public async Task AddPassengerBookingAsync(PassengerBooking passengerBooking)
         {
             _context.PassengerBookings.Add(passengerBooking);
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Method to get passenger booking by bookingId
+        /// </summary>
+        /// <param name="bookingId">bookingId in int</param>
+        /// <returns>IEnumerable of passenger booking</returns>
         public async Task<IEnumerable<PassengerBooking>> GetPassengerBookingsAsync(int bookingId)
         {
             return await _context.PassengerBookings
@@ -94,6 +108,11 @@ namespace Simplifly.Repositories
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// method to remove passenger booking by passengerId
+        /// </summary>
+        /// <param name="passengerBookingId">passengerId in int</param>
+        /// <returns></returns>
         public async Task RemovePassengerBookingAsync(int passengerBookingId)
         {
             var passengerBooking = await _context.PassengerBookings.FindAsync(passengerBookingId);
@@ -122,6 +141,13 @@ namespace Simplifly.Repositories
             throw new NoSuchPassengerBookingException();
         }
 
+        /// <summary>
+        /// Method to check if seat is available or not
+        /// </summary>
+        /// <param name="scheduleId">scheduleId in int</param>
+        /// <param name="seatNos">List of string</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<bool> CheckSeatsAvailabilityAsync(int scheduleId, List<string> seatNos)
         {
             // Get all booked seats for the given flight

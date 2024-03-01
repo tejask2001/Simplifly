@@ -70,6 +70,11 @@ namespace Simplifly.Repositories
             throw new NoSuchSeatException();
         }
 
+        /// <summary>
+        /// Method to getSeatDetails
+        /// </summary>
+        /// <param name="SeatNos">List of seat number in string</param>
+        /// <returns>IEnumerable of seatDetail</returns>
         public async Task<IEnumerable<SeatDetail>> GetSeatDetailsAsync(List<string> SeatNos)
         {
             return await Task.FromResult(_context.Seats.Where(s => SeatNos.Contains(s.SeatNumber)).ToList());

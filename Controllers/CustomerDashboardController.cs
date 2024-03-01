@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Simplifly.Services;
 using Simplifly.Models;
 using Simplifly.Exceptions;
+using Simplifly.Models.DTO_s;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Simplifly.Controllers
 {
@@ -66,6 +68,22 @@ namespace Simplifly.Controllers
             
         }
 
+        [Route("GetCustomerById")]
+        [HttpGet]
+        public async Task<ActionResult<Customer>> GetCustomerById(int userId)
+        {
+            try
+            {
+                var customer=await _customerService.GetByIdCustomers(userId);
+                return Ok(customer);
+            }
+            catch (NoSuchCustomerException nsce)
+            {
+                _logger.LogInformation(nsce.Message);
+                return NotFound(nsce.Message);
+            }
+        }
+
 
         [HttpDelete("{userId}/bookings/{bookingId}")]
         public async Task<IActionResult> CancelBooking(int userId, int bookingId)
@@ -78,11 +96,27 @@ namespace Simplifly.Controllers
             return NotFound();
         }
 
-        [HttpGet("{userId}/booking-history")]
+        [HttpGet("{userId}/GetBookings")]
         public async Task<IActionResult> GetBookingHistory(int userId)
         {
             var bookingHistory = await _bookingService.GetUserBookingsAsync(userId);
             return Ok(bookingHistory);
+        }
+        [Route("GetBookingByCustomerId")]
+        [HttpGet]
+        public async Task<ActionResult<List<PassengerBooking>>> GetBookingByCustomerId(int customerId)
+        {
+            try
+            {
+                var bookings = await _bookingService.GetBookingsByCustomerId(customerId);
+                return Ok(bookings);
+            }
+            catch(NoSuchCustomerException nsce)
+            {
+                _logger.LogError(nsce.Message);
+                return NotFound();
+            }
+            
         }
 
         [HttpPut("{userId}/bookings/{bookingId}/refund")]
@@ -94,6 +128,23 @@ namespace Simplifly.Controllers
                 return Ok("Refund requested successfully.");
             }
             return NotFound();
+        }
+
+        [Route("UpdateUser")]
+        [Authorize(Roles ="customer")]
+        [HttpPut]
+        public async Task<ActionResult<Customer>> UpdateCustomer(UpdateCustomerDTO customerDTO)
+        {
+            try
+            {
+                var customer = await _customerService.UpdateCustomer(customerDTO);
+                return customer;
+            }
+            catch (NoSuchCustomerException nsce)
+            {
+                _logger.LogInformation(nsce.Message);
+                return NotFound(nsce.Message);
+            }
         }
     }
 }

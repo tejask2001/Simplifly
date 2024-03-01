@@ -70,19 +70,23 @@ namespace Simplifly.Services
 
         public async Task<LoginUserDTO> RegisterAdmin(RegisterAdminUserDTO user)
         {
-
-            User myuser = new RegisterToUser(user).GetUser();
-            myuser = await _userRepository.Add(myuser);
-            Admin admin = new RegisterToAdmin(user).GetAdmin();
-            admin = await _adminRepository.Add(admin);
-            LoginUserDTO result = new LoginUserDTO
+            var users = await _userRepository.GetAsync();
+            var checkUser=users.FirstOrDefault(e=>e.Username==user.Username);
+            if (checkUser == null)
             {
-                Username = myuser.Username,
-                Role = myuser.Role,
+                User myuser = new RegisterToUser(user).GetUser();
+                myuser = await _userRepository.Add(myuser);
+                Admin admin = new RegisterToAdmin(user).GetAdmin();
+                admin = await _adminRepository.Add(admin);
+                LoginUserDTO result = new LoginUserDTO
+                {
+                    Username = myuser.Username,
+                    Role = myuser.Role,
 
-            };
-            return result;
-
+                };
+                return result;
+            }
+            throw new UserAlreadyPresentException();
         }
 
         public async Task<LoginUserDTO> RegisterFlightOwner(RegisterFlightOwnerUserDTO user)
