@@ -91,7 +91,6 @@ namespace Simplifly.Controllers
                 _logger.LogInformation(nsse.Message);
                 return NotFound(nsse.Message);
             }
-
         }
 
         [Route("UpdateScheduledRoute")]

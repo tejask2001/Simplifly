@@ -87,9 +87,15 @@ namespace Simplifly.Services
         /// </summary>
         /// <param name="id">Id in int</param>
         /// <returns>Object of Customer</returns>
+        /// <exception cref="NoSuchCustomerException">throw when no customer with id found</exception>
         public async Task<Customer> GetByIdCustomers(int id)
         {
-            return await (_customerRepository.GetAsync(id));
+            var customer= await (_customerRepository.GetAsync(id));
+            if(customer != null)
+            {
+                return customer;
+            }
+            throw new NoSuchCustomerException();
         }
 
         /// <summary>

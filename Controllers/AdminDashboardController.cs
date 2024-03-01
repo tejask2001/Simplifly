@@ -35,14 +35,14 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet("Bookings/Allbookings")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, flightOwner")]
         public async Task<IActionResult> GetAllBookings()
         {
             var bookings = await _bookingService.GetAllBookingsAsync();
             return Ok(bookings);
         }
         [HttpGet("Users/AllCustomers")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, flightOwner")]
         public async Task<IActionResult> GetAsync()
         {
             var users = await _custService.GetAllCustomers();

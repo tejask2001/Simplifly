@@ -68,6 +68,22 @@ namespace Simplifly.Controllers
             
         }
 
+        [Route("GetCustomerById")]
+        [HttpGet]
+        public async Task<ActionResult<Customer>> GetCustomerById(int userId)
+        {
+            try
+            {
+                var customer=await _customerService.GetByIdCustomers(userId);
+                return Ok(customer);
+            }
+            catch (NoSuchCustomerException nsce)
+            {
+                _logger.LogInformation(nsce.Message);
+                return NotFound(nsce.Message);
+            }
+        }
+
 
         [HttpDelete("{userId}/bookings/{bookingId}")]
         public async Task<IActionResult> CancelBooking(int userId, int bookingId)
