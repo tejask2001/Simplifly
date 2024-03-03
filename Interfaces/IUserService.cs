@@ -1,4 +1,5 @@
 ﻿
+using Simplifly.Models.DTO_s;
 using Simplifly.Models.DTOs;
 
 namespace Simplifly.Interfaces
@@ -10,5 +11,6 @@ namespace Simplifly.Interfaces
 
         public Task<LoginUserDTO> RegisterFlightOwner(RegisterFlightOwnerUserDTO user);
         public Task<LoginUserDTO> RegisterCustomer(RegisterCustomerUserDTO user);
+        public Task<LoginUserDTO> UpdateUserPassword(ForgotPasswordDTO userDTO);
     }
 }

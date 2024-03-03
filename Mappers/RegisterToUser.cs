@@ -4,6 +4,7 @@ using Simplifly.Models.DTOs;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.Security.Cryptography;
 using System.Text;
+using Simplifly.Models.DTO_s;
 
 namespace Simplifly.Mappers
 {
@@ -36,6 +37,14 @@ namespace Simplifly.Mappers
             user.Role = register.Role;
 
             GetPassword(register.Password);
+        }
+        public RegisterToUser(ForgotPasswordDTO userDTO)
+        {
+
+            user = new User();
+            user.Username = userDTO.Username;
+
+            GetPassword(userDTO.Password);
         }
         void GetPassword(string password)
         {

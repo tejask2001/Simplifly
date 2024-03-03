@@ -87,7 +87,7 @@ namespace Simplifly.Services
             // Create Payment entry
             var payment = new Payment
             {
-                Amount = totalPrice,
+                Amount = bookingRequest.Price,
                 PaymentDate = DateTime.Now,
                 Status = PaymentStatus.Successful,
                 PaymentDetails = bookingRequest.PaymentDetails,
@@ -100,7 +100,7 @@ namespace Simplifly.Services
                 ScheduleId = bookingRequest.ScheduleId,
                 UserId = bookingRequest.UserId,
                 BookingTime = DateTime.Now, // Set current booking time
-                TotalPrice = totalPrice,
+                TotalPrice = bookingRequest.Price,
                 PaymentId = addedPayment.PaymentId // Assign the PaymentId of the created payment
             };
              

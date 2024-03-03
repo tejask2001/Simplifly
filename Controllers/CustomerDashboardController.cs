@@ -36,9 +36,17 @@ namespace Simplifly.Controllers
         [HttpPost("{userId}/bookings")]
         public async Task<IActionResult> BookTickets(int userId, [FromBody] BookingRequestDto bookingRequestDto)
         {
-            bookingRequestDto.UserId = userId; // Set the user ID in the request DTO
-            var bookingId = await _bookingService.CreateBookingAsync(bookingRequestDto);
-            return CreatedAtAction(nameof(GetBooking), new { userId, bookingId }, null);
+            try
+            {
+                bookingRequestDto.UserId = userId; // Set the user ID in the request DTO
+                var bookingId = await _bookingService.CreateBookingAsync(bookingRequestDto);
+                return Ok(bookingId);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpGet("{userId}/bookings/{bookingId}")]

@@ -5,6 +5,7 @@ using Simplifly.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using Simplifly.Models.DTO_s;
 
 
 namespace Simplifly.Controllers
@@ -66,6 +67,21 @@ namespace Simplifly.Controllers
                 return Unauthorized("Invalid username or password");
             }
 
+        }
+        [Route("UpdatePassword")]
+        [HttpPut]
+        public async Task<ActionResult<LoginUserDTO>> UpdatePassword(ForgotPasswordDTO forgotPasswordDTO)
+        {
+            try
+            {
+                var result = await _userService.UpdateUserPassword(forgotPasswordDTO);
+                return Ok(result);
+            }
+            catch (NoSuchUserException nsue)
+            {
+                _logger.LogCritical(nsue.Message);
+                return Unauthorized("Invalid username");
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "flightOwner")]
+        [Authorize(Roles = "flightOwner, admin")]
         public async Task<ActionResult<List<Route>>> GetAllRoute()
         {
             try
