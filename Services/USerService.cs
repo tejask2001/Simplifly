@@ -129,6 +129,7 @@ namespace Simplifly.Services
             if (findUser != null)
             {
                 findUser.Password = user.Password;
+                findUser.Key = user.Key;
                 findUser = await _userRepository.Update(findUser);
                 LoginUserDTO result = new LoginUserDTO
                 {
