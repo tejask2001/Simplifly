@@ -1,7 +1,10 @@
-﻿namespace Simplifly.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Simplifly.Exceptions
 {
     [Serializable]
-    internal class InvlidUuserException : Exception
+    [ExcludeFromCodeCoverage]
+    public class InvlidUuserException : Exception
     {
         string message;
         public InvlidUuserException()

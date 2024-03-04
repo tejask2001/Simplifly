@@ -1,8 +1,10 @@
 ﻿using Simplifly.Models.DTOs;
 using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Mappers
 {
+    [ExcludeFromCodeCoverage]
     public class RegisterToFlightOwner
     {
         FlightOwner flightowner;

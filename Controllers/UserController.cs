@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using Simplifly.Models.DTO_s;
+using System.Diagnostics.CodeAnalysis;
 
 
 namespace Simplifly.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;

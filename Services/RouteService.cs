@@ -163,15 +163,6 @@ namespace Simplifly.Services
             return false;
         }
 
-        /// <summary>
-        /// Method to Update route
-        /// </summary>
-        /// <param name="route"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Task<List<Route>> UpdateRoute(Route route)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

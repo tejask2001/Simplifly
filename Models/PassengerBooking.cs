@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class PassengerBooking : IEquatable<PassengerBooking>
     {
         [Key]

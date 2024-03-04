@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace Simplifly.Context
 {
+    [ExcludeFromCodeCoverage]
     public class RequestTrackerContext:DbContext
     {
 

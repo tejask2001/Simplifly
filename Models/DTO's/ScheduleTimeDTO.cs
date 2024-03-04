@@ -1,5 +1,8 @@
-﻿namespace Simplifly.Models.DTO_s
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Simplifly.Models.DTO_s
 {
+    [ExcludeFromCodeCoverage]
     public class ScheduleTimeDTO
     {
         public int ScheduleId { get; set; }

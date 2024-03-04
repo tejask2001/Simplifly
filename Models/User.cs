@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class User
     {
         [Key]

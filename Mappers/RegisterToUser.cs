@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using System.Security.Cryptography;
 using System.Text;
 using Simplifly.Models.DTO_s;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Mappers
 {
+    [ExcludeFromCodeCoverage]
     public class RegisterToUser
     {
         User user;

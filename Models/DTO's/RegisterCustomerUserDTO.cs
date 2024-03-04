@@ -1,5 +1,8 @@
-﻿namespace Simplifly.Models.DTOs
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Simplifly.Models.DTOs
 {
+    [ExcludeFromCodeCoverage]
     public class RegisterCustomerUserDTO
     {
         public string Username { get; set; }

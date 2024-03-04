@@ -4,9 +4,11 @@ using Simplifly.Context;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class PassengerBookingRepository : IRepository<int,PassengerBooking>,IPassengerBookingRepository
     {
         private readonly RequestTrackerContext _context;

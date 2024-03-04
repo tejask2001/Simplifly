@@ -1,5 +1,8 @@
-﻿namespace Simplifly.Exceptions
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Simplifly.Exceptions
 {
+    [ExcludeFromCodeCoverage]
     public class NoSuchUserException:Exception
     {
         private readonly string message;

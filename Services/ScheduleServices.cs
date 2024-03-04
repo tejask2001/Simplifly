@@ -70,7 +70,7 @@ namespace Simplifly.Services
         /// <summary>
         /// Service class method to remove schedule
         /// </summary>
-        /// <param name="flightNumber">Schedule number in string</param>
+        /// <param name="schedule">Schedule object</param>
         /// <returns>Object of schedule</returns>
         /// <exception cref="NoSuchScheduleException">throw when schedule is not present</exception>
         public async Task<Schedule> RemoveSchedule(Schedule schedule)

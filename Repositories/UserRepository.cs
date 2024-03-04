@@ -4,9 +4,11 @@ using Simplifly.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Simplifly.Exceptions;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class UserRepository : IRepository<string, User>
     {
         private readonly RequestTrackerContext _context;

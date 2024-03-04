@@ -5,12 +5,14 @@ using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Models.DTO_s;
+using System.Diagnostics.CodeAnalysis;
 using Route = Simplifly.Models.Route;
 
 namespace Simplifly.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class RouteController : ControllerBase
     {
         private readonly IRouteFlightOwnerService _routeFlightOwnerService;

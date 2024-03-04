@@ -11,6 +11,7 @@ using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Repositories;
 using Simplifly.Services;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Reflection.Emit;
 using System.Text;
@@ -19,6 +20,7 @@ using Route = Simplifly.Models.Route;
 
 namespace Simplifly
 {
+    [ExcludeFromCodeCoverage]
     public class Program
     {
         public static void Main(string[] args)

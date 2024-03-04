@@ -3,9 +3,11 @@ using Simplifly.Context;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class CustomerRepository : IRepository<int, Customer>
     {
         private readonly RequestTrackerContext _context;

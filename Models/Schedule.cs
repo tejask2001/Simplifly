@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Schedule:IEquatable<Schedule>
     {
         [Key]

@@ -52,7 +52,7 @@ namespace Simplifly.Services
             throw new InvlidUuserException();
         }
 
-        private bool ComparePasswords(byte[] password, byte[] userPassword)
+        public bool ComparePasswords(byte[] password, byte[] userPassword)
         {
             for (int i = 0; i < password.Length; i++)
             {
@@ -105,7 +105,9 @@ namespace Simplifly.Services
             };
             return result;
 
-        }public async Task<LoginUserDTO> RegisterCustomer(RegisterCustomerUserDTO user)
+        }
+        
+        public async Task<LoginUserDTO> RegisterCustomer(RegisterCustomerUserDTO user)
         {
 
             User myuser = new RegisterToUser(user).GetUser();

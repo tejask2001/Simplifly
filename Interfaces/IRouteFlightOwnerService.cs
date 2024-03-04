@@ -12,7 +12,6 @@ namespace Simplifly.Interfaces
         public Task<Route> GetRouteById(int id);
         public Task<int> GetRouteIdByAirport(int sourceAirportId,int destinationAirportId);
         public Task<List<Airport>> GetAllAirports();
-        public Task<List<Route>> UpdateRoute(Route route);
 
         public Task<bool> RemoveRouteById(int routeId);
     }

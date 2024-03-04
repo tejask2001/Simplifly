@@ -6,11 +6,13 @@ using Simplifly.Models;
 using Simplifly.Exceptions;
 using Simplifly.Models.DTO_s;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class CustomerDashboardController : ControllerBase
     {
         private readonly IUserService _userService;

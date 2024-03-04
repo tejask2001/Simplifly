@@ -38,6 +38,7 @@ namespace Simplifly.Services
             catch (NoSuchFlightException)
             {
                 flight = await _flightRepository.Add(flight);
+                _logger.LogInformation("Flight added from service method");
                 return flight;
             }
 
@@ -82,6 +83,7 @@ namespace Simplifly.Services
             if (flight != null)
             {
                 flight = await _flightRepository.Delete(flightNumber);
+                _logger.LogInformation("Flight removed from service method");
                 return flight;
             }
             throw new NoSuchFlightException();
@@ -102,6 +104,7 @@ namespace Simplifly.Services
             {
                 flight.Airline = airline;
                 flight = await _flightRepository.Update(flight);
+                _logger.LogInformation("Flight updated from service method");
                 return flight;
             }
             throw new NoSuchFlightException();
@@ -121,6 +124,7 @@ namespace Simplifly.Services
             {
                 flight.TotalSeats = totalSeats;
                 flight = await _flightRepository.Update(flight);
+                _logger.LogInformation("Flight updated from service method");
                 return flight;
             }
             throw new NoSuchFlightException();

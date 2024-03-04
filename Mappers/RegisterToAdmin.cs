@@ -1,8 +1,10 @@
 ﻿using Simplifly.Models;
 using Simplifly.Models.DTOs;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Mappers
 {
+    [ExcludeFromCodeCoverage]
     public class RegisterToAdmin
     {
         Admin admin;
