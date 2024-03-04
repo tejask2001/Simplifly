@@ -6,6 +6,7 @@ using Simplifly.Models;
 using Simplifly.Models.DTOs;
 using System.Security.Cryptography;
 using System.Text;
+using Simplifly.Models.DTO_s;
 
 namespace Simplifly.Services
 {
@@ -74,14 +75,14 @@ namespace Simplifly.Services
             var checkUser=users.FirstOrDefault(e=>e.Username==user.Username);
             if (checkUser == null)
             {
-                User myuser = new RegisterToUser(user).GetUser();
-                myuser = await _userRepository.Add(myuser);
+                User myUser = new RegisterToUser(user).GetUser();
+                myUser = await _userRepository.Add(myUser);
                 Admin admin = new RegisterToAdmin(user).GetAdmin();
-                admin = await _adminRepository.Add(admin);
+                await _adminRepository.Add(admin);
                 LoginUserDTO result = new LoginUserDTO
                 {
-                    Username = myuser.Username,
-                    Role = myuser.Role,
+                    Username = myUser.Username,
+                    Role = myUser.Role,
 
                 };
                 return result;
@@ -94,8 +95,8 @@ namespace Simplifly.Services
 
             User myuser = new RegisterToUser(user).GetUser();
             myuser = await _userRepository.Add(myuser);
-            FlightOwner flightowner = new RegisterToFlightOwner(user).GetFlightOwner();
-            flightowner = await _flightownerRepository.Add(flightowner);
+            FlightOwner flightOwner = new RegisterToFlightOwner(user).GetFlightOwner();
+            await _flightownerRepository.Add(flightOwner);
             LoginUserDTO result = new LoginUserDTO
             {
                 Username = myuser.Username,
@@ -119,6 +120,25 @@ namespace Simplifly.Services
             };
             return result;
 
+        }
+
+        public async Task<LoginUserDTO> UpdateUserPassword(ForgotPasswordDTO userDTO)
+        {
+            User user = new RegisterToUser(userDTO).GetUser();
+            var findUser=await _userRepository.GetAsync(userDTO.Username);
+            if (findUser != null)
+            {
+                findUser.Password = user.Password;
+                findUser.Key = user.Key;
+                findUser = await _userRepository.Update(findUser);
+                LoginUserDTO result = new LoginUserDTO
+                {
+                    Username = findUser.Username,
+                    Role = findUser.Role,
+                };
+                return result;
+            }
+            throw new NoSuchUserException();
         }
     }
 }

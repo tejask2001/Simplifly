@@ -49,7 +49,7 @@ namespace Simplifly.Repositories
             {
                 _context.Remove(user);
                 _context.SaveChanges();
-                _logger.LogInformation($"User added with username {key}");
+                _logger.LogInformation($"User deleted with username {key}");
                 return user;
             }
             throw new NoSuchUserException();
@@ -62,7 +62,8 @@ namespace Simplifly.Repositories
         /// <returns>Object of user</returns>
         public async Task<User> GetAsync(string key)
         {
-            var user = _context.Users.SingleOrDefault(u => u.Username == key);
+            var users = _context.Users.ToList(); // Fetch all users from the database
+            var user = users.SingleOrDefault(u => string.Equals(u.Username, key, StringComparison.Ordinal));
             return user;
         }
 

@@ -129,6 +129,22 @@ namespace Simplifly.Controllers
             return NotFound("Flight route not found.");
         }
 
+        [Route("DeleteUserByUsername")]
+        [HttpDelete]
+        [Authorize(Roles = "admin")]
+        public async Task<ActionResult<User>> DeleteUserByUsername(string username)
+        {
+            try
+            {
+                var user=await _adminService.DeleteUser(username);
+                return Ok(user);
+            }catch (NoSuchUserException nsue)
+            {
+                _logger.LogError(nsue.Message);
+                return NotFound(nsue.Message);
+            }
+        }
+
         [HttpPut]
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<Admin>> UpdateAdmin(UpdateAdminDTO adminDTO)

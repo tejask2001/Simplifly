@@ -8,6 +8,7 @@ namespace Simplifly.Services
     public class AdminService : IAdminService
     {
         private readonly IRepository<int, Admin> _repository;
+        private readonly IRepository<string,User> _userRepository;
         private readonly ILogger<AdminService> _logger;
 
         /// <summary>
@@ -19,6 +20,24 @@ namespace Simplifly.Services
         {
             _repository = repository;
             _logger = logger;
+        }
+        public AdminService(IRepository<int, Admin> repository, ILogger<AdminService> logger, IRepository<string, User> userRepository)
+        {
+            _repository = repository;
+            _logger = logger;
+            _userRepository = userRepository;
+        }
+
+        public async Task<User> DeleteUser(string username)
+        {
+            var users = await _userRepository.GetAsync();
+            var user= users.FirstOrDefault(e=>e.Username==username);
+            if(user!=null)
+            {
+                user= await _userRepository.Delete(username);
+                return user;
+            }
+            throw new NoSuchUserException();
         }
 
         /// <summary>
