@@ -21,7 +21,6 @@ namespace Simplifly.Models
         [ForeignKey("FlightNumber")]
         public String FlightId { get; set; }
         public Flight? Flight { get; set; }
-
         public DateTime Departure { get; set; }
         public DateTime Arrival { get; set; }
 

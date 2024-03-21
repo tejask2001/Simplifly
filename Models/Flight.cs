@@ -18,6 +18,7 @@ namespace Simplifly.Models
         public FlightOwner? FlightOwner { get; set; }
 
         public double BasePrice { get; set; }
+        public int Status {  get; set; }
 
 
         public Flight()

@@ -286,5 +286,6 @@ namespace Simplifly.Services
             }
             return removedScheduleCount;
         }
+
     }
 }

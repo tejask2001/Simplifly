@@ -62,6 +62,7 @@ namespace Simplifly.Services
 
             if (existingRoute == null)
             {
+                route.Status = 1;
                 route = await _routeRepository.Add(route);
                 return route;
             }
@@ -142,7 +143,8 @@ namespace Simplifly.Services
             if (route != null)
             {
                 int routeId = route.Id;
-                route = await _routeRepository.Delete(routeId);
+                route.Status = 0;
+                route = await _routeRepository.Update(route);
                 return route;
             }
             throw new NoSuchRouteException();

@@ -94,7 +94,7 @@ namespace Simplifly.Controllers
 
         [Route("AddRoute")]
         [HttpPost]
-        [Authorize(Roles = "flightOwner")]
+        [Authorize(Roles = "flightOwner, admin")]
         public async Task<ActionResult<Route>> AddRoute(Route route)
         {
             try
@@ -112,7 +112,7 @@ namespace Simplifly.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "flightOwner")]
+        [Authorize(Roles = "flightOwner, admin")]
         public async Task<ActionResult<Route>> RemoveRoute(RemoveRouteDTO routeDTO)
         {
             try

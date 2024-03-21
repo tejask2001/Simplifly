@@ -156,5 +156,22 @@ namespace Simplifly.Controllers
                 return NotFound(nsce.Message);
             }
         }
+
+        [Route("CancelBookingByPassenger")]
+
+        [Authorize(Roles = "customer")]
+        [HttpDelete]
+        public async Task<ActionResult<PassengerBooking>> CancelBookingByPassenger(int passengerId)
+        {
+            try{
+                var passengerBooking = await _bookingService.CancelBookingByPassenger(passengerId);
+                return passengerBooking;
+            }
+            catch(NoSuchBookingsException nsbe)
+            {
+                _logger.LogError(nsbe.Message);
+                return NotFound(nsbe.Message);
+            }
+        }
     }
 }

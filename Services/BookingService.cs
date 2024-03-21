@@ -326,5 +326,16 @@ namespace Simplifly.Services
             }
             throw new NoSuchCustomerException();
         }
+
+        public async Task<PassengerBooking> CancelBookingByPassenger(int passengerId)
+        {
+            var passengerBooking=await _passengerBookingRepository.GetAsync(passengerId);
+            if (passengerBooking != null)
+            {
+                passengerBooking = await _passengerBookingRepository.Delete(passengerId);
+                return passengerBooking;
+            }
+            throw new NoSuchPassengerException();
+        }
     }
 }
