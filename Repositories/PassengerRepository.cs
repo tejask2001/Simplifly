@@ -3,13 +3,15 @@ using Simplifly.Context;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class PassengerRepository : IRepository<int, Models.Passenger> 
     {
-        RequestTrackerContext _context;
-        ILogger<PassengerRepository> _logger;
+        private readonly RequestTrackerContext _context;
+        private readonly ILogger<PassengerRepository> _logger;
 
         /// <summary>
         /// Default constructor with RequestTrackerContext

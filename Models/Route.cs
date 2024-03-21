@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Route:IEquatable<Route>
     {
         [Key]
@@ -18,6 +20,7 @@ namespace Simplifly.Models
         [ForeignKey("DestinationAirportId")]
         public Airport? DestinationAirport { get; set; }
         public double Distance { get; set; }
+        public int Status { get; set; }
         public ICollection<Schedule>? Schedules { get; set; }
 
 

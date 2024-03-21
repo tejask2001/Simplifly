@@ -6,11 +6,13 @@ using Simplifly.Models;
 using Simplifly.Exceptions;
 using Simplifly.Models.DTO_s;
 using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Controllers
 {
     [Route("api/users")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class CustomerDashboardController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -152,6 +154,23 @@ namespace Simplifly.Controllers
             {
                 _logger.LogInformation(nsce.Message);
                 return NotFound(nsce.Message);
+            }
+        }
+
+        [Route("CancelBookingByPassenger")]
+
+        [Authorize(Roles = "customer")]
+        [HttpDelete]
+        public async Task<ActionResult<PassengerBooking>> CancelBookingByPassenger(int passengerId)
+        {
+            try{
+                var passengerBooking = await _bookingService.CancelBookingByPassenger(passengerId);
+                return passengerBooking;
+            }
+            catch(NoSuchBookingsException nsbe)
+            {
+                _logger.LogError(nsbe.Message);
+                return NotFound(nsbe.Message);
             }
         }
     }

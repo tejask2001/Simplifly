@@ -19,7 +19,6 @@ namespace Simplifly.Services
         private readonly IBookingRepository _bookingsRepository;
 
         private readonly IRepository<int, Payment> _paymentRepository;
-      //  private readonly IPaymentRepository _paymentsRepository;
 
         private readonly ILogger<BookingService> _logger;
 
@@ -201,7 +200,7 @@ namespace Simplifly.Services
             var bookings= await _bookingsRepository.GetBookingsByUserIdAsync(userId);
             if (bookings != null)
             {
-                bookings.Where(e => e.Schedule.Departure > DateTime.Now);
+                bookings.Where(e => e.Schedule.Departure < DateTime.Now);
             }
             return await _bookingsRepository.GetBookingsByUserIdAsync(userId);
         }
@@ -326,6 +325,17 @@ namespace Simplifly.Services
                 return bookings;
             }
             throw new NoSuchCustomerException();
+        }
+
+        public async Task<PassengerBooking> CancelBookingByPassenger(int passengerId)
+        {
+            var passengerBooking=await _passengerBookingRepository.GetAsync(passengerId);
+            if (passengerBooking != null)
+            {
+                passengerBooking = await _passengerBookingRepository.Delete(passengerId);
+                return passengerBooking;
+            }
+            throw new NoSuchPassengerException();
         }
     }
 }

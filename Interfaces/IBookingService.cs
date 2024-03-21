@@ -16,5 +16,6 @@ namespace Simplifly.Interfaces
         Task<List<Booking>> GetBookingByFlight(string flightNumber);
         Task<List<string>> GetBookedSeatBySchedule(int scheduleID);
         Task<List<PassengerBooking>> GetBookingsByCustomerId(int customerId);
+        Task<PassengerBooking> CancelBookingByPassenger(int passengerId);
     }
 }

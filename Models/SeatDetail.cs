@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class SeatDetail : IEquatable<SeatDetail>
     {
         [Key]

@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Schedule:IEquatable<Schedule>
     {
         [Key]
@@ -19,7 +21,6 @@ namespace Simplifly.Models
         [ForeignKey("FlightNumber")]
         public String FlightId { get; set; }
         public Flight? Flight { get; set; }
-
         public DateTime Departure { get; set; }
         public DateTime Arrival { get; set; }
 

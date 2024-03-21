@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Simplifly.Context;
 
@@ -11,9 +12,10 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    partial class RequestTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20240321101437_updatedSchedule")]
+    partial class updatedSchedule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -249,12 +251,7 @@ namespace Simplifly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("PassengerId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Passengers");
                 });
@@ -496,15 +493,6 @@ namespace Simplifly.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Simplifly.Models.Passenger", b =>
-                {
-                    b.HasOne("Simplifly.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Simplifly.Models.PassengerBooking", b =>

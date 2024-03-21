@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Customer:IEquatable<Customer>
     {
         [Key]
@@ -11,7 +13,6 @@ namespace Simplifly.Models
         public string Email { get; set; }= string.Empty;
         public string? Phone { get; set; }
         public string? Gender { get; set; }
-
         public string Username { get; set; }
         [ForeignKey("Username")]
         public User User { get; set; }

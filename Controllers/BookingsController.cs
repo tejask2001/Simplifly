@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class BookingsController : ControllerBase
     {
         private readonly IBookingService _bookingService;

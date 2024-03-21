@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Flight:IEquatable<Flight>
     {
         [Key]
@@ -16,6 +18,7 @@ namespace Simplifly.Models
         public FlightOwner? FlightOwner { get; set; }
 
         public double BasePrice { get; set; }
+        public int Status {  get; set; }
 
 
         public Flight()

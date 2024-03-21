@@ -32,12 +32,14 @@ namespace Simplifly.Services
         {
             try
             {
-                var flights = await _flightRepository.GetAsync(flight.FlightNumber);
+                await _flightRepository.GetAsync(flight.FlightNumber);
                 throw new FlightAlreadyPresentException();
             }
             catch (NoSuchFlightException)
             {
+                flight.Status = 1;
                 flight = await _flightRepository.Add(flight);
+                _logger.LogInformation("Flight added from service method");
                 return flight;
             }
 
@@ -81,7 +83,9 @@ namespace Simplifly.Services
             var flight = await _flightRepository.GetAsync(flightNumber);
             if (flight != null)
             {
-                flight = await _flightRepository.Delete(flightNumber);
+                flight.Status = 0;
+                flight = await _flightRepository.Update(flight);
+                _logger.LogInformation("Flight status changed to 0");
                 return flight;
             }
             throw new NoSuchFlightException();
@@ -102,6 +106,7 @@ namespace Simplifly.Services
             {
                 flight.Airline = airline;
                 flight = await _flightRepository.Update(flight);
+                _logger.LogInformation("Flight updated from service method");
                 return flight;
             }
             throw new NoSuchFlightException();
@@ -121,6 +126,7 @@ namespace Simplifly.Services
             {
                 flight.TotalSeats = totalSeats;
                 flight = await _flightRepository.Update(flight);
+                _logger.LogInformation("Flight updated from service method");
                 return flight;
             }
             throw new NoSuchFlightException();

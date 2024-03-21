@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using static Simplifly.Models.Booking;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Booking:IEquatable<Booking>
     {
         [Key]

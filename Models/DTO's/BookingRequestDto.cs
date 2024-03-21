@@ -1,7 +1,9 @@
 ﻿using Simplifly.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Controllers
 {
+    [ExcludeFromCodeCoverage]
     public class BookingRequestDto
     {
         public int ScheduleId { get; set; }

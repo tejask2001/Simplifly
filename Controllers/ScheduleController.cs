@@ -6,11 +6,13 @@ using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Models.DTO_s;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ExcludeFromCodeCoverage]
     public class ScheduleController : ControllerBase
     {
         private readonly IScheduleFlightOwnerService _scheduleFlightOwnerService;

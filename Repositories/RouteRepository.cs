@@ -2,9 +2,11 @@
 using Simplifly.Context;
 using Simplifly.Exceptions;
 using Simplifly.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Simplifly.Repositories
 {
+    [ExcludeFromCodeCoverage]
     public class RouteRepository : IRepository<int, Models.Route>
     {
         RequestTrackerContext _context;

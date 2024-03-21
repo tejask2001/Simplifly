@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Linq;
 
 namespace Simplifly.Models
 {
+    [ExcludeFromCodeCoverage]
     public class Passenger : IEquatable<Passenger>
     {
         [Key]
@@ -11,6 +14,9 @@ namespace Simplifly.Models
         public string Name { get; set; } =string.Empty;
         public int Age { get; set; } = 0;
         public string PassportNo { get; set; } = string.Empty;
+        public int? UserId { get; set; }
+        [ForeignKey("UserId")]
+        public Customer? Customer { get; set; }
 
         public Passenger()
         {
