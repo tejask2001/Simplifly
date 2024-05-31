@@ -10,7 +10,7 @@ namespace Simplifly.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? BookingId { get; set; }
+        public int BookingId { get; set; }
         //This one is just for navigation and will not be created as an attribute in table
         [ForeignKey("BookingId")]
         public Booking? Booking { get; set; }
@@ -36,7 +36,7 @@ namespace Simplifly.Models
            
         }
 
-        public PassengerBooking(int id, int? bookingId, int? passengerId, string? seatId) : this(id)
+        public PassengerBooking(int id, int bookingId, int? passengerId, string? seatId) : this(id)
         {
             BookingId = bookingId;
             PassengerId = passengerId;

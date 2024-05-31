@@ -1,19 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Simplifly.Context;
-using Simplifly.Exceptions;
 using Simplifly.Interfaces;
 using Simplifly.Models;
 using Simplifly.Repositories;
 using Simplifly.Services;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Reflection.Emit;
 using System.Text;
 using System.Text.Json.Serialization;
 using Route = Simplifly.Models.Route;
@@ -109,6 +103,7 @@ namespace Simplifly
             builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
             builder.Services.AddScoped<IRepository<int, PassengerBooking>, PassengerBookingRepository>();
             builder.Services.AddScoped<IRepository<int, Passenger>, PassengerRepository>();
+            builder.Services.AddScoped<IRepository<int,CancelledBooking>, CancelledBookingRepository>();
 
             builder.Services.AddScoped<IRepository<int, Payment>,PaymentRepository>();
             builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
@@ -117,7 +112,6 @@ namespace Simplifly
             builder.Services.AddScoped<IRepository<string, SeatDetail>, SeatDetailRepository>();
             builder.Services.AddScoped<IPassengerBookingRepository,PassengerBookingRepository>();
             builder.Services.AddScoped<IBookingRepository ,BookingsRepository>();
-           // builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
             builder.Services.AddScoped<ISeatDeatilRepository, SeatDetailRepository>();
 
             #endregion
@@ -137,7 +131,8 @@ namespace Simplifly
             builder.Services.AddScoped<IPassengerService, PassengerService>();
             builder.Services.AddScoped<ISeatDetailService, SeatDetailService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
-
+            builder.Services.AddScoped<ICancelledBookingService, CancelledBookingService>();
+            builder.Services.AddLogging();
 
             #endregion
 

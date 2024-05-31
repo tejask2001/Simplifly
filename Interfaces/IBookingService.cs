@@ -15,7 +15,8 @@ namespace Simplifly.Interfaces
         Task<bool> RequestRefundAsync(int bookingId);
         Task<List<Booking>> GetBookingByFlight(string flightNumber);
         Task<List<string>> GetBookedSeatBySchedule(int scheduleID);
-        Task<List<PassengerBooking>> GetBookingsByCustomerId(int customerId);
+        Task<List<PassengerBooking>> GetPassengerBookingsByCustomerId(int customerId);
+        Task<List<Booking>> GetBookingsByCustomerId(int customerId);
         Task<PassengerBooking> CancelBookingByPassenger(int passengerId);
     }
 }
