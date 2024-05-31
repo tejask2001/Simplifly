@@ -17,8 +17,8 @@ namespace Simplifly.Services
         private readonly IRepository<int, Schedule> _scheduleRepository;
         private readonly IPassengerBookingRepository _passengerBookingsRepository;
         private readonly IBookingRepository _bookingsRepository;
-
         private readonly IRepository<int, Payment> _paymentRepository;
+        private readonly ICancelledBookingService _cancelledBookingService;
 
         private readonly ILogger<BookingService> _logger;
 
@@ -34,7 +34,7 @@ namespace Simplifly.Services
         /// <param name="passengerBookingRepository1"></param>
         /// <param name="paymentRepository"></param>
         /// <param name="logger"></param>
-        public BookingService(IRepository<int, Booking> bookingRepository, IRepository<int, Schedule> scheduleRepository, IRepository<int, PassengerBooking> passengerBookingRepository, IRepository<string, Flight> flightRepository, IBookingRepository bookingsRepository, ISeatDeatilRepository seatDetailRepository, IPassengerBookingRepository passengerBookingRepository1, IRepository<int, Payment> paymentRepository, ILogger<BookingService> logger)
+        public BookingService(IRepository<int, Booking> bookingRepository, IRepository<int, Schedule> scheduleRepository, IRepository<int, PassengerBooking> passengerBookingRepository, IRepository<string, Flight> flightRepository, IBookingRepository bookingsRepository, ISeatDeatilRepository seatDetailRepository, IPassengerBookingRepository passengerBookingRepository1, IRepository<int, Payment> paymentRepository, ILogger<BookingService> logger, ICancelledBookingService cancelledBookingService)
         {
             _flightRepository = flightRepository;
             _bookingsRepository = bookingsRepository;
@@ -45,6 +45,7 @@ namespace Simplifly.Services
             _scheduleRepository = scheduleRepository;
             _paymentRepository = paymentRepository;
             _logger = logger;
+            _cancelledBookingService = cancelledBookingService;
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace Simplifly.Services
                 totalPrice += 800;
             }
 
-            // Create Payment entry
+            
             var payment = new Payment
             {
                 Amount = bookingRequest.Price,
@@ -93,20 +94,20 @@ namespace Simplifly.Services
             };
             var addedPayment = await _paymentRepository.Add(payment);
 
-            // Create Booking object
+            
             var booking = new Booking
             {
                 ScheduleId = bookingRequest.ScheduleId,
                 UserId = bookingRequest.UserId,
-                BookingTime = DateTime.Now, // Set current booking time
+                BookingTime = DateTime.Now, 
                 TotalPrice = bookingRequest.Price,
-                PaymentId = addedPayment.PaymentId // Assign the PaymentId of the created payment
+                PaymentId = addedPayment.PaymentId 
             };
              
 
-            // Save booking
+            
             var addedBooking = await _bookingRepository.Add(booking);
-            // Fetch seat details for selected seats
+            
             var seatDetails = await _seatDetailRepository.GetSeatDetailsAsync(bookingRequest.SelectedSeats);
 
             if (seatDetails == null || seatDetails.Count() != bookingRequest.SelectedSeats.Count())
@@ -115,7 +116,7 @@ namespace Simplifly.Services
             }
 
 
-            // Create PassengerBooking entries,SeatNumbers
+            
             int index = 0;
             foreach (var passengerId in bookingRequest.PassengerIds)
             {
@@ -173,21 +174,11 @@ namespace Simplifly.Services
             if (booking == null)
             {
                 throw new NoSuchBookingsException();
-            }
-           
+            }         
 
-            // Remove passenger bookings
-            var passengerBookings = await _passengerBookingsRepository.GetPassengerBookingsAsync(bookingId);
-            foreach (var passengerBooking in passengerBookings)
-            {
-                await _passengerBookingRepository.Delete(passengerBooking.Id);
-            }
-
-            // Delete payment
-            await _paymentRepository.Delete(booking.PaymentId);
-
+            booking= await _bookingRepository.Delete(booking.Id);
             // Delete booking
-            return await _bookingRepository.Delete(booking.Id);
+            return booking;
         }
 
         /// <summary>
@@ -316,7 +307,7 @@ namespace Simplifly.Services
         /// <param name="customerId">customerId in int</param>
         /// <returns>List of PassengerBooking</returns>
         /// <exception cref="NoSuchCustomerException">Throw when no booking with given customerId found</exception>
-        public async Task<List<PassengerBooking>> GetBookingsByCustomerId(int customerId)
+        public async Task<List<PassengerBooking>> GetPassengerBookingsByCustomerId(int customerId)
         {
             var bookings = await _passengerBookingRepository.GetAsync();
             bookings = bookings.Where(e => e.Booking.UserId == customerId).ToList();
@@ -327,11 +318,35 @@ namespace Simplifly.Services
             throw new NoSuchCustomerException();
         }
 
+        public async Task<List<Booking>> GetBookingsByCustomerId(int customerId)
+        {
+            var bookings = await _bookingRepository.GetAsync();
+            var userBookings = bookings.Where(e => e.UserId == customerId).ToList();
+            if (userBookings != null)
+            {
+                return userBookings;
+            }
+            throw new NoSuchCustomerException();
+        }
+
+
         public async Task<PassengerBooking> CancelBookingByPassenger(int passengerId)
         {
             var passengerBooking=await _passengerBookingRepository.GetAsync(passengerId);
+            var bookingId = passengerBooking.BookingId;
+            var passengerBookings = await _passengerBookingRepository.GetAsync();
+            passengerBookings = passengerBookings.Where(e=>e.BookingId == bookingId).ToList();
+
+            if (passengerBookings.Count == 1)
+            {
+                CancelBookingAsync(bookingId);
+                return passengerBooking;
+            }
             if (passengerBooking != null)
             {
+                var booking = await _bookingRepository.GetAsync(bookingId);
+                var refundAmount = booking.TotalPrice / passengerBookings.Count;
+                var bookings= _cancelledBookingService.AddCancelledBooking(booking,passengerBooking,refundAmount);
                 passengerBooking = await _passengerBookingRepository.Delete(passengerId);
                 return passengerBooking;
             }

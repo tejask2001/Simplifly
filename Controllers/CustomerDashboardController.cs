@@ -18,13 +18,15 @@ namespace Simplifly.Controllers
         private readonly IUserService _userService;
         private readonly ICustomerService _customerService;
         private readonly IBookingService _bookingService;
+        private readonly ICancelledBookingService _cancelledBookingService;
         private readonly ILogger<CustomerDashboardController> _logger;
 
-        public CustomerDashboardController(IUserService userService, ICustomerService customerService, IBookingService bookingService, ILogger<CustomerDashboardController> logger)
+        public CustomerDashboardController(IUserService userService, ICustomerService customerService, IBookingService bookingService, ICancelledBookingService cancelledBookingService, ILogger<CustomerDashboardController> logger)
         {
             _userService = userService;
             _bookingService = bookingService;
             _customerService = customerService;
+            _cancelledBookingService = cancelledBookingService;
             _logger = logger;
         }
 
@@ -112,6 +114,24 @@ namespace Simplifly.Controllers
             var bookingHistory = await _bookingService.GetUserBookingsAsync(userId);
             return Ok(bookingHistory);
         }
+
+        [Route("GetPassengerBookingByCustomerId")]
+        [HttpGet]
+        public async Task<ActionResult<List<PassengerBooking>>> GetPassengerBookingByCustomerId(int customerId)
+        {
+            try
+            {
+                var bookings = await _bookingService.GetPassengerBookingsByCustomerId(customerId);
+                return Ok(bookings);
+            }
+            catch(NoSuchCustomerException nsce)
+            {
+                _logger.LogError(nsce.Message);
+                return NotFound();
+            }
+            
+        }
+
         [Route("GetBookingByCustomerId")]
         [HttpGet]
         public async Task<ActionResult<List<PassengerBooking>>> GetBookingByCustomerId(int customerId)
@@ -121,12 +141,27 @@ namespace Simplifly.Controllers
                 var bookings = await _bookingService.GetBookingsByCustomerId(customerId);
                 return Ok(bookings);
             }
-            catch(NoSuchCustomerException nsce)
+            catch (NoSuchCustomerException nsce)
             {
                 _logger.LogError(nsce.Message);
                 return NotFound();
             }
-            
+
+        }
+
+        [Route("GetCancelledBookingByUserId")]
+        [HttpGet]
+        public async Task<ActionResult<List<CancelledBooking>>> GetCancelledBooking(int userId)
+        {
+            try
+            {
+                var cancelledBooking = await _cancelledBookingService.GetCancelledBookingByUserId(userId);
+                return Ok(cancelledBooking);
+            }catch(NoCancelledBookingFound ncbf)
+            {
+                _logger.LogInformation(ncbf.Message);
+                return NotFound(ncbf.Message);
+            }
         }
 
         [HttpPut("{userId}/bookings/{bookingId}/refund")]

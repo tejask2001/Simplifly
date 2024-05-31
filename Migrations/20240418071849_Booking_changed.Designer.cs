@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Simplifly.Context;
 
@@ -11,9 +12,10 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    partial class RequestTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20240418071849_Booking_changed")]
+    partial class Booking_changed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,49 +124,6 @@ namespace Simplifly.Migrations
                     b.HasIndex("ScheduleId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("Simplifly.Models.CancelledBooking", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<double>("RefundAmount")
-                        .HasColumnType("float");
-
-                    b.Property<string>("RefundStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("cardNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("passengerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("paymentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("scheduleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("paymentId");
-
-                    b.HasIndex("scheduleId");
-
-                    b.ToTable("CancelledBookings");
                 });
 
             modelBuilder.Entity("Simplifly.Models.Customer", b =>
@@ -502,33 +461,6 @@ namespace Simplifly.Migrations
                         .HasForeignKey("ScheduleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Payment");
-
-                    b.Navigation("Schedule");
-                });
-
-            modelBuilder.Entity("Simplifly.Models.CancelledBooking", b =>
-                {
-                    b.HasOne("Simplifly.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Simplifly.Models.Payment", "Payment")
-                        .WithMany()
-                        .HasForeignKey("paymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Simplifly.Models.Schedule", "Schedule")
-                        .WithMany()
-                        .HasForeignKey("scheduleId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Payment");
 

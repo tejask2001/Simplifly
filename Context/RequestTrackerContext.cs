@@ -22,6 +22,7 @@ namespace Simplifly.Context
         public DbSet<SeatDetail> Seats { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CancelledBooking> CancelledBookings { get; set; }
 
         public RequestTrackerContext(DbContextOptions options):base(options)
         {
@@ -38,8 +39,6 @@ namespace Simplifly.Context
                 .WithMany()
                 .HasForeignKey(r => r.SourceAirportId)
                 .OnDelete(DeleteBehavior.Restrict);
-            
-               
 
             modelBuilder.Entity<Models.Route>()
                 .HasOne(r => r.DestinationAirport)
@@ -47,6 +46,17 @@ namespace Simplifly.Context
                 .HasForeignKey(r => r.DestinationAirportId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<PassengerBooking>()
+                 .HasOne(p => p.Booking)
+                 .WithMany()
+                 .HasForeignKey(p => p.BookingId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CancelledBooking>()
+                .HasOne(r => r.Schedule)
+                .WithMany()
+                .HasForeignKey(r => r.scheduleId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }
