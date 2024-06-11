@@ -92,7 +92,6 @@ namespace Simplifly
             });
 
             #endregion
-
             #region RepositoryInjection 
 
             builder.Services.AddScoped<IRepository<int,Airport>,AirportRepository>();
