@@ -80,7 +80,7 @@ namespace Simplifly
             {
                 Options.AddPolicy("ReactPolicy", opts =>
                 {
-                    opts.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+                    opts.WithOrigins("http://localhost:3000", "http://localhost:3001","http://localhost:3002").AllowAnyMethod().AllowAnyHeader();
                 });
             });
 
@@ -131,6 +131,7 @@ namespace Simplifly
             builder.Services.AddScoped<ISeatDetailService, SeatDetailService>();
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<ICancelledBookingService, CancelledBookingService>();
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddLogging();
 
             #endregion

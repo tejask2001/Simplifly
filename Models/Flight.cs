@@ -10,14 +10,19 @@ namespace Simplifly.Models
         [Key]
         public string FlightNumber { get; set; } 
         public string Airline { get; set; }= string.Empty;
-        public int TotalSeats { get; set; }
+        public int TotalEconomySeats { get; set; }
+        public int TotalPremiumEconomySeats { get; set; }
+        public int TotalBusinessClassSeats { get; set; }
+        public double EconomySeatPrice { get; set; }
+        public double PremiumEconomySeatPrice { get; set; }
+        public double BusinessClassSeatPrice { get; set; }
+
 
         [ForeignKey("FlightOwnerOwnerId")]
         public int FlightOwnerOwnerId { get; set; }
        
         public FlightOwner? FlightOwner { get; set; }
 
-        public double BasePrice { get; set; }
         public int Status {  get; set; }
 
 
@@ -27,13 +32,19 @@ namespace Simplifly.Models
             
         }
 
-        public Flight(string flightNumber, string airline, int totalSeats, int flightOwnerOwnerId, double basePrice)
+        public Flight(string flightNumber, string airline, int totalEconomySeats, int totalPremiumEconomySeats, int totalBusinessClassSeats, double economySeatPrice, double premiumEconomySeatPrice, double lBusinessClassSeatPrice, int flightOwnerOwnerId, FlightOwner? flightOwner, int status)
         {
             FlightNumber = flightNumber;
             Airline = airline;
-            TotalSeats = totalSeats;
+            TotalEconomySeats = totalEconomySeats;
+            TotalPremiumEconomySeats = totalPremiumEconomySeats;
+            TotalBusinessClassSeats = totalBusinessClassSeats;
+            EconomySeatPrice = economySeatPrice;
+            PremiumEconomySeatPrice = premiumEconomySeatPrice;
+            this.BusinessClassSeatPrice = lBusinessClassSeatPrice;
             FlightOwnerOwnerId = flightOwnerOwnerId;
-            BasePrice = basePrice;
+            FlightOwner = flightOwner;
+            Status = status;
         }
 
         public bool Equals(Flight? other)

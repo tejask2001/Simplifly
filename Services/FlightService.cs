@@ -119,12 +119,14 @@ namespace Simplifly.Services
         /// <param name="totalSeats">total seats in int</param>
         /// <returns>Object of flight</returns>
         /// <exception cref="NoSuchFlightException">throw when flight is not present</exception>
-        public async Task<Flight> UpdateTotalSeats(string flightNumber, int totalSeats)
+        public async Task<Flight> UpdateTotalSeats(FlightSeatsDTO flightSeatsDTO)
         {
-            var flight = await _flightRepository.GetAsync(flightNumber);
+            var flight = await _flightRepository.GetAsync(flightSeatsDTO.FlightNumber);
             if (flight != null)
             {
-                flight.TotalSeats = totalSeats;
+                flight.TotalEconomySeats = flightSeatsDTO.TotalEconomySeats;
+                flight.TotalPremiumEconomySeats = flightSeatsDTO.TotalPremiumEconomySeats;
+                flight.TotalBusinessClassSeats = flightSeatsDTO.TotalBusinessClassSeats;
                 flight = await _flightRepository.Update(flight);
                 _logger.LogInformation("Flight updated from service method");
                 return flight;

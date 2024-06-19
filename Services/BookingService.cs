@@ -77,12 +77,12 @@ namespace Simplifly.Services
             }
 
             // Calculate total price based on the number of selected seats
-            var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(schedule.FlightId));
+            /*var totalPrice = CalculateTotalPrice(bookingRequest.SelectedSeats.Count, await _flightRepository.GetAsync(schedule.FlightId));
             var seatClass = bookingRequest.SelectedSeats[0][0];
             if (seatClass == 'E')
             {
                 totalPrice += 800;
-            }
+            }*/
 
             
             var payment = new Payment
@@ -204,9 +204,7 @@ namespace Simplifly.Services
         /// <returns></returns>
         public double CalculateTotalPrice(int numberOfSeats, Flight flight)
         {
-            double totalPrice = numberOfSeats * (flight?.BasePrice ?? 0); 
-            return totalPrice;
-
+            return 0.0;
         }
 
         /// <summary>

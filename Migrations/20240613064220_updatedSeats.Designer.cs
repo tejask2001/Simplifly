@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Simplifly.Context;
 
@@ -11,9 +12,10 @@ using Simplifly.Context;
 namespace Simplifly.Migrations
 {
     [DbContext(typeof(RequestTrackerContext))]
-    partial class RequestTrackerContextModelSnapshot : ModelSnapshot
+    [Migration("20240613064220_updatedSeats")]
+    partial class updatedSeats
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -210,7 +212,7 @@ namespace Simplifly.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("BusinessClassSeatPrice")
+                    b.Property<double>("BasePrice")
                         .HasColumnType("float");
 
                     b.Property<double>("EconomySeatPrice")
@@ -233,6 +235,9 @@ namespace Simplifly.Migrations
 
                     b.Property<int>("TotalPremiumEconomySeats")
                         .HasColumnType("int");
+
+                    b.Property<double>("lBusinessClassSeatPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("FlightNumber");
 

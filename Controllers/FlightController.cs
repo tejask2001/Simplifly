@@ -107,7 +107,7 @@ namespace Simplifly.Controllers
         {
             try
             {
-                var flight = await _flightOwnerService.UpdateTotalSeats(flightDTO.FlightNumber, flightDTO.TotalSeats);
+                var flight = await _flightOwnerService.UpdateTotalSeats(flightDTO);
                 return flight;
             }
             catch (NoSuchFlightException nsfe)

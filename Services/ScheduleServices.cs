@@ -158,7 +158,7 @@ namespace Simplifly.Services
             schedules = schedules.Where(e => e.Departure.Date == searchFlight.DateOfJourney.Date
              && e.Route?.SourceAirport?.City == searchFlight.Origin
              && e.Route.DestinationAirport?.City == searchFlight.Destination
-             && (AvailableSeats(e.Flight.TotalSeats,e.Id)>0)).ToList();
+             && (AvailableSeats((e.Flight.TotalEconomySeats+e.Flight.TotalPremiumEconomySeats+e.Flight.TotalBusinessClassSeats),e.Id)>0)).ToList();
 
             searchResult = schedules.Select(e => new SearchedFlightResultDTO
             {
@@ -169,7 +169,7 @@ namespace Simplifly.Services
                 DestinationAirport = e.Route.DestinationAirport.City,
                 DepartureTime = e.Departure,
                 ArrivalTime = e.Arrival,
-                TotalPrice = CalculateTotalPrice(searchFlight, e.Flight.BasePrice)
+                TotalPrice = CalculateTotalPrice(searchFlight, e.Flight)
 
             }).ToList();
             if (searchResult != null)
@@ -184,21 +184,21 @@ namespace Simplifly.Services
         /// <param name="searchFlightDto">Object of SearchFlightDTO</param>
         /// <param name="basePrice">basePrice in double</param>
         /// <returns>Total price in double</returns>
-        public double CalculateTotalPrice(SearchFlightDTO searchFlightDto, double basePrice)
+        public double CalculateTotalPrice(SearchFlightDTO searchFlightDto, Flight flight )
         {
             double totalPrice = 0;
             double seatPrice = 0;
             double adultSeatCost = 0;
             double childSeatCost = 0;
             if (searchFlightDto.SeatClass == "economy")
-                seatPrice = basePrice*0.2;
+                seatPrice = flight.EconomySeatPrice;
             else if (searchFlightDto.SeatClass == "premiumEconomy")
-                seatPrice = basePrice*0.3;
+                seatPrice = flight.PremiumEconomySeatPrice;
             else
-                seatPrice = basePrice * 0.4;
+                seatPrice = flight.BusinessClassSeatPrice;
 
-            adultSeatCost = basePrice + seatPrice + (basePrice*0.3);
-            childSeatCost = basePrice + seatPrice + (basePrice * 0.2);
+            adultSeatCost = seatPrice;
+            childSeatCost = seatPrice - (seatPrice * 0.3);
             totalPrice=(adultSeatCost*searchFlightDto.Adult)+(childSeatCost*searchFlightDto.Child);
 
             return totalPrice;
