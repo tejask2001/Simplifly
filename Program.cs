@@ -80,7 +80,7 @@ namespace Simplifly
             {
                 Options.AddPolicy("ReactPolicy", opts =>
                 {
-                    opts.WithOrigins("http://localhost:3000", "http://localhost:3001","http://localhost:3002").AllowAnyMethod().AllowAnyHeader();
+                    opts.WithOrigins("http://localhost:3000", "http://localhost:3001","http://localhost:3002", "http://localhost:3003","http://localhost:3004").AllowAnyMethod().AllowAnyHeader();
                 });
             });
 

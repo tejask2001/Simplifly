@@ -32,6 +32,7 @@ namespace Simplifly.Services
         {
             try
             {
+                flight.FlightNumber = await GenerateIndigoFlightNumber();
                 await _flightRepository.GetAsync(flight.FlightNumber);
                 throw new FlightAlreadyPresentException();
             }
@@ -132,6 +133,27 @@ namespace Simplifly.Services
                 return flight;
             }
             throw new NoSuchFlightException();
+        }
+
+        public async Task<string> GenerateIndigoFlightNumber()
+        {
+            var latestFlights = await _flightRepository.GetAsync();
+
+            if(latestFlights!=null && latestFlights.Any())
+            {
+                var latestFlight=latestFlights.OrderByDescending(e=>e.FlightNumber).FirstOrDefault();
+                if (latestFlight != null)
+                {
+                    return "FLI0001";
+                }
+                var latestFlightNumber = int.Parse(latestFlight.FlightNumber.Substring(4));
+                return $"FLI{(latestFlightNumber + 1).ToString("03")}";
+            }
+            else
+            {
+                return "FLI0001";
+            }
+
         }
     }
 }
